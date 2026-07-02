@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Coming Soon</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .wrap { text-align: center; padding: 24px; }
+    .logo {
+      width: 48px; height: 48px;
+      background: #3b82f6;
+      border-radius: 13px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 24px; color: #fff;
+      margin-bottom: 30px;
+      opacity: 0;
+    }
+    .coming-title {
+      font-size: clamp(2.2rem, 7vw, 5rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: #f8fafc;
+    }
+    .subtitle {
+      margin-top: 18px;
+      font-size: 15px;
+      color: #94a3b8;
+      opacity: 0;
+    }
+    .back {
+      margin-top: 34px;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: transparent;
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      opacity: 0;
+      transition: background .2s, border-color .2s;
+    }
+    .back:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.35); }
+    .quick { margin-top: 18px; font-size: 13px; color: #64748b; opacity: 0; }
+    .quick a { color: #94a3b8; text-decoration: none; }
+    .quick a:hover { color: #e2e8f0; text-decoration: underline; }
+    .quick span { margin: 0 8px; color: #475569; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="logo"><i class="ti ti-bolt"></i></div>
+    <h1 class="coming-title">Page Coming Soon</h1>
+    <p class="subtitle">This screen is part of the prototype and isn't built yet.</p>
+    <button class="back" id="backBtn"><i class="ti ti-arrow-left"></i> Go back</button>
+    <div class="quick">
+      <a href="work-order-prototype.html">Schedule</a>
+      <span>·</span>
+      <a href="analytics-dashboard.html">Analytics</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { animate, splitText, stagger, utils } from 'https://esm.sh/animejs@4';
+
+    const { chars } = splitText('.coming-title');
+    utils.set(chars, { opacity: 0, translateY: '1.1em' });
+
+    animate('.logo', {
+      opacity: [0, 1],
+      scale: [0.6, 1],
+      duration: 600,
+      ease: 'outBack',
+    });
+
+    animate(chars, {
+      opacity: [0, 1],
+      translateY: ['1.1em', 0],
+      delay: stagger(40, { start: 250, from: 'center' }),
+      duration: 750,
+      ease: 'outExpo',
+    });
+
+    animate('.subtitle', { opacity: [0, 1], translateY: [12, 0], duration: 600, delay: 950, ease: 'outExpo' });
+    animate('.back',     { opacity: [0, 1], translateY: [12, 0], duration: 600, delay: 1150, ease: 'outExpo' });
+    animate('.quick',    { opacity: [0, 1], translateY: [12, 0], duration: 600, delay: 1300, ease: 'outExpo' });
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      if (history.length > 1) history.back();
+      else location.href = 'work-order-prototype.html';
+    });
+  </script>
+</body>
+</html>

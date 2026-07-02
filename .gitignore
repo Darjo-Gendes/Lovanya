@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+pipeline/logs/*.jsonl
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

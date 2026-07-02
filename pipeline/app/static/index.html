@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovänya — Pipeline Test Bench</title>
+<style>
+  :root {
+    --bg: #14100e;
+    --panel: #1f1917;
+    --panel-2: #2a2220;
+    --text: #f2ece7;
+    --muted: #a89a90;
+    --accent: #d4a373;
+    --accent-2: #e7bc91;
+    --good: #8fbf88;
+    --mid: #d9c06b;
+    --bad: #d98a7a;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    padding: 22px 28px 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  header h1 { font-size: 22px; font-weight: 600; letter-spacing: 0.5px; }
+  header h1 em { color: var(--accent); font-style: normal; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  #status {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--panel);
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+  #status.ok { color: var(--good); }
+  main {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+    padding: 10px 28px 40px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .panel h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  #gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 8px;
+    max-height: 460px;
+    overflow-y: auto;
+  }
+  #gallery img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.85;
+    transition: border-color .15s, opacity .15s;
+  }
+  #gallery img:hover { opacity: 1; }
+  #gallery img.selected { border-color: var(--accent); opacity: 1; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+  select, button, .upload-label {
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid #3a2f2b;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button.primary {
+    background: var(--accent);
+    color: #241a12;
+    font-weight: 600;
+    border: none;
+  }
+  button.primary:disabled { opacity: 0.45; cursor: default; }
+  input[type=file] { display: none; }
+  #preview {
+    margin-top: 14px;
+    display: none;
+    max-width: 180px;
+    border-radius: 10px;
+  }
+  #results .placeholder { color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .overall {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .overall .num {
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--accent-2);
+    line-height: 1;
+  }
+  .overall .label { color: var(--muted); font-size: 13px; }
+  .score-row { margin-bottom: 10px; }
+  .score-row .name {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .bar {
+    height: 8px;
+    background: var(--panel-2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bar > div { height: 100%; border-radius: 999px; transition: width .4s ease; }
+  .feedback {
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .feedback .fix {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--panel-2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+  }
+  details {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  details pre {
+    margin-top: 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: var(--panel-2);
+    padding: 10px;
+    border-radius: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+  .spinner {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 14px;
+  }
+  .spinner .dot {
+    width: 14px; height: 14px;
+    border: 2px solid var(--accent);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .elapsed { color: var(--muted); font-size: 12px; margin-top: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Lov<em>ä</em>nya</h1>
+  <span class="sub">AI pipeline test bench — Qwen2.5-VL</span>
+  <span id="status">checking…</span>
+</header>
+<main>
+  <section class="panel">
+    <h2>1 · Pick a sample (or upload)</h2>
+    <div id="gallery"></div>
+    <div class="controls">
+      <label class="upload-label" for="file">Upload photo…</label>
+      <input type="file" id="file" accept="image/*">
+      <select id="occasion">
+        <option value="casual">Casual</option>
+        <option value="work">Work</option>
+        <option value="date night">Date night</option>
+        <option value="formal event">Formal event</option>
+        <option value="party">Party</option>
+        <option value="weekend brunch">Weekend brunch</option>
+      </select>
+      <button class="primary" id="go" disabled>Analyze</button>
+    </div>
+    <img id="preview" alt="upload preview">
+    <div class="spinner" id="spinner"><div class="dot"></div><span id="spinner-text">Analyzing…</span></div>
+  </section>
+  <section class="panel" id="results">
+    <h2>2 · Judgment</h2>
+    <p class="placeholder">Select a sample photo on the left, pick an occasion, and hit <b>Analyze</b>.<br><br>
+    First run loads the model into VRAM — expect a wait before the first result. After that it's fast.</p>
+  </section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+// When this page is served by the pipeline itself, relative URLs work. When
+// it's opened any other way (file://, preview panel), fall back to the
+// pipeline's default address.
+const BASE = location.protocol.startsWith('http') ? '' : 'http://localhost:8000';
+let selectedSample = null;
+let uploadFile = null;
+
+async function init() {
+  try {
+    const h = await (await fetch(BASE + '/health')).json();
+    $('#status').textContent = `cuda: ${h.cuda} · model ${h.model_loaded ? 'loaded' : 'not loaded yet'}`;
+    $('#status').classList.toggle('ok', h.cuda);
+  } catch { $('#status').textContent = 'server unreachable'; }
+
+  const data = await (await fetch(BASE + '/api/samples')).json();
+  const gallery = $('#gallery');
+  for (const name of data.samples) {
+    const img = document.createElement('img');
+    img.src = BASE + '/samples/' + name;
+    img.title = name;
+    img.onclick = () => {
+      document.querySelectorAll('#gallery img').forEach(i => i.classList.remove('selected'));
+      img.classList.add('selected');
+      selectedSample = name;
+      uploadFile = null;
+      $('#preview').style.display = 'none';
+      $('#go').disabled = false;
+    };
+    gallery.appendChild(img);
+  }
+}
+
+$('#file').addEventListener('change', (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  uploadFile = f;
+  selectedSample = null;
+  document.querySelectorAll('#gallery img').forEach(i => i.classList.remove('selected'));
+  const url = URL.createObjectURL(f);
+  $('#preview').src = url;
+  $('#preview').style.display = 'block';
+  $('#go').disabled = false;
+});
+
+function barColor(v) {
+  if (v >= 7) return 'var(--good)';
+  if (v >= 5) return 'var(--mid)';
+  return 'var(--bad)';
+}
+
+function render(result) {
+  const j = result.judgment || {};
+  const scores = j.scores || {};
+  const rows = Object.entries(scores).map(([k, v]) => `
+    <div class="score-row">
+      <div class="name"><span>${k.replaceAll('_',' ')}</span><span>${v}/10</span></div>
+      <div class="bar"><div style="width:${v*10}%;background:${barColor(v)}"></div></div>
+    </div>`).join('');
+  $('#results').innerHTML = `
+    <h2>2 · Judgment</h2>
+    <div class="overall">
+      <div class="num">${j.overall ?? '—'}</div>
+      <div class="label">overall<br>· ${result.occasion}</div>
+    </div>
+    ${rows}
+    <div class="feedback">
+      ${j.feedback ?? '<i>No feedback returned.</i>'}
+      ${j.one_fix ? `<div class="fix"><b>One fix:</b> ${j.one_fix}</div>` : ''}
+    </div>
+    <div class="elapsed">${result.elapsed_seconds}s · logged to logs/judgments.jsonl</div>
+    <details><summary>Raw perception + judgment JSON</summary><pre>${JSON.stringify(result, null, 2)}</pre></details>
+  `;
+}
+
+$('#go').addEventListener('click', async () => {
+  const fd = new FormData();
+  fd.append('occasion', $('#occasion').value);
+  if (uploadFile) fd.append('photo', uploadFile);
+  else if (selectedSample) fd.append('sample', selectedSample);
+  else return;
+
+  $('#go').disabled = true;
+  $('#spinner').style.display = 'flex';
+  $('#spinner-text').textContent = 'Analyzing… (first run also loads the model, ~1-3 min)';
+  try {
+    const res = await fetch(BASE + '/api/analyze', { method: 'POST', body: fd });
+    if (!res.ok) throw new Error(await res.text());
+    render(await res.json());
+  } catch (err) {
+    $('#results').innerHTML = `<h2>2 · Judgment</h2><p class="placeholder">Error: ${err.message}</p>`;
+  } finally {
+    $('#spinner').style.display = 'none';
+    $('#go').disabled = false;
+    init();
+  }
+});
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maintenance Analytics — Prototype</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .app {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      min-height: 760px;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 62px;
+      background: #1e293b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .sidebar-logo {
+      width: 36px; height: 36px;
+      background: #3b82f6;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px; color: #fff; font-size: 17px;
+    }
+    .nav-item {
+      width: 42px; height: 42px;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: rgba(255,255,255,0.4);
+      font-size: 19px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75); }
+    .nav-item.active { background: rgba(255,255,255,0.13); color: #fff; }
+
+    /* ── Main ── */
+    .main { flex: 1; display: flex; flex-direction: column; background: #f1f5f9; min-width: 0; }
+
+    .top-header {
+      background: #fff;
+      padding: 14px 22px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+    .top-header .date { font-size: 12px; color: #64748b; margin-bottom: 2px; }
+    .top-header .title { font-size: 20px; font-weight: 600; color: #0f172a; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .range-picker {
+      border: 1px solid #cbd5e1; border-radius: 8px;
+      padding: 6px 11px; font-size: 12px;
+      display: flex; align-items: center; gap: 6px;
+      color: #475569; cursor: pointer;
+    }
+    .range-picker:hover { background: #f8fafc; }
+    .avatar {
+      width: 30px; height: 30px; background: #3b82f6; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; color: #fff;
+    }
+
+    .content { padding: 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+
+    /* KPI cards */
+    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .kpi-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; }
+    .kpi-card .label { font-size: 12px; color: #64748b; }
+    .kpi-card .value-row { display: flex; align-items: baseline; gap: 8px; margin-top: 5px; }
+    .kpi-card .value { font-size: 26px; font-weight: 700; color: #0f172a; line-height: 1; }
+    .kpi-card .value .unit { font-size: 14px; font-weight: 500; color: #94a3b8; }
+    .delta { font-size: 12px; display: flex; align-items: center; gap: 1px; }
+    .delta.good { color: #16a34a; }
+    .delta.bad  { color: #dc2626; }
+    .delta.neutral { color: #64748b; }
+
+    /* Chart cards */
+    .charts-row { display: grid; grid-template-columns: 1.6fr 1fr; gap: 12px; }
+    .chart-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px 17px; }
+    .chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .chart-head .ctitle { font-size: 14px; font-weight: 600; color: #0f172a; }
+    .chart-legend { display: flex; gap: 14px; font-size: 11px; color: #64748b; }
+    .chart-legend span { display: flex; align-items: center; gap: 5px; }
+    .swatch { width: 10px; height: 10px; border-radius: 2px; }
+    .dash { width: 12px; height: 2px; }
+
+    /* ── Right rail ── */
+    .rail { width: 280px; background: #fff; border-left: 1px solid #e2e8f0; flex-shrink: 0; display: flex; flex-direction: column; }
+    .rail-section { padding: 16px 17px; border-bottom: 1px solid #e2e8f0; }
+    .rail-section:last-child { border-bottom: none; }
+    .rail-title { font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 11px; }
+
+    .donut-legend { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+    .donut-legend .row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #475569; }
+    .donut-legend .row .lhs { display: flex; align-items: center; gap: 7px; }
+    .donut-legend .row .val { font-weight: 600; color: #0f172a; }
+
+    .attn-item { display: flex; gap: 9px; align-items: flex-start; margin-bottom: 12px; }
+    .attn-item:last-child { margin-bottom: 0; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .dot.red { background: #dc2626; }
+    .dot.amber { background: #f59e0b; }
+    .attn-title { font-size: 12.5px; font-weight: 600; color: #0f172a; line-height: 1.3; }
+    .attn-sub { font-size: 11px; margin-top: 2px; }
+    .attn-sub.red { color: #dc2626; }
+    .attn-sub.amber { color: #b45309; }
+
+    .asset { margin-bottom: 13px; }
+    .asset:last-child { margin-bottom: 0; }
+    .asset-head { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 4px; }
+    .asset-head .name { color: #0f172a; font-weight: 500; }
+    .asset-head .hrs { color: #64748b; }
+    .asset-bar { height: 5px; background: #f1f5f9; border-radius: 3px; }
+    .asset-fill { height: 5px; background: #3b82f6; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo"><i class="ti ti-bolt"></i></div>
+    <div class="nav-item"><i class="ti ti-calendar"></i></div>
+    <div class="nav-item"><i class="ti ti-clipboard-list"></i></div>
+    <div class="nav-item"><i class="ti ti-box"></i></div>
+    <div class="nav-item active"><i class="ti ti-chart-bar"></i></div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <div class="top-header">
+      <div>
+        <div class="date">Wednesday, June 17 · Morning Shift</div>
+        <div class="title">Maintenance Analytics</div>
+      </div>
+      <div class="header-right">
+        <div class="range-picker"><i class="ti ti-calendar" style="font-size:13px"></i> This week <i class="ti ti-chevron-down" style="font-size:12px"></i></div>
+        <div class="avatar">MC</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- KPI row -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="label">Completion rate</div>
+          <div class="value-row">
+            <span class="value">87%</span>
+            <span class="delta good"><i class="ti ti-arrow-up-right"></i>4%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="label">Avg. time to repair</div>
+          <div class="value-row">
+            <span class="value">1.8<span class="unit"> h</span></span>
+            <span class="delta good"><i class="ti ti-arrow-down-right"></i>0.3 h</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="label">Open work orders</div>
+          <div class="value-row">
+            <span class="value">12</span>
+            <span class="delta neutral"><i class="ti ti-arrow-up-right"></i>2</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="label">Downtime this week</div>
+          <div class="value-row">
+            <span class="value">14.4<span class="unit"> h</span></span>
+            <span class="delta bad"><i class="ti ti-arrow-up-right"></i>1.2 h</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-head">
+            <span class="ctitle">Work orders · last 7 days</span>
+            <div class="chart-legend">
+              <span><span class="swatch" style="background:#3b82f6"></span>Completed</span>
+              <span><span class="dash" style="background:#94a3b8"></span>Created</span>
+            </div>
+          </div>
+          <div style="position:relative;width:100%;height:230px">
+            <canvas id="trendChart" role="img" aria-label="Line chart of work orders completed versus created over the last 7 days">Completed: 5,7,6,8,4,9,7. Created: 6,5,8,6,7,5,8.</canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-head"><span class="ctitle">Maintenance type</span></div>
+          <div style="position:relative;width:100%;height:230px">
+            <canvas id="typeChart" role="img" aria-label="Bar chart of work orders by maintenance type">Preventive 38, Corrective 14, Emergency 6, Inspection 22.</canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Downtime row -->
+      <div class="chart-card">
+        <div class="chart-head"><span class="ctitle">Downtime by area (hours)</span></div>
+        <div style="position:relative;width:100%;height:280px">
+          <canvas id="downtimeChart" role="img" aria-label="Horizontal bar chart of downtime hours by area">Bay 3 6.4, Bay 1 3.2, Assembly 2.1, Bay 2 1.8, Packaging 0.9.</canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right rail -->
+  <div class="rail">
+
+    <div class="rail-section">
+      <div class="rail-title">Tasks by status</div>
+      <div style="position:relative;width:100%;height:165px">
+        <canvas id="statusChart" role="img" aria-label="Donut chart of tasks by status: done 42, in progress 6, pending 12">Done 42, In progress 6, Pending 12.</canvas>
+      </div>
+      <div class="donut-legend">
+        <div class="row"><span class="lhs"><span class="swatch" style="background:#22c55e"></span>Done</span><span class="val">42</span></div>
+        <div class="row"><span class="lhs"><span class="swatch" style="background:#3b82f6"></span>In progress</span><span class="val">6</span></div>
+        <div class="row"><span class="lhs"><span class="swatch" style="background:#cbd5e1"></span>Pending</span><span class="val">12</span></div>
+      </div>
+    </div>
+
+    <div class="rail-section">
+      <div class="rail-title">Needs attention</div>
+      <div class="attn-item">
+        <span class="dot red"></span>
+        <div>
+          <div class="attn-title">Spindle bearing replacement</div>
+          <div class="attn-sub red">Overdue · 2h · WO-CNC-B02-0588</div>
+        </div>
+      </div>
+      <div class="attn-item">
+        <span class="dot amber"></span>
+        <div>
+          <div class="attn-title">Coolant system flush</div>
+          <div class="attn-sub amber">Due soon · WO-HVAC-C01-0612</div>
+        </div>
+      </div>
+      <div class="attn-item">
+        <span class="dot red"></span>
+        <div>
+          <div class="attn-title">Safety guard calibration</div>
+          <div class="attn-sub red">High priority · WO-PRESS-A03-0601</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rail-section">
+      <div class="rail-title">Top problem assets</div>
+      <div class="asset">
+        <div class="asset-head"><span class="name">Mazak QT-200 Lathe</span><span class="hrs">6.4 h</span></div>
+        <div class="asset-bar"><div class="asset-fill" style="width:100%"></div></div>
+      </div>
+      <div class="asset">
+        <div class="asset-head"><span class="name">Haas VF-2 Mill</span><span class="hrs">3.1 h</span></div>
+        <div class="asset-bar"><div class="asset-fill" style="width:48%"></div></div>
+      </div>
+      <div class="asset">
+        <div class="asset-head"><span class="name">Press Brake PB-50</span><span class="hrs">2.0 h</span></div>
+        <div class="asset-bar"><div class="asset-fill" style="width:31%"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const grid = '#eef2f6', tick = '#94a3b8';
+
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: ['Jun 11','Jun 12','Jun 13','Jun 14','Jun 15','Jun 16','Jun 17'],
+      datasets: [
+        { label:'Completed', data:[5,7,6,8,4,9,7], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.10)', fill:true, tension:0.35, borderWidth:2, pointRadius:0, pointHoverRadius:4 },
+        { label:'Created', data:[6,5,8,6,7,5,8], borderColor:'#94a3b8', borderDash:[5,4], fill:false, tension:0.35, borderWidth:2, pointRadius:0, pointHoverRadius:4 }
+      ]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{ y:{beginAtZero:true,grid:{color:grid},ticks:{color:tick,font:{size:11}}}, x:{grid:{display:false},ticks:{color:tick,font:{size:11}}} } }
+  });
+
+  new Chart(document.getElementById('typeChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Preventive','Inspection','Corrective','Emergency'],
+      datasets: [{ data:[38,22,14,6], backgroundColor:['#3b82f6','#60a5fa','#f59e0b','#ef4444'], borderRadius:5, barThickness:34 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{ y:{beginAtZero:true,grid:{color:grid},ticks:{color:tick,font:{size:11}}}, x:{grid:{display:false},ticks:{color:'#475569',font:{size:11}}} } }
+  });
+
+  new Chart(document.getElementById('downtimeChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Bay 3','Bay 1','Assembly','Bay 2','Packaging'],
+      datasets: [{ data:[6.4,3.2,2.1,1.8,0.9], backgroundColor:['#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe'], borderRadius:5, barThickness:24 }]
+    },
+    options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{ x:{beginAtZero:true,grid:{color:grid},ticks:{color:tick,font:{size:11}}}, y:{grid:{display:false},ticks:{color:'#475569',font:{size:12}}} } }
+  });
+
+  new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Done','In progress','Pending'],
+      datasets: [{ data:[42,6,12], backgroundColor:['#22c55e','#3b82f6','#cbd5e1'], borderWidth:2, borderColor:'#fff' }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'66%', plugins:{legend:{display:false}} }
+  });
+</script>
+
+<script type="module">
+  import { animate } from 'https://esm.sh/animejs@4';
+
+  const reveal = document.createElement('div');
+  reveal.setAttribute('aria-hidden', 'true');
+  reveal.style.cssText = 'position:fixed;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#0f172a;pointer-events:none;z-index:99999;transform:scale(0);will-change:transform;';
+  document.body.appendChild(reveal);
+
+  let navigating = false;
+  function triggerReveal(x, y) {
+    if (navigating) return;
+    navigating = true;
+    reveal.style.left = x + 'px';
+    reveal.style.top = y + 'px';
+    const dx = Math.max(x, innerWidth - x);
+    const dy = Math.max(y, innerHeight - y);
+    const target = (Math.hypot(dx, dy) * 2) / 14 * 1.15;
+    animate(reveal, {
+      scale: [0, target],
+      duration: 650,
+      ease: 'inOutQuad',
+      onComplete: () => { location.href = 'coming-soon.html'; },
+    });
+  }
+
+  const selector = 'button, a, .nav-item, .task-card, .insight-card, .info-link, .worker-dropdown, .range-picker, .badge-done, .kpi-card, .chart-card, .attn-item, .asset';
+  document.querySelectorAll(selector).forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerReveal(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2);
+    });
+  });
+
+  function resetReveal() {
+    navigating = false;
+    reveal.style.transform = 'scale(0)';
+  }
+  window.addEventListener('pageshow', resetReveal);
+  window.addEventListener('popstate', resetReveal);
+</script>
+
+</body>
+</html>

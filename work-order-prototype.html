@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Today's Schedule — Prototype</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .app {
+      display: flex;
+      width: 100%;
+      max-width: 1100px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      min-height: 720px;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 62px;
+      background: #1e293b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .sidebar-logo {
+      width: 36px;
+      height: 36px;
+      background: #3b82f6;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      color: #fff;
+      font-size: 17px;
+    }
+    .nav-item {
+      width: 42px;
+      height: 42px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: rgba(255,255,255,0.4);
+      font-size: 19px;
+      transition: background 0.15s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75); }
+    .nav-item.active { background: rgba(255,255,255,0.13); color: #fff; }
+
+    /* ── Main panel ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f1f5f9;
+      min-width: 0;
+    }
+
+    /* Top header */
+    .top-header {
+      background: #fff;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+    .top-header .date { font-size: 12px; color: #64748b; margin-bottom: 2px; }
+    .top-header .title { font-size: 20px; font-weight: 600; color: #0f172a; }
+    .header-right { display: flex; align-items: center; gap: 20px; }
+    .badge-count { font-size: 26px; font-weight: 700; color: #3b82f6; line-height: 1; }
+    .shift-info { font-size: 12px; color: #0f172a; margin-top: 2px; }
+    .shift-info span { color: #64748b; }
+    .worker-dropdown {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #475569;
+      cursor: pointer;
+    }
+    .avatar {
+      width: 30px; height: 30px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; color: #fff;
+    }
+    .user-name { font-size: 13px; color: #0f172a; white-space: nowrap; }
+
+    /* Stats */
+    .stats { padding: 14px 22px; display: flex; gap: 10px; flex-shrink: 0; }
+    .stat-card {
+      flex: 1;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      padding: 11px 13px;
+    }
+    .stat-card .label { font-size: 11px; color: #64748b; }
+    .stat-card .value { font-size: 22px; font-weight: 700; color: #0f172a; line-height: 1.2; margin-top: 2px; }
+    .stat-card .value.blue { color: #3b82f6; }
+    .stat-card .value .sub { font-size: 13px; color: #94a3b8; font-weight: 400; }
+
+    /* Task cards */
+    .cards { padding: 0 22px 22px; display: flex; flex-direction: column; gap: 10px; }
+
+    .task-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 13px 14px;
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+    }
+    .task-card.selected { border: 2px solid #3b82f6; }
+
+    .time-col { width: 52px; flex-shrink: 0; }
+    .time-col .time { font-size: 13px; font-weight: 700; color: #0f172a; }
+    .time-col .time.blue { color: #3b82f6; }
+    .time-col .sub { font-size: 11px; color: #94a3b8; margin-top: 1px; }
+
+    .card-body { flex: 1; min-width: 0; }
+    .wo-number { font-size: 11px; color: #94a3b8; margin-bottom: 2px; }
+    .card-title { font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 6px; }
+
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; color: #64748b; }
+    .meta span { display: flex; align-items: center; gap: 3px; }
+
+    .progress-row { display: flex; justify-content: flex-end; margin-bottom: 2px; font-size: 11px; color: #64748b; }
+    .progress-bar { height: 3px; background: #e2e8f0; border-radius: 2px; margin-bottom: 7px; }
+    .progress-fill { height: 3px; width: 50%; background: #3b82f6; border-radius: 2px; }
+
+    .safety-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+    .tag {
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .tag.red    { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .tag.orange { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+    .tag.yellow { background: #fefce8; color: #854d0e; border: 1px solid #fef08a; }
+
+    .card-action { flex-shrink: 0; align-self: center; }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .btn-outline {
+      background: #fff;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .badge-done {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+    }
+
+    /* ── Detail panel ── */
+    .detail-panel {
+      width: 300px;
+      background: #fff;
+      border-left: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .panel-header {
+      padding: 13px 15px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .panel-header span { font-size: 12px; color: #64748b; }
+    .panel-header i { font-size: 15px; color: #94a3b8; cursor: pointer; }
+
+    .panel-body { flex: 1; padding: 15px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
+
+    .panel-title { font-size: 16px; font-weight: 700; color: #0f172a; line-height: 1.3; margin-bottom: 5px; }
+    .panel-desc { font-size: 12px; color: #64748b; line-height: 1.6; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .info-item .info-label {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .info-item .info-value { font-size: 12px; font-weight: 600; color: #0f172a; }
+
+    .safety-box {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 11px;
+    }
+    .safety-box .safety-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #92400e;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-title span { font-size: 11px; font-weight: 400; color: #64748b; }
+
+    .procedure-list { display: flex; flex-direction: column; gap: 8px; }
+    .proc-item { display: flex; gap: 8px; align-items: flex-start; }
+    .proc-dot {
+      width: 19px; height: 19px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-size: 10px;
+    }
+    .proc-dot.done { background: #3b82f6; color: #fff; }
+    .proc-dot.pending { background: #fff; border: 1px solid #cbd5e1; color: #64748b; }
+    .proc-text { font-size: 12px; line-height: 1.5; }
+    .proc-text.done { color: #64748b; }
+    .proc-text.pending { color: #0f172a; }
+
+    .info-link {
+      border: 1px solid #e2e8f0;
+      border-radius: 9px;
+      padding: 10px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .info-link:hover { background: #f8fafc; }
+    .info-link .link-inner { display: flex; gap: 9px; align-items: center; min-width: 0; }
+    .info-link .link-sub { font-size: 11px; color: #94a3b8; }
+    .info-link .link-title { font-size: 12px; font-weight: 600; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .insight-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 9px;
+      padding: 10px 11px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+    .insight-card:hover { background: #f8fafc; }
+    .insight-card:last-child { margin-bottom: 0; }
+    .match-badge {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      border-radius: 4px;
+      padding: 2px 5px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .insight-meta { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+    .insight-title { font-size: 12px; font-weight: 600; color: #0f172a; margin-top: 2px; line-height: 1.4; }
+    .insight-desc { font-size: 11px; color: #64748b; margin-top: 3px; line-height: 1.5; }
+
+    .panel-footer { padding: 13px 15px; border-top: 1px solid #e2e8f0; flex-shrink: 0; }
+    .btn-start {
+      width: 100%;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-family: inherit;
+    }
+    .btn-start:hover { background: #2563eb; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-outline:hover { background: #f8fafc; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo"><i class="ti ti-bolt"></i></div>
+    <div class="nav-item active"><i class="ti ti-calendar"></i></div>
+    <div class="nav-item"><i class="ti ti-clipboard-list"></i></div>
+    <div class="nav-item"><i class="ti ti-box"></i></div>
+    <div class="nav-item"><i class="ti ti-chart-bar"></i></div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Top header -->
+    <div class="top-header">
+      <div>
+        <div class="date">Wednesday, June 17</div>
+        <div class="title">Today's Schedule</div>
+      </div>
+      <div class="header-right">
+        <div style="text-align:right">
+          <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+            <span class="badge-count">3</span>
+            <span style="font-size:12px;color:#64748b">tasks pending</span>
+          </div>
+          <div class="shift-info">Morning Shift <span>06:00 – 14:00</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="worker-dropdown">
+            <i class="ti ti-user" style="font-size:13px"></i> Worker <i class="ti ti-chevron-down" style="font-size:11px"></i>
+          </div>
+          <div class="avatar">MC</div>
+          <span class="user-name">Marcus Chen</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="label">All Task</div>
+        <div class="value">4</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">In Progress</div>
+        <div class="value blue">1</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Pending</div>
+        <div class="value">2</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Done</div>
+        <div class="value">1<span class="sub">/4</span></div>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+
+      <!-- Card 1: Done -->
+      <div class="task-card">
+        <div class="time-col">
+          <div class="time">08:30</div>
+          <div class="sub">Completed</div>
+        </div>
+        <div class="card-body">
+          <div class="wo-number">WO-PUMP-A01-0617</div>
+          <div class="card-title">Hydraulic Valve Inspection &amp; Seal Test</div>
+          <div class="meta">
+            <span><i class="ti ti-tool"></i> Mazak QT-200 CNC Lathe</span>
+            <span><i class="ti ti-map-pin"></i> Bay 3 — Station 7</span>
+            <span><i class="ti ti-clock"></i> 90 min</span>
+            <span><i class="ti ti-user"></i> 1 worker</span>
+          </div>
+        </div>
+        <div class="card-action">
+          <span class="badge-done"><i class="ti ti-check"></i> Done</span>
+        </div>
+      </div>
+
+      <!-- Card 2: In Progress -->
+      <div class="task-card">
+        <div class="time-col">
+          <div class="time blue">08:30</div>
+          <div class="sub">Now</div>
+        </div>
+        <div class="card-body">
+          <div class="wo-number" style="display:flex;justify-content:space-between">
+            <span>WO-PUMP-A01-0617</span>
+            <span style="color:#64748b">Step 4/8</span>
+          </div>
+          <div class="card-title">Hydraulic Valve Inspection &amp; Seal Test</div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <div class="meta">
+            <span><i class="ti ti-tool"></i> Mazak QT-200 CNC Lathe</span>
+            <span><i class="ti ti-map-pin"></i> Bay 3 — Station 7</span>
+            <span><i class="ti ti-clock"></i> 90 min</span>
+            <span><i class="ti ti-user"></i> 1 worker</span>
+          </div>
+        </div>
+        <div class="card-action">
+          <button class="btn-primary"><i class="ti ti-player-play"></i> Continue</button>
+        </div>
+      </div>
+
+      <!-- Card 3: Selected -->
+      <div class="task-card selected">
+        <div class="time-col">
+          <div class="time blue">08:30</div>
+          <div class="sub">Now</div>
+        </div>
+        <div class="card-body">
+          <div class="wo-number">WO-PUMP-A01-0617</div>
+          <div class="card-title">Hydraulic Valve Inspection &amp; Seal Test</div>
+          <div class="meta">
+            <span><i class="ti ti-tool"></i> Mazak QT-200 CNC Lathe</span>
+            <span><i class="ti ti-map-pin"></i> Bay 3 — Station 7</span>
+            <span><i class="ti ti-clock"></i> 90 min</span>
+            <span><i class="ti ti-user"></i> 1 worker</span>
+          </div>
+          <div class="safety-tags">
+            <span class="tag red"><i class="ti ti-lock"></i> LOTO Required</span>
+            <span class="tag orange"><i class="ti ti-hand"></i> Protective gloves</span>
+            <span class="tag yellow"><i class="ti ti-eye"></i> Safety glasses</span>
+          </div>
+        </div>
+        <div class="card-action">
+          <button class="btn-outline"><i class="ti ti-player-play"></i> Star Work</button>
+        </div>
+      </div>
+
+      <!-- Card 4: Pending -->
+      <div class="task-card">
+        <div class="time-col">
+          <div class="time">08:30</div>
+          <div class="sub">Now</div>
+        </div>
+        <div class="card-body">
+          <div class="wo-number">WO-PUMP-A01-0617</div>
+          <div class="card-title">Hydraulic Valve Inspection &amp; Seal Test</div>
+          <div class="meta">
+            <span><i class="ti ti-tool"></i> Mazak QT-200 CNC Lathe</span>
+            <span><i class="ti ti-map-pin"></i> Bay 3 — Station 7</span>
+            <span><i class="ti ti-clock"></i> 90 min</span>
+            <span><i class="ti ti-user"></i> 1 worker</span>
+          </div>
+        </div>
+        <div class="card-action">
+          <button class="btn-outline"><i class="ti ti-player-play"></i> Star Work</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="detail-panel">
+
+    <div class="panel-header">
+      <span>WO-PUMP-A01-0617</span>
+      <i class="ti ti-x"></i>
+    </div>
+
+    <div class="panel-body">
+
+      <div>
+        <div class="panel-title">Hydraulic Valve Inspection &amp; Seal Test</div>
+        <p class="panel-desc">Hydraulic pressure was 8% below spec on last inspection. Check discharge port and all fittings for leaks before proceeding.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label"><i class="ti ti-tool"></i> Machine</div>
+          <div class="info-value">Mazak QT-200 CNC Lathe</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label"><i class="ti ti-map-pin"></i> Area</div>
+          <div class="info-value">Bay 3 — Station 7</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label"><i class="ti ti-clock"></i> Estimated time</div>
+          <div class="info-value">90 min</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label"><i class="ti ti-users"></i> Required people</div>
+          <div class="info-value">1 person</div>
+        </div>
+      </div>
+
+      <div class="safety-box">
+        <div class="safety-title">
+          <i class="ti ti-alert-triangle" style="color:#f59e0b"></i> Safety Requirements
+        </div>
+        <div class="safety-tags">
+          <span class="tag red"><i class="ti ti-lock"></i> LOTO Required</span>
+          <span class="tag orange"><i class="ti ti-hand"></i> Protective gloves</span>
+          <span class="tag yellow"><i class="ti ti-eye"></i> Safety glasses</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Work Procedure <span>3/8 steps</span></div>
+        <div class="procedure-list">
+          <div class="proc-item">
+            <div class="proc-dot done"><i class="ti ti-check"></i></div>
+            <div class="proc-text done">Inspect pump exterior for visible leaks or damage</div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-dot done"><i class="ti ti-check"></i></div>
+            <div class="proc-text done">Check fluid levels and add if necessary</div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-dot done"><i class="ti ti-check"></i></div>
+            <div class="proc-text done">Verify electrical connections for signs of wear</div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-dot pending">4</div>
+            <div class="proc-text pending">Test pressure gauges for accuracy</div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-dot pending">5</div>
+            <div class="proc-text pending">Inspect hoses and fittings for integrity</div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-dot pending">6</div>
+            <div class="proc-text pending">Ensure safety guards are in place and functional</div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-dot pending">7</div>
+            <div class="proc-text pending">Ensure safety guards are in place and functional</div>
+          </div>
+          <div class="proc-item">
+            <div class="proc-dot pending">8</div>
+            <div class="proc-text pending">Ensure safety guards are in place and functional</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Primary Information</div>
+        <div class="info-link">
+          <div class="link-inner">
+            <i class="ti ti-file-text" style="font-size:18px;color:#64748b;flex-shrink:0"></i>
+            <div style="min-width:0">
+              <div class="link-sub">Standars Manual #57</div>
+              <div class="link-title">Injection molding machine H2: Standa…</div>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right" style="font-size:14px;color:#94a3b8;flex-shrink:0"></i>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Veteran Insight</div>
+        <div class="insight-card">
+          <i class="ti ti-brain" style="font-size:20px;color:#3b82f6;flex-shrink:0;margin-top:2px"></i>
+          <div style="flex:1;min-width:0">
+            <span class="match-badge">81% Match</span>
+            <div class="insight-meta">Veteran Case Study #12-04 • Yuka Hano</div>
+            <div class="insight-title">Injection molding machine H2: Standard support for reduced clamping pressure.</div>
+            <div class="insight-desc">Use a pressure gauge and hex wrench. If there is no pressure, check the directional control valve first.</div>
+          </div>
+          <i class="ti ti-chevron-right" style="font-size:14px;color:#94a3b8;flex-shrink:0"></i>
+        </div>
+        <div class="insight-card">
+          <i class="ti ti-brain" style="font-size:20px;color:#3b82f6;flex-shrink:0;margin-top:2px"></i>
+          <div style="flex:1;min-width:0">
+            <span class="match-badge">81% Match</span>
+            <div class="insight-meta">Veteran Case Study #12-04 • Yuka Hano</div>
+            <div class="insight-title">Injection molding machine H2: Standard support for reduced clamping pressure.</div>
+            <div class="insight-desc">Use a pressure gauge and hex wrench. If there is no pressure, check the directional control valve first.</div>
+          </div>
+          <i class="ti ti-chevron-right" style="font-size:14px;color:#94a3b8;flex-shrink:0"></i>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel-footer">
+      <button class="btn-start"><i class="ti ti-player-play"></i> Start Work</button>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+  import { animate } from 'https://esm.sh/animejs@4';
+
+  const reveal = document.createElement('div');
+  reveal.setAttribute('aria-hidden', 'true');
+  reveal.style.cssText = 'position:fixed;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#0f172a;pointer-events:none;z-index:99999;transform:scale(0);will-change:transform;';
+  document.body.appendChild(reveal);
+
+  let navigating = false;
+  function triggerReveal(x, y) {
+    if (navigating) return;
+    navigating = true;
+    reveal.style.left = x + 'px';
+    reveal.style.top = y + 'px';
+    const dx = Math.max(x, innerWidth - x);
+    const dy = Math.max(y, innerHeight - y);
+    const target = (Math.hypot(dx, dy) * 2) / 14 * 1.15;
+    animate(reveal, {
+      scale: [0, target],
+      duration: 650,
+      ease: 'inOutQuad',
+      onComplete: () => { location.href = 'coming-soon.html'; },
+    });
+  }
+
+  const selector = 'button, a, .nav-item, .task-card, .insight-card, .info-link, .worker-dropdown, .range-picker, .badge-done, .kpi-card, .chart-card, .attn-item, .asset';
+  document.querySelectorAll(selector).forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerReveal(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2);
+    });
+  });
+
+  function resetReveal() {
+    navigating = false;
+    reveal.style.transform = 'scale(0)';
+  }
+  window.addEventListener('pageshow', resetReveal);
+  window.addEventListener('popstate', resetReveal);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+# torch + torchvision: install the CUDA builds explicitly (plain PyPI is CPU-only on Windows):
+#   python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+torch
+torchvision
+transformers>=4.49.0
+accelerate
+qwen-vl-utils
+pillow
+numpy
+huggingface_hub
+fastapi
+uvicorn
+python-multipart
+pytest
