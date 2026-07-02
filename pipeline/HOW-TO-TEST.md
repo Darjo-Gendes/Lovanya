@@ -13,8 +13,13 @@ python -m uvicorn app.main:app --port 8000
 Then open **http://localhost:8000** in a browser. You'll see all 30 sample
 outfit photos in a gallery. Click one, pick an occasion, hit **Analyze**.
 
-- The **first** analyze loads Qwen2.5-VL-3B into VRAM — measured ~50s.
-  Every analyze after that takes ~35–40s (two model calls: perceive + judge).
+- The judge is **Qwen3-VL-8B-Instruct** quantized to 4-bit at load
+  (bitsandbytes NF4). The first analyze loads it into VRAM (expect a couple
+  of minutes); after that each analyze runs two model calls (perceive +
+  judge) plus a GroundingDINO garment-crop.
+- Rate every judgment with 👍/👎 — a 👎 opens a correction box. Ratings and
+  corrections go to `data/ratings.jsonl` and become fine-tuning data
+  (see TRAINING.md).
 - You can also upload any photo instead of using a sample.
 - Tip: close Chrome/other GPU-heavy apps first; the model wants ~7GB VRAM.
   If it doesn't fit, layers spill to CPU automatically (works, just slower).

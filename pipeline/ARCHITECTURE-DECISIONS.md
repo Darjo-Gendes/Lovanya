@@ -12,9 +12,12 @@
    runtime. Everything must run locally against the GPU on this machine.
 2. **Detection + segmentation:** GroundingDINO + SAM2 (not yet implemented —
    `pipeline/app/segment.py` is still a stub that returns the whole image).
-3. **Perception + judgment:** Qwen2.5-VL-3B-Instruct (default). A 7B variant
-   is documented as a fallback if 3B quality is insufficient, but 3B is what
-   we target given the 8GB VRAM budget.
+3. **Perception + judgment:** Qwen3-VL-8B-Instruct, bitsandbytes NF4 4-bit
+   (fits the 8GB VRAM budget on-GPU). History: started with Qwen2.5-VL-3B
+   bf16 (quality ceiling hit fast — parroting, invented problems); a
+   compressed-tensors AWQ 4-bit checkpoint failed at inference on
+   Windows/transformers-v5 (`KeyError: 'weight_packed'`), so quantize-on-load
+   NF4 from the official checkpoint is the working recipe.
 4. **Optional render step:** SDXL/Flux for a styled visual — out of scope for
    this pass.
 5. **Structured, one-shot inference only.** Conversational/chat-style
@@ -39,9 +42,10 @@
 - `QwenAnalyzer` (`app/qwen_analyzer.py`) — perception + judgment via
   Qwen2.5-VL-3B-Instruct, one structured call per stage, no chat loop.
   Loads the framework file at judge time (framework-as-file seam).
-- `segment.py` — real seam, stub implementation (returns the whole image).
-  `analyze()` already calls it, so GroundingDINO+SAM2 slot in later without
-  touching the pipeline shape. Deferred deliberately to keep scope tight.
+- `segment.py` — GroundingDINO-tiny zero-shot garment/person detection,
+  union-box crop with margin, graceful fallback to the whole image
+  (SEGMENT=off bypasses). SAM2 pixel masks deferred until the training-data
+  phase — masked backgrounds hurt VLM perception at judge time.
 - `app/main.py` — FastAPI server: `GET /` browser test bench (sample gallery
   + occasion picker + judgment view), `POST /api/analyze` (sample name or
   photo upload), `GET /api/samples`, `GET /health`, `POST /warmup`.

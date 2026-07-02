@@ -1,7 +1,10 @@
+import json
 import shutil
 import tempfile
 import time
 from pathlib import Path
+
+from pydantic import BaseModel
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -93,6 +96,30 @@ async def analyze_endpoint(
     result = analyze(image_path, occasion)
     result["elapsed_seconds"] = round(time.time() - t0, 1)
     return result
+
+
+class Rating(BaseModel):
+    judgment_id: str
+    rating: str  # "up" | "down"
+    correction: str | None = None
+
+
+@app.post("/api/rate")
+def rate(r: Rating):
+    """Store a user rating/correction — this is the training-data intake."""
+    if r.rating not in ("up", "down"):
+        raise HTTPException(422, "rating must be 'up' or 'down'")
+    data_dir = PIPELINE_DIR / "data"
+    data_dir.mkdir(exist_ok=True)
+    entry = {
+        "rated_at": time.time(),
+        "judgment_id": r.judgment_id,
+        "rating": r.rating,
+        "correction": r.correction or None,
+    }
+    with open(data_dir / "ratings.jsonl", "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    return {"saved": True}
 
 
 app.mount("/samples", StaticFiles(directory=str(SAMPLES_DIR)), name="samples")

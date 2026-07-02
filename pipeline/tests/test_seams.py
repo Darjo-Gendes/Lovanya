@@ -43,10 +43,20 @@ def test_framework_file_loads():
     assert "Output contract" in content
 
 
-def test_segment_stub_passthrough():
-    from app.segment import segment
+def test_segment_off_passthrough(monkeypatch):
+    from app import segment as seg
 
-    assert segment("some/photo.jpg") == "some/photo.jpg"
+    monkeypatch.setattr(config, "SEGMENT", "off")
+    assert seg.segment("some/photo.jpg") == "some/photo.jpg"
+
+
+def test_segment_never_raises(monkeypatch):
+    from app import segment as seg
+
+    monkeypatch.setattr(config, "SEGMENT", "dino")
+    # nonexistent file: detection path must swallow the error and fall back
+    monkeypatch.setattr(seg, "_get_detector", lambda: (_ for _ in ()).throw(RuntimeError))
+    assert seg.segment("missing/photo.jpg") == "missing/photo.jpg"
 
 
 def test_get_analyzer_rejects_unknown_model(monkeypatch):

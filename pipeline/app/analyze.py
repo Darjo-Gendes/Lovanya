@@ -1,3 +1,5 @@
+import uuid
+
 from . import config
 from .logging_utils import log_judgment
 from .segment import segment
@@ -28,7 +30,9 @@ def analyze(image_path: str, occasion: str) -> dict:
     perception = analyzer.perceive(region_path)
     judgment = analyzer.judge(region_path, perception, occasion)
     record = {
+        "judgment_id": uuid.uuid4().hex[:12],
         "model": config.MODEL,
+        "model_id": config.QWEN_MODEL_ID,
         "image_path": image_path,
         "occasion": occasion,
         "perception": perception,

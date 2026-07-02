@@ -2,13 +2,7 @@ import json
 
 import torch
 from qwen_vl_utils import process_vision_info
-from transformers import AutoProcessor
-
-try:
-    from transformers import Qwen2_5_VLForConditionalGeneration as _QwenModelClass
-except ImportError:
-    # transformers v5 exposes VLMs through the generic image-text-to-text API
-    from transformers import AutoModelForImageTextToText as _QwenModelClass
+from transformers import AutoModelForImageTextToText, AutoProcessor
 
 from . import config
 from .json_utils import extract_json
@@ -52,11 +46,16 @@ class QwenAnalyzer:
     def __init__(self, model_id: str | None = None):
         model_id = model_id or config.QWEN_MODEL_ID
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model = _QwenModelClass.from_pretrained(
-            model_id,
-            dtype=torch.bfloat16,
-            device_map="auto",
-        )
+        kwargs = {"dtype": "auto", "device_map": "auto"}
+        if config.QUANT == "4bit" and self.device == "cuda":
+            from transformers import BitsAndBytesConfig
+
+            kwargs["quantization_config"] = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.bfloat16,
+            )
+        self.model = AutoModelForImageTextToText.from_pretrained(model_id, **kwargs)
         self.processor = AutoProcessor.from_pretrained(model_id)
 
     def _generate(self, image_path: str, prompt: str, max_new_tokens: int) -> str:
