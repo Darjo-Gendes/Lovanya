@@ -36,12 +36,14 @@ the "Output contract" section of the framework above."""
 
 
 class QwenAnalyzer:
-    """Perception + judgment via Qwen2.5-VL, one structured call per stage.
+    """Perception + judgment via Qwen VL, one structured call per stage.
 
     No chat/multi-turn history is kept between calls - each perceive()/judge()
     call is an independent one-shot inference, per the locked architecture
     decision to keep per-action cost bounded.
     """
+
+    input_kind = "image"  # analyze() dispatches on this: photo, not palette
 
     def __init__(self, model_id: str | None = None):
         model_id = model_id or config.QWEN_MODEL_ID
@@ -55,7 +57,14 @@ class QwenAnalyzer:
                 bnb_4bit_quant_type="nf4",
                 bnb_4bit_compute_dtype=torch.bfloat16,
             )
+            # auto device-map estimates spill to CPU (disallowed for 4-bit);
+            # NF4-quantized the model fits on the card, so pin it there.
+            kwargs["device_map"] = {"": 0}
         self.model = AutoModelForImageTextToText.from_pretrained(model_id, **kwargs)
+        if config.ADAPTER:
+            from peft import PeftModel
+
+            self.model = PeftModel.from_pretrained(self.model, config.ADAPTER)
         self.processor = AutoProcessor.from_pretrained(model_id)
 
     def _generate(self, image_path: str, prompt: str, max_new_tokens: int) -> str:

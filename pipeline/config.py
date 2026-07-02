@@ -29,6 +29,10 @@ QUANT: str = os.environ.get("LOVANYA_QUANT", "4bit")
 # "dino" = GroundingDINO garment detection before perception; "off" = whole image.
 SEGMENT: str = os.environ.get("LOVANYA_SEGMENT", "dino")
 
+# Path to a trained LoRA adapter dir (scripts/train_qlora.py output).
+# Empty = run the base model.
+ADAPTER: str = os.environ.get("LOVANYA_ADAPTER", "")
+
 # --- Framework-as-file (the moat lives in text, not code) ---------------------
 _HERE = os.path.dirname(os.path.abspath(__file__))
 FRAMEWORK_PATH: str = os.environ.get(

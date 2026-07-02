@@ -73,6 +73,14 @@ def test_quality_score_bounds():
     assert quality_score(flat) == 0.0
 
 
+def test_qwen_analyzer_declares_image_input_kind():
+    # analyze() dispatches on input_kind; without this attr the Qwen judge
+    # silently receives a color palette instead of the photo (merge bug).
+    from pipeline.app.qwen_analyzer import QwenAnalyzer
+
+    assert QwenAnalyzer.input_kind == "image"
+
+
 def test_get_analyzer_rejects_unknown_model(monkeypatch):
     monkeypatch.setattr(config, "MODEL", "nonexistent")
     monkeypatch.setattr(analyze, "_analyzer", None)
