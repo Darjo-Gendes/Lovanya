@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import config
+from .. import config
 from .analyze import analyze, get_analyzer
 
 PIPELINE_DIR = Path(__file__).resolve().parent.parent

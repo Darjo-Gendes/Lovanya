@@ -10,7 +10,7 @@ except ImportError:
     # transformers v5 exposes VLMs through the generic image-text-to-text API
     from transformers import AutoModelForImageTextToText as _QwenModelClass
 
-from . import config
+from .. import config
 from .json_utils import extract_json
 
 PERCEIVE_PROMPT = """Look at this outfit photo. Respond with ONLY a JSON object

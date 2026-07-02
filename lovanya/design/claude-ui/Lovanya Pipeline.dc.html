@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#EE7E54">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#EE7E54"/>
+    <rect x="470" y="250" width="260" height="340" rx="44" fill="none" stroke="#FCEDE3" stroke-width="14"/>
+    <path d="M600 360l28 62 68 6-51 46 15 67-60-36-60 36 15-67-51-46 68-6z" fill="#FCEDE3"/>
+  </svg>
+</template>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { margin: 0; font-family: 'Hanken Grotesk', system-ui, sans-serif; background:#EFC9AE; }
+  .lvp-scroll::-webkit-scrollbar { width: 0; height: 8px; }
+  .lvp-scroll::-webkit-scrollbar-thumb { background: rgba(160,110,80,.2); border-radius:8px; }
+  .lvp-scroll { scrollbar-width: thin; }
+  @keyframes lvpSpin { to { transform: rotate(360deg); } }
+  @keyframes lvpBreath { 0%,100% { transform: scale(1); opacity:.5; } 50% { transform: scale(1.18); opacity:.85; } }
+  @keyframes lvpFade { from { transform: translateY(10px);} to { transform:none;} }
+  @keyframes lvpBox { from{opacity:0; transform:scale(1.1);} to{opacity:1; transform:scale(1);} }
+  @keyframes lvpScan { 0%{top:-70px;opacity:0;} 10%{opacity:1;} 86%{top:100%;opacity:1;} 100%{top:100%;opacity:0;} }
+  @keyframes lvpVeil { 0%,30%{opacity:0;} 78%,100%{opacity:1;} }
+  @keyframes lvpTrace { 0%,18%{stroke-dashoffset:100;opacity:0;} 30%{opacity:1;} 100%{stroke-dashoffset:0;opacity:1;} }
+  @keyframes lvpChip { from{opacity:0; transform:translateY(10px) scale(.92);} to{opacity:1; transform:none;} }
+  @keyframes lvpToken { 0%{left:0;} 100%{left:100%;} }
+</style>
+</helmet>
+
+<div style="min-height:100vh;width:100%;font-family:'Hanken Grotesk',sans-serif;background:{{ rootBg }};transition:background .4s ease;">
+
+  <!-- ===================== TOP CONTROL BAR ===================== -->
+  <div style="position:sticky;top:0;z-index:200;display:flex;justify-content:center;padding:18px 16px 10px;">
+    <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:30px;padding:8px 10px 8px 20px;box-shadow:0 14px 34px -16px rgba(120,70,45,.5), 0 0 0 1px rgba(160,110,80,.1);">
+      <div style="font-family:'Newsreader',serif;font-size:20px;font-weight:600;color:#34302C;letter-spacing:-.3px;">Lovänya<span style="color:#E0764A;">.</span></div>
+      <div style="font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#B7A89E;">Auto-fill pipeline</div>
+      <div style="width:1px;height:22px;background:rgba(160,110,80,.18);"></div>
+      <div style="display:flex;gap:4px;background:#F3E6DC;border-radius:24px;padding:4px;">
+        <div onClick="{{ showConsumer }}" style="cursor:pointer;font-size:13px;font-weight:700;padding:9px 18px;border-radius:20px;background:{{ tabConsumerBg }};color:{{ tabConsumerColor }};transition:all .2s;">Consumer flow</div>
+        <div onClick="{{ showOperator }}" style="cursor:pointer;font-size:13px;font-weight:700;padding:9px 18px;border-radius:20px;background:{{ tabOperatorBg }};color:{{ tabOperatorColor }};transition:all .2s;">Operator console</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== CONSUMER ===================== -->
+  <sc-if value="{{ isConsumer }}" hint-placeholder-val="{{ true }}">
+  <div style="padding:6px 20px 64px;animation:lvpFade .4s ease both;">
+
+    <!-- demo controls -->
+    <div style="display:flex;flex-wrap:wrap;gap:11px;align-items:center;justify-content:center;margin:10px 0 26px;">
+      <div style="display:flex;gap:4px;background:rgba(255,255,255,.55);border-radius:24px;padding:4px;box-shadow:0 0 0 1px rgba(160,110,80,.12);">
+        <div onClick="{{ setVariantA }}" style="cursor:pointer;font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:20px;background:{{ varABg }};color:{{ varAColor }};transition:all .2s;">Stage rail</div>
+        <div onClick="{{ setVariantB }}" style="cursor:pointer;font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:20px;background:{{ varBBg }};color:{{ varBColor }};transition:all .2s;">Orbit</div>
+      </div>
+      <div style="display:flex;gap:4px;background:rgba(255,255,255,.55);border-radius:24px;padding:4px;box-shadow:0 0 0 1px rgba(160,110,80,.12);">
+        <div onClick="{{ setFree }}" style="cursor:pointer;font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:20px;background:{{ tierFreeBg }};color:{{ tierFreeColor }};transition:all .2s;">Free</div>
+        <div onClick="{{ setPremium }}" style="cursor:pointer;display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:20px;background:{{ tierPremBg }};color:{{ tierPremColor }};transition:all .2s;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg>Premium</div>
+      </div>
+      <div onClick="{{ start }}" style="cursor:pointer;display:flex;align-items:center;gap:8px;background:#34302C;color:#FCEDE3;font-size:12.5px;font-weight:700;padding:10px 18px;border-radius:24px;box-shadow:0 10px 24px -12px rgba(52,48,44,.7);transition:transform .15s;" style-active="transform:scale(.96)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l12-7z"/></svg>{{ runLabel }}
+      </div>
+    </div>
+
+    <!-- phone -->
+    <div style="display:flex;justify-content:center;">
+      <div style="position:relative;width:428px;height:900px;background:#1d1714;border-radius:60px;padding:13px;box-shadow:0 60px 100px -34px rgba(150,80,50,.55), 0 0 0 1px rgba(255,255,255,.05) inset;flex:none;">
+        <div style="position:relative;width:100%;height:100%;border-radius:48px;overflow:hidden;background:#FCF6F0;">
+
+          <!-- Dynamic Island -->
+          <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:126px;height:36px;background:#080606;border-radius:20px;z-index:65;pointer-events:none;"></div>
+          <!-- home indicator -->
+          <div style="position:absolute;bottom:9px;left:50%;transform:translateX(-50%);width:140px;height:5px;border-radius:3px;background:{{ homeIndicatorColor }};z-index:65;pointer-events:none;"></div>
+
+          <!-- status bar -->
+          <div style="position:absolute;top:0;left:0;right:0;height:54px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:19px 32px 0;pointer-events:none;color:{{ statusColor }};">
+            <span style="font-size:15px;font-weight:600;letter-spacing:.2px;">9:41</span>
+            <div style="display:flex;align-items:center;gap:7px;">
+              <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity=".4"/></svg>
+              <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="16" height="7.8" rx="1.8" fill="currentColor"/><rect x="24" y="4.2" width="1.6" height="4.6" rx=".8" fill="currentColor" opacity=".5"/></svg>
+            </div>
+          </div>
+
+          <div class="lvp-scroll" style="position:relative;width:100%;height:100%;overflow-y:auto;overflow-x:hidden;">
+
+            <!-- ===== READY (preview) ===== -->
+            <sc-if value="{{ isReady }}" hint-placeholder-val="{{ true }}">
+            <div style="min-height:874px;background:#FCF6F0;padding:64px 22px 36px;display:flex;flex-direction:column;animation:lvpFade .35s ease both;">
+              <div style="text-align:center;margin-bottom:18px;">
+                <div style="font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#B7A89E;margin-bottom:6px;">Wardrobe auto-fill</div>
+                <div style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#34302C;line-height:1;">Before we begin</div>
+              </div>
+              <div style="position:relative;border-radius:30px;overflow:hidden;box-shadow:0 28px 50px -22px rgba(160,100,70,.5);flex:1;margin-bottom:18px;">
+                <image-slot id="lvp-capture" style="width:100%;height:100%;" shape="rounded" radius="30" placeholder="your outfit photo"></image-slot>
+                <div style="position:absolute;left:14px;top:14px;display:flex;align-items:center;gap:6px;background:{{ tierChipBg }};backdrop-filter:blur(6px);padding:7px 13px;border-radius:24px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="{{ tierChipDot }}"><circle cx="12" cy="12" r="9"/></svg>
+                  <span style="font-size:11px;font-weight:700;letter-spacing:.4px;color:{{ tierChipColor }};">{{ tierChipLabel }}</span>
+                </div>
+              </div>
+              <div style="text-align:center;font-family:'Newsreader',serif;font-style:italic;font-size:19px;line-height:1.5;color:#7A4F3C;margin-bottom:20px;padding:0 10px;">{{ readyNote }}</div>
+              <div onClick="{{ start }}" style="cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#FBC79E,#EE7E54);color:#fff;font-size:16px;font-weight:600;padding:18px;border-radius:30px;box-shadow:0 18px 34px -14px rgba(238,126,84,.7);transition:transform .15s;" style-active="transform:scale(.98)">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 7 4h10l4 4.5"/><rect x="3" y="8.5" width="18" height="11.5" rx="3.5"/><circle cx="12" cy="14" r="3.4"/></svg>
+                Read this look
+              </div>
+            </div>
+            </sc-if>
+
+            <!-- ===== RUNNING · VARIATION A (stage rail) ===== -->
+            <sc-if value="{{ isRunA }}" hint-placeholder-val="{{ false }}">
+            <div style="min-height:874px;background:radial-gradient(120% 80% at 50% 0%, #2A211C 0%, #1C1512 64%);padding:62px 22px 26px;display:flex;flex-direction:column;animation:lvpFade .3s ease both;">
+              <div style="text-align:center;margin-bottom:16px;">
+                <div style="font-family:'Newsreader',serif;font-size:25px;font-weight:600;color:#FCEDE3;line-height:1;">Reading your look</div>
+                <div style="font-size:12.5px;color:rgba(252,237,227,.55);margin-top:6px;">One careful pass — colour, fit and feeling.</div>
+              </div>
+
+              <!-- photo + cut-out -->
+              <div style="position:relative;height:296px;border-radius:26px;overflow:hidden;background:#100C0A;box-shadow:0 24px 44px -22px rgba(0,0,0,.7);margin-bottom:18px;">
+                <image-slot id="lvp-capture" style="position:absolute;inset:0;width:100%;height:100%;" shape="rounded" radius="26" placeholder="your outfit photo"></image-slot>
+                <sc-if value="{{ boxed }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;left:18%;top:9%;right:18%;bottom:7%;pointer-events:none;animation:lvpBox .5s cubic-bezier(.2,.7,.25,1) both;">
+                  <div style="position:absolute;left:0;top:0;width:22px;height:22px;border-left:2px solid #F4A268;border-top:2px solid #F4A268;border-radius:7px 0 0 0;"></div>
+                  <div style="position:absolute;right:0;top:0;width:22px;height:22px;border-right:2px solid #F4A268;border-top:2px solid #F4A268;border-radius:0 7px 0 0;"></div>
+                  <div style="position:absolute;left:0;bottom:0;width:22px;height:22px;border-left:2px solid #F4A268;border-bottom:2px solid #F4A268;border-radius:0 0 0 7px;"></div>
+                  <div style="position:absolute;right:0;bottom:0;width:22px;height:22px;border-right:2px solid #F4A268;border-bottom:2px solid #F4A268;border-radius:0 0 7px 0;"></div>
+                  <div style="position:absolute;left:-1px;top:-22px;display:flex;gap:5px;align-items:center;background:#F4A268;padding:3px 8px;border-radius:6px;"><span style="font-size:9.5px;font-weight:800;letter-spacing:.4px;color:#2A1A12;font-family:ui-monospace,monospace;">GARMENT · 0.98</span></div>
+                </div>
+                </sc-if>
+                <sc-if value="{{ cutShown }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
+                  <sc-if value="{{ segmenting }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;left:0;right:0;height:70px;background:linear-gradient(to bottom,transparent,rgba(244,162,104,.55),transparent);animation:lvpScan 1.05s ease-in-out forwards;"></div>
+                  </sc-if>
+                  <svg viewBox="0 0 100 130" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
+                    <defs><mask id="lvpMaskA"><rect width="100" height="130" fill="#fff"/><path d="M50 20 C45 20 43 23 41 25 L24 31 C22 32 21 34 22 36 L27 50 C28 52 30 52 31 50 L33 46 L33 101 C33 104 35 106 38 106 L62 106 C65 106 67 104 67 101 L67 46 L69 50 C70 52 72 52 73 50 L78 36 C79 34 78 32 76 31 L59 25 C57 23 55 20 50 20 Z" fill="#000"/></mask></defs>
+                    <rect width="100" height="130" fill="rgba(16,12,10,.84)" mask="url(#lvpMaskA)" style="animation:lvpVeil 1.7s ease forwards;"></rect>
+                    <path d="M50 20 C45 20 43 23 41 25 L24 31 C22 32 21 34 22 36 L27 50 C28 52 30 52 31 50 L33 46 L33 101 C33 104 35 106 38 106 L62 106 C65 106 67 104 67 101 L67 46 L69 50 C70 52 72 52 73 50 L78 36 C79 34 78 32 76 31 L59 25 C57 23 55 20 50 20 Z" pathLength="100" fill="none" stroke="#FBC79E" stroke-width="0.7" stroke-linejoin="round" style="stroke-dasharray:100;animation:lvpTrace 1.7s ease forwards;filter:drop-shadow(0 0 3px rgba(251,199,158,.85));"></path>
+                  </svg>
+                </div>
+                </sc-if>
+                <sc-if value="{{ reading }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;inset:0;pointer-events:none;">
+                  <div style="position:absolute;left:14px;top:42px;background:rgba(252,237,227,.94);font-size:10.5px;font-weight:700;color:#C16A41;padding:5px 10px;border-radius:6px;animation:lvpChip .4s ease both;">washed linen</div>
+                  <div style="position:absolute;right:16px;top:96px;background:rgba(252,237,227,.94);font-size:10.5px;font-weight:700;color:#C16A41;padding:5px 10px;border-radius:6px;animation:lvpChip .4s .15s ease both;">sand</div>
+                  <div style="position:absolute;left:30px;bottom:34px;background:rgba(252,237,227,.94);font-size:10.5px;font-weight:700;color:#C16A41;padding:5px 10px;border-radius:6px;animation:lvpChip .4s .3s ease both;">relaxed fit</div>
+                </div>
+                </sc-if>
+              </div>
+
+              <!-- progress -->
+              <div style="height:4px;border-radius:4px;background:rgba(252,237,227,.1);overflow:hidden;margin-bottom:22px;">
+                <div ref="{{ setBar }}" style="height:100%;width:0%;border-radius:4px;background:linear-gradient(90deg,#FBC79E,#EE7E54);"></div>
+              </div>
+
+              <!-- rail -->
+              <div style="display:flex;flex-direction:column;gap:18px;flex:1;">
+                <div style="display:flex;align-items:center;gap:14px;opacity:{{ vDetect.op }};transition:opacity .3s;">
+                  <div style="width:40px;height:40px;border-radius:13px;flex:none;background:{{ vDetect.bub }};color:{{ vDetect.icol }};display:flex;align-items:center;justify-content:center;transition:all .3s;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 4 7v3M17 4l3 3v3M7 20l-3-3v-3M17 20l3-3v-3"/><circle cx="12" cy="12" r="3"/></svg></div>
+                  <div style="flex:1;"><div style="font-size:14.5px;font-weight:600;color:{{ vDetect.lcol }};transition:color .3s;">Finding your garment</div><sc-if value="{{ showModels }}" hint-placeholder-val="{{ true }}"><div style="font-size:10.5px;color:rgba(252,237,227,.38);font-family:ui-monospace,monospace;margin-top:2px;">GroundingDINO</div></sc-if></div>
+                  <div style="width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;"><sc-if value="{{ vDetect.done }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F4A268" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if><sc-if value="{{ vDetect.active }}" hint-placeholder-val="{{ true }}"><div style="width:18px;height:18px;border-radius:50%;border:2px solid rgba(252,237,227,.2);border-top-color:#F4A268;animation:lvpSpin .8s linear infinite;"></div></sc-if><sc-if value="{{ vDetect.pending }}" hint-placeholder-val="{{ false }}"><div style="width:7px;height:7px;border-radius:50%;background:rgba(252,237,227,.25);"></div></sc-if></div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:14px;opacity:{{ vSegment.op }};transition:opacity .3s;">
+                  <div style="width:40px;height:40px;border-radius:13px;flex:none;background:{{ vSegment.bub }};color:{{ vSegment.icol }};display:flex;align-items:center;justify-content:center;transition:all .3s;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.2 7.6 20 18M8.2 16.4 20 6"/></svg></div>
+                  <div style="flex:1;"><div style="font-size:14.5px;font-weight:600;color:{{ vSegment.lcol }};transition:color .3s;">Lifting it from the background</div><sc-if value="{{ showModels }}" hint-placeholder-val="{{ true }}"><div style="font-size:10.5px;color:rgba(252,237,227,.38);font-family:ui-monospace,monospace;margin-top:2px;">SAM2</div></sc-if></div>
+                  <div style="width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;"><sc-if value="{{ vSegment.done }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F4A268" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if><sc-if value="{{ vSegment.active }}" hint-placeholder-val="{{ false }}"><div style="width:18px;height:18px;border-radius:50%;border:2px solid rgba(252,237,227,.2);border-top-color:#F4A268;animation:lvpSpin .8s linear infinite;"></div></sc-if><sc-if value="{{ vSegment.pending }}" hint-placeholder-val="{{ true }}"><div style="width:7px;height:7px;border-radius:50%;background:rgba(252,237,227,.25);"></div></sc-if></div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:14px;opacity:{{ vPerceive.op }};transition:opacity .3s;">
+                  <div style="width:40px;height:40px;border-radius:13px;flex:none;background:{{ vPerceive.bub }};color:{{ vPerceive.icol }};display:flex;align-items:center;justify-content:center;transition:all .3s;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+                  <div style="flex:1;"><div style="font-size:14.5px;font-weight:600;color:{{ vPerceive.lcol }};transition:color .3s;">Reading colour, fabric &amp; fit</div><sc-if value="{{ showModels }}" hint-placeholder-val="{{ true }}"><div style="font-size:10.5px;color:rgba(252,237,227,.38);font-family:ui-monospace,monospace;margin-top:2px;">Qwen2.5-VL · perception</div></sc-if></div>
+                  <div style="width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;"><sc-if value="{{ vPerceive.done }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F4A268" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if><sc-if value="{{ vPerceive.active }}" hint-placeholder-val="{{ false }}"><div style="width:18px;height:18px;border-radius:50%;border:2px solid rgba(252,237,227,.2);border-top-color:#F4A268;animation:lvpSpin .8s linear infinite;"></div></sc-if><sc-if value="{{ vPerceive.pending }}" hint-placeholder-val="{{ true }}"><div style="width:7px;height:7px;border-radius:50%;background:rgba(252,237,227,.25);"></div></sc-if></div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:14px;opacity:{{ vJudge.op }};transition:opacity .3s;">
+                  <div style="width:40px;height:40px;border-radius:13px;flex:none;background:{{ vJudge.bub }};color:{{ vJudge.icol }};display:flex;align-items:center;justify-content:center;transition:all .3s;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg></div>
+                  <div style="flex:1;"><div style="font-size:14.5px;font-weight:600;color:{{ vJudge.lcol }};transition:color .3s;">Forming a gentle verdict</div><sc-if value="{{ showModels }}" hint-placeholder-val="{{ true }}"><div style="font-size:10.5px;color:rgba(252,237,227,.38);font-family:ui-monospace,monospace;margin-top:2px;">{{ judgeModelLine }}</div></sc-if></div>
+                  <div style="width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;"><sc-if value="{{ vJudge.done }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F4A268" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if><sc-if value="{{ vJudge.active }}" hint-placeholder-val="{{ false }}"><div style="width:18px;height:18px;border-radius:50%;border:2px solid rgba(252,237,227,.2);border-top-color:#F4A268;animation:lvpSpin .8s linear infinite;"></div></sc-if><sc-if value="{{ vJudge.pending }}" hint-placeholder-val="{{ true }}"><div style="width:7px;height:7px;border-radius:50%;background:rgba(252,237,227,.25);"></div></sc-if></div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:14px;opacity:{{ vRender.op }};transition:opacity .3s;">
+                  <div style="width:40px;height:40px;border-radius:13px;flex:none;background:{{ vRender.bub }};color:{{ vRender.icol }};display:flex;align-items:center;justify-content:center;transition:all .3s;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21 15 11M14 4l1.5 1.5M18 4l2 2-2 2-2-2zM7 13l-2 6 6-2"/></svg></div>
+                  <div style="flex:1;"><div style="font-size:14.5px;font-weight:600;color:{{ vRender.lcol }};transition:color .3s;">Styling a clean product shot</div><sc-if value="{{ showModels }}" hint-placeholder-val="{{ true }}"><div style="font-size:10.5px;color:rgba(252,237,227,.38);font-family:ui-monospace,monospace;margin-top:2px;">SDXL · Flux img2img</div></sc-if></div>
+                  <div style="width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;"><sc-if value="{{ vRender.done }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F4A268" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if><sc-if value="{{ vRender.active }}" hint-placeholder-val="{{ false }}"><div style="width:18px;height:18px;border-radius:50%;border:2px solid rgba(252,237,227,.2);border-top-color:#F4A268;animation:lvpSpin .8s linear infinite;"></div></sc-if><sc-if value="{{ vRender.pending }}" hint-placeholder-val="{{ false }}"><div style="width:7px;height:7px;border-radius:50%;background:rgba(252,237,227,.25);"></div></sc-if><sc-if value="{{ vRender.locked }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(252,237,227,.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></sc-if></div>
+                </div>
+              </div>
+
+              <div style="text-align:center;font-size:11.5px;color:rgba(252,237,227,.4);font-family:ui-monospace,monospace;margin-top:18px;">{{ pathLabel }}</div>
+            </div>
+            </sc-if>
+
+            <!-- ===== RUNNING · VARIATION B (orbit) ===== -->
+            <sc-if value="{{ isRunB }}" hint-placeholder-val="{{ false }}">
+            <div style="min-height:874px;background:radial-gradient(110% 70% at 50% 30%, #2C231D 0%, #160F0C 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 40px;text-align:center;animation:lvpFade .3s ease both;">
+
+              <div style="position:relative;width:248px;height:300px;margin-bottom:42px;display:flex;align-items:center;justify-content:center;">
+                <!-- aura -->
+                <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(238,126,84,.32),transparent 66%);animation:lvpBreath 3s ease-in-out infinite;"></div>
+                <!-- ring -->
+                <svg width="248" height="300" viewBox="0 0 248 300" style="position:absolute;inset:0;">
+                  <rect x="22" y="14" width="204" height="272" rx="34" fill="none" stroke="rgba(252,237,227,.1)" stroke-width="3"/>
+                  <rect ref="{{ setRing }}" x="22" y="14" width="204" height="272" rx="34" fill="none" stroke="#F4A268" stroke-width="3" stroke-linecap="round" pathLength="100" stroke-dasharray="100"></rect>
+                </svg>
+                <!-- photo vignette + cut-out -->
+                <div style="position:relative;width:196px;height:264px;border-radius:30px;overflow:hidden;background:#100C0A;">
+                  <image-slot id="lvp-capture" style="position:absolute;inset:0;width:100%;height:100%;" shape="rounded" radius="30" placeholder="your outfit"></image-slot>
+                  <sc-if value="{{ cutShown }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
+                    <sc-if value="{{ segmenting }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;left:0;right:0;height:60px;background:linear-gradient(to bottom,transparent,rgba(244,162,104,.55),transparent);animation:lvpScan 1.05s ease-in-out forwards;"></div>
+                    </sc-if>
+                    <svg viewBox="0 0 100 130" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
+                      <defs><mask id="lvpMaskB"><rect width="100" height="130" fill="#fff"/><path d="M50 20 C45 20 43 23 41 25 L24 31 C22 32 21 34 22 36 L27 50 C28 52 30 52 31 50 L33 46 L33 101 C33 104 35 106 38 106 L62 106 C65 106 67 104 67 101 L67 46 L69 50 C70 52 72 52 73 50 L78 36 C79 34 78 32 76 31 L59 25 C57 23 55 20 50 20 Z" fill="#000"/></mask></defs>
+                      <rect width="100" height="130" fill="rgba(16,12,10,.84)" mask="url(#lvpMaskB)" style="animation:lvpVeil 1.7s ease forwards;"></rect>
+                      <path d="M50 20 C45 20 43 23 41 25 L24 31 C22 32 21 34 22 36 L27 50 C28 52 30 52 31 50 L33 46 L33 101 C33 104 35 106 38 106 L62 106 C65 106 67 104 67 101 L67 46 L69 50 C70 52 72 52 73 50 L78 36 C79 34 78 32 76 31 L59 25 C57 23 55 20 50 20 Z" pathLength="100" fill="none" stroke="#FBC79E" stroke-width="0.7" stroke-linejoin="round" style="stroke-dasharray:100;animation:lvpTrace 1.7s ease forwards;filter:drop-shadow(0 0 3px rgba(251,199,158,.85));"></path>
+                    </svg>
+                  </div>
+                  </sc-if>
+                </div>
+              </div>
+
+              <div style="font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:#F4A268;margin-bottom:12px;">{{ orbitNum }}</div>
+              <div style="font-family:'Newsreader',serif;font-size:32px;font-weight:600;color:#FCEDE3;line-height:1.05;margin-bottom:12px;min-height:68px;">{{ orbitLabel }}</div>
+              <sc-if value="{{ showModels }}" hint-placeholder-val="{{ true }}">
+              <div style="font-size:12px;color:rgba(252,237,227,.42);font-family:ui-monospace,monospace;">{{ orbitModel }}</div>
+              </sc-if>
+              <div style="margin-top:8px;font-size:11.5px;color:rgba(252,237,227,.35);font-family:ui-monospace,monospace;">{{ pathLabel }}</div>
+            </div>
+            </sc-if>
+
+            <!-- ===== RESULT (wardrobe entry) ===== -->
+            <sc-if value="{{ isResult }}" hint-placeholder-val="{{ false }}">
+            <div style="min-height:874px;background:#FCF6F0;animation:lvpFade .4s ease both;">
+              <!-- hero -->
+              <div style="position:relative;height:330px;">
+                <image-slot id="lvp-render" style="position:absolute;inset:0;width:100%;height:100%;" shape="rect" placeholder="clean product shot"></image-slot>
+                <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(40,26,22,.85) 0%, rgba(40,26,22,.05) 48%, rgba(40,26,22,.3) 100%);"></div>
+                <div style="position:absolute;top:60px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;">
+                  <div onClick="{{ replay }}" style="cursor:pointer;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:#fff;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 4v4h4"/></svg></div>
+                  <sc-if value="{{ isPremium }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:6px;background:rgba(252,237,227,.92);padding:7px 13px;border-radius:24px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#E0764A"><path d="M5 21 15 11M14 4l1.5 1.5M18 4l2 2-2 2-2-2z"/></svg><span style="font-size:10.5px;font-weight:800;letter-spacing:.4px;color:#C16A41;">AI CLEAN SHOT</span></div></sc-if>
+                </div>
+                <!-- free: render gated overlay -->
+                <sc-if value="{{ isFree }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(28,21,18,.55);backdrop-filter:blur(3px);">
+                  <div style="text-align:center;padding:0 40px;">
+                    <div style="width:48px;height:48px;border-radius:16px;background:rgba(252,237,227,.16);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:#FCEDE3;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+                    <div style="font-family:'Newsreader',serif;font-size:21px;font-weight:600;color:#FCEDE3;line-height:1.1;">A clean product shot lives in Premium</div>
+                    <div style="font-size:12.5px;color:rgba(252,237,227,.7);margin-top:6px;">Free keeps your original photo — the read is still all yours.</div>
+                  </div>
+                </div>
+                </sc-if>
+                <div style="position:absolute;left:22px;right:22px;bottom:42px;">
+                  <div style="display:inline-block;background:rgba(255,255,255,.92);font-size:10.5px;font-weight:700;letter-spacing:.4px;color:#C16A41;padding:6px 11px;border-radius:6px;margin-bottom:11px;">ADDED TO WARDROBE</div>
+                  <div style="font-family:'Newsreader',serif;font-size:36px;font-weight:600;line-height:1;color:#fff;letter-spacing:-.4px;">Quiet linen</div>
+                </div>
+              </div>
+
+              <div style="position:relative;margin-top:-22px;border-radius:30px 30px 0 0;background:#FCF6F0;padding:26px 22px 54px;">
+                <!-- attributes -->
+                <div style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#B7A89E;margin-bottom:14px;">What we noted</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px;">
+                  <sc-for list="{{ attrs }}" as="a" hint-placeholder-count="6">
+                    <div style="background:#fff;border-radius:13px;padding:13px 15px;box-shadow:0 8px 22px -18px rgba(160,110,80,.5);"><div style="font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#C7B6AA;margin-bottom:4px;">{{ a.k }}</div><div style="font-size:14.5px;font-weight:600;color:#34302C;">{{ a.v }}</div></div>
+                  </sc-for>
+                </div>
+
+                <!-- colour story -->
+                <div style="background:#fff;border-radius:14px;padding:16px;box-shadow:0 8px 22px -18px rgba(160,110,80,.5);margin-bottom:18px;">
+                  <div style="font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#C7B6AA;margin-bottom:10px;">Colour</div>
+                  <div style="display:flex;gap:8px;"><div style="flex:1;height:30px;border-radius:8px;background:#E8DAC6;"></div><div style="flex:1;height:30px;border-radius:8px;background:#D9C3A8;"></div><div style="flex:1;height:30px;border-radius:8px;background:#C8B49B;"></div><div style="flex:1;height:30px;border-radius:8px;background:#F2EAE0;"></div></div>
+                </div>
+
+                <!-- verdict -->
+                <div style="background:linear-gradient(135deg,#FDEEE3,#FBE0D0);border-radius:16px;padding:20px 22px;margin-bottom:18px;position:relative;overflow:hidden;">
+                  <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#D08A60;margin-bottom:8px;">The read</div>
+                  <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:600;font-size:19px;line-height:1.4;color:#7A4F3C;">{{ verdict }}</div>
+                </div>
+
+                <!-- six dimensions (soft, no scores) -->
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:13px;">
+                  <div style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#B7A89E;">The six things we weigh</div>
+                  <div style="flex:1;height:1px;background:rgba(160,110,80,.14);"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:0;background:#fff;border-radius:16px;padding:4px 16px;box-shadow:0 8px 22px -18px rgba(160,110,80,.5);margin-bottom:18px;">
+                  <sc-for list="{{ dimensions }}" as="d" hint-placeholder-count="6">
+                    <div style="display:flex;align-items:flex-start;gap:13px;padding:13px 0;border-bottom:1px solid {{ d.border }};">
+                      <div style="width:6px;height:6px;border-radius:50%;flex:none;margin-top:7px;background:{{ d.dot }};"></div>
+                      <div style="flex:1;">
+                        <div style="font-size:13.5px;font-weight:700;color:#34302C;margin-bottom:2px;">{{ d.name }}</div>
+                        <div style="font-size:12.5px;line-height:1.5;color:#8A7468;">{{ d.note }}</div>
+                      </div>
+                      <div style="display:flex;gap:3px;flex:none;margin-top:4px;">
+                        <sc-for list="{{ d.pips }}" as="p" hint-placeholder-count="5">
+                          <div style="width:6px;height:6px;border-radius:50%;background:{{ p.c }};"></div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="font-size:11.5px;line-height:1.55;color:#A89488;font-style:italic;font-family:'Newsreader',serif;margin:-6px 2px 20px;">Weighed against Lovänya's framework — not a leaderboard, and never a read on you. Only the styling of what you own.</div>
+
+                <!-- elevate -->
+                <div style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#B7A89E;margin-bottom:12px;">If you feel like it</div>
+                <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:22px;">
+                  <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="2">
+                    <div style="display:flex;gap:13px;background:#fff;border-radius:14px;padding:15px;box-shadow:0 8px 22px -18px rgba(160,110,80,.5);"><div style="width:34px;height:34px;border-radius:11px;flex:none;background:#FCEDE3;color:#E0764A;display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 14.5 16 10 4 22"/><path d="m14 6 1.5-1.5a2.1 2.1 0 0 1 3 3L17 9"/></svg></div><div style="flex:1;font-size:13.5px;line-height:1.5;color:#5A4A40;">{{ s }}</div></div>
+                  </sc-for>
+                </div>
+
+                <!-- tier footer -->
+                <sc-if value="{{ isPremium }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;gap:12px;background:#34302C;border-radius:16px;padding:16px 18px;color:#FCEDE3;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#F4A268"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:700;">Premium · full path</div><div style="font-size:12px;color:rgba(252,237,227,.6);">Unlimited reads, generated feedback, clean shots.</div></div>
+                </div>
+                </sc-if>
+                <sc-if value="{{ isFree }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:15px 17px;box-shadow:0 8px 22px -18px rgba(160,110,80,.5);margin-bottom:11px;">
+                    <div style="flex:1;"><div style="font-size:13.5px;font-weight:700;color:#34302C;">Daily Outfit Check</div><div style="font-size:12px;color:#9B8B80;margin-top:1px;">1 of 1 used today · cheap path</div></div>
+                    <div style="width:34px;height:34px;border-radius:50%;background:#FCEDE3;display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E0764A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+                  </div>
+                  <div style="background:linear-gradient(135deg,#FBC79E,#EE7E54);border-radius:16px;padding:18px 20px;color:#fff;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                      <div style="font-size:12.5px;font-weight:700;letter-spacing:.3px;">Wardrobe · 24 of 25</div>
+                      <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.85);">nearly full</div>
+                    </div>
+                    <div style="height:6px;border-radius:6px;background:rgba(255,255,255,.28);overflow:hidden;margin-bottom:14px;"><div style="height:100%;width:96%;border-radius:6px;background:#fff;"></div></div>
+                    <div style="font-family:'Newsreader',serif;font-size:18px;font-weight:600;line-height:1.25;margin-bottom:14px;">One space left. Go unlimited and keep every look.</div>
+                    <div style="display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#C16A41;font-size:14px;font-weight:700;padding:13px;border-radius:24px;">Go unlimited · $3.50/mo</div>
+                  </div>
+                </div>
+                </sc-if>
+
+                <div onClick="{{ replay }}" style="cursor:pointer;text-align:center;font-size:14px;font-weight:600;color:#B7A89E;margin-top:20px;">Read another look</div>
+              </div>
+            </div>
+            </sc-if>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:22px;font-size:13px;color:rgba(80,50,35,.6);max-width:520px;margin-left:auto;margin-right:auto;line-height:1.5;">{{ variantCaption }}</div>
+  </div>
+  </sc-if>
+
+  <!-- ===================== OPERATOR ===================== -->
+  <sc-if value="{{ isOperator }}" hint-placeholder-val="{{ false }}">
+  <div style="padding:8px 28px 60px;animation:lvpFade .4s ease both;">
+    <div style="max-width:1180px;margin:0 auto;">
+
+      <!-- header -->
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin:12px 0 22px;">
+        <div>
+          <div style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#FCEDE3;line-height:1;">Pipeline console</div>
+          <div style="font-size:13px;color:rgba(252,237,227,.5);margin-top:7px;">Linear, one-shot inference · all open-weight, self-hosted · scale-to-zero serverless GPU</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(252,237,227,.4);">Judgment model · swappable boundary</div>
+            <div style="display:flex;align-items:center;gap:7px;background:rgba(244,162,104,.14);border:1px solid rgba(244,162,104,.3);border-radius:24px;padding:6px 13px;"><div style="width:7px;height:7px;border-radius:50%;background:#86C29A;"></div><span style="font-size:12px;font-weight:700;color:#F4A268;font-family:ui-monospace,monospace;">Qwen2.5-VL-3B</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- run controls -->
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:20px;">
+        <div onClick="{{ opRun }}" style="cursor:pointer;display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#FBC79E,#EE7E54);color:#fff;font-size:13.5px;font-weight:700;padding:11px 20px;border-radius:24px;box-shadow:0 12px 28px -12px rgba(238,126,84,.7);transition:transform .15s;" style-active="transform:scale(.97)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l12-7z"/></svg>{{ opRunLabel }}</div>
+        <div style="display:flex;gap:4px;background:rgba(252,237,227,.07);border-radius:24px;padding:4px;">
+          <div onClick="{{ setOpFull }}" style="cursor:pointer;font-size:12px;font-weight:700;padding:8px 15px;border-radius:20px;background:{{ opFullBg }};color:{{ opFullColor }};transition:all .2s;">Full path · Premium</div>
+          <div onClick="{{ setOpCheap }}" style="cursor:pointer;font-size:12px;font-weight:700;padding:8px 15px;border-radius:20px;background:{{ opCheapBg }};color:{{ opCheapColor }};transition:all .2s;">Cheap path · Free</div>
+        </div>
+        <div style="margin-left:auto;font-size:12px;color:rgba(252,237,227,.45);font-family:ui-monospace,monospace;">job cost ≈ ${{ opTotalCost }} · {{ opTotalMs }}ms</div>
+      </div>
+
+      <!-- pipeline nodes -->
+      <div class="lvp-scroll" style="display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:4px 2px 14px;margin-bottom:24px;">
+        <div style="flex:1;min-width:150px;border-radius:16px;padding:16px;background:{{ oDetect.bg }};border:1px solid {{ oDetect.border }};transition:all .3s;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="width:32px;height:32px;border-radius:10px;background:rgba(252,237,227,.06);color:{{ oDetect.dot }};display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 4 7v3M17 4l3 3v3M7 20l-3-3v-3M17 20l3-3v-3"/><circle cx="12" cy="12" r="3"/></svg></div><div style="width:8px;height:8px;border-radius:50%;background:{{ oDetect.dot }};"></div></div>
+          <div style="font-size:13.5px;font-weight:700;color:#FCEDE3;margin-bottom:3px;">Detect</div>
+          <div style="font-size:10.5px;color:rgba(252,237,227,.45);font-family:ui-monospace,monospace;margin-bottom:12px;">GroundingDINO</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;font-weight:700;color:{{ oDetect.sc }};">{{ oDetect.st }}</span><span style="font-size:10.5px;color:rgba(252,237,227,.4);font-family:ui-monospace,monospace;">180ms</span></div>
+        </div>
+        <div style="display:flex;align-items:center;color:rgba(252,237,227,.25);padding:0 4px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+
+        <div style="flex:1;min-width:150px;border-radius:16px;padding:16px;background:{{ oSegment.bg }};border:1px solid {{ oSegment.border }};transition:all .3s;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="width:32px;height:32px;border-radius:10px;background:rgba(252,237,227,.06);color:{{ oSegment.dot }};display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.2 7.6 20 18M8.2 16.4 20 6"/></svg></div><div style="width:8px;height:8px;border-radius:50%;background:{{ oSegment.dot }};"></div></div>
+          <div style="font-size:13.5px;font-weight:700;color:#FCEDE3;margin-bottom:3px;">Segment</div>
+          <div style="font-size:10.5px;color:rgba(252,237,227,.45);font-family:ui-monospace,monospace;margin-bottom:12px;">SAM2</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;font-weight:700;color:{{ oSegment.sc }};">{{ oSegment.st }}</span><span style="font-size:10.5px;color:rgba(252,237,227,.4);font-family:ui-monospace,monospace;">240ms</span></div>
+        </div>
+        <div style="display:flex;align-items:center;color:rgba(252,237,227,.25);padding:0 4px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+
+        <div style="flex:1;min-width:150px;border-radius:16px;padding:16px;background:{{ oPerceive.bg }};border:1px solid {{ oPerceive.border }};transition:all .3s;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="width:32px;height:32px;border-radius:10px;background:rgba(252,237,227,.06);color:{{ oPerceive.dot }};display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></div><div style="width:8px;height:8px;border-radius:50%;background:{{ oPerceive.dot }};"></div></div>
+          <div style="font-size:13.5px;font-weight:700;color:#FCEDE3;margin-bottom:3px;">Perceive</div>
+          <div style="font-size:10.5px;color:rgba(252,237,227,.45);font-family:ui-monospace,monospace;margin-bottom:12px;">Qwen2.5-VL</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;font-weight:700;color:{{ oPerceive.sc }};">{{ oPerceive.st }}</span><span style="font-size:10.5px;color:rgba(252,237,227,.4);font-family:ui-monospace,monospace;">210ms</span></div>
+        </div>
+        <div style="display:flex;align-items:center;color:rgba(252,237,227,.25);padding:0 4px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+
+        <div style="flex:1;min-width:150px;border-radius:16px;padding:16px;background:{{ oJudge.bg }};border:1px solid {{ oJudge.border }};transition:all .3s;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="width:32px;height:32px;border-radius:10px;background:rgba(252,237,227,.06);color:{{ oJudge.dot }};display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg></div><div style="width:8px;height:8px;border-radius:50%;background:{{ oJudge.dot }};"></div></div>
+          <div style="font-size:13.5px;font-weight:700;color:#FCEDE3;margin-bottom:3px;">Judge</div>
+          <div style="font-size:10.5px;color:rgba(252,237,227,.45);font-family:ui-monospace,monospace;margin-bottom:12px;">{{ oJudgeModel }}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;font-weight:700;color:{{ oJudge.sc }};">{{ oJudge.st }}</span><span style="font-size:10.5px;color:rgba(252,237,227,.4);font-family:ui-monospace,monospace;">{{ oJudgeMs }}</span></div>
+        </div>
+        <div style="display:flex;align-items:center;color:rgba(252,237,227,.25);padding:0 4px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+
+        <div style="flex:1;min-width:150px;border-radius:16px;padding:16px;background:{{ oRender.bg }};border:1px solid {{ oRender.border }};transition:all .3s;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="width:32px;height:32px;border-radius:10px;background:rgba(252,237,227,.06);color:{{ oRender.dot }};display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21 15 11M14 4l1.5 1.5M18 4l2 2-2 2-2-2zM7 13l-2 6 6-2"/></svg></div><div style="width:8px;height:8px;border-radius:50%;background:{{ oRender.dot }};"></div></div>
+          <div style="font-size:13.5px;font-weight:700;color:#FCEDE3;margin-bottom:3px;">Render</div>
+          <div style="font-size:10.5px;color:rgba(252,237,227,.45);font-family:ui-monospace,monospace;margin-bottom:12px;">SDXL · Flux</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;font-weight:700;color:{{ oRender.sc }};">{{ oRender.st }}</span><span style="font-size:10.5px;color:rgba(252,237,227,.4);font-family:ui-monospace,monospace;">520ms</span></div>
+        </div>
+        <div style="display:flex;align-items:center;color:rgba(252,237,227,.25);padding:0 4px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+
+        <div style="flex:1;min-width:150px;border-radius:16px;padding:16px;background:{{ oEntry.bg }};border:1px solid {{ oEntry.border }};transition:all .3s;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="width:32px;height:32px;border-radius:10px;background:rgba(252,237,227,.06);color:{{ oEntry.dot }};display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 7 4h10l4 3.5M3 7.5V19a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7.5M3 7.5h18M9 11h6"/></svg></div><div style="width:8px;height:8px;border-radius:50%;background:{{ oEntry.dot }};"></div></div>
+          <div style="font-size:13.5px;font-weight:700;color:#FCEDE3;margin-bottom:3px;">Wardrobe entry</div>
+          <div style="font-size:10.5px;color:rgba(252,237,227,.45);font-family:ui-monospace,monospace;margin-bottom:12px;">image + JSON</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;font-weight:700;color:{{ oEntry.sc }};">{{ oEntry.st }}</span><span style="font-size:10.5px;color:rgba(252,237,227,.4);font-family:ui-monospace,monospace;">60ms</span></div>
+        </div>
+      </div>
+
+      <!-- judgment rubric (the moat) -->
+      <div style="background:#15100D;border:1px solid rgba(252,237,227,.08);border-radius:18px;padding:20px;margin-bottom:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#FCEDE3;">Judgment rubric</div>
+            <div style="font-size:11.5px;color:rgba(252,237,227,.45);margin-top:4px;max-width:440px;line-height:1.5;">The model scores against a fixed framework — it never freestyles. The rubric is the moat, not the weights.</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;background:{{ rubricBadgeBg }};border:1px solid {{ rubricBadgeBorder }};border-radius:24px;padding:6px 13px;"><div style="width:7px;height:7px;border-radius:50%;background:{{ rubricBadgeDot }};"></div><span style="font-size:11px;font-weight:700;color:{{ rubricBadgeColor }};font-family:ui-monospace,monospace;">{{ rubricBadge }}</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;margin-bottom:18px;">
+          <sc-for list="{{ rubric }}" as="d" hint-placeholder-count="6">
+            <div>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12.5px;font-weight:600;color:#FCEDE3;">{{ d.name }}</span><span style="font-size:12px;font-weight:700;color:{{ d.scoreColor }};font-family:ui-monospace,monospace;">{{ d.label }}</span></div>
+              <div style="height:6px;border-radius:6px;background:rgba(252,237,227,.07);overflow:hidden;"><div style="height:100%;border-radius:6px;width:{{ d.pct }}%;background:{{ d.fill }};transition:width .5s ease;"></div></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:18px;">
+          <div style="background:rgba(252,237,227,.03);border-radius:13px;padding:15px 17px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(252,237,227,.4);margin-bottom:8px;">editorial_read</div>
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-size:15.5px;line-height:1.5;color:rgba(252,237,227,.85);">{{ editorialRead }}</div>
+          </div>
+          <div style="background:rgba(252,237,227,.03);border-radius:13px;padding:15px 17px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(252,237,227,.4);margin-bottom:8px;">elevate_suggestions</div>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <sc-for list="{{ rubricSuggestions }}" as="s" hint-placeholder-count="2">
+                <div style="display:flex;gap:9px;font-size:12.5px;line-height:1.45;color:rgba(252,237,227,.75);"><span style="color:#F4A268;flex:none;">→</span><span>{{ s }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- two columns: JSON contract + log -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+        <!-- JSON contract -->
+        <div style="background:#15100D;border:1px solid rgba(252,237,227,.08);border-radius:18px;padding:20px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div style="font-size:13px;font-weight:700;color:#FCEDE3;">Output contract</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(252,237,227,.4);">same shape, any model</div>
+          </div>
+          <div style="font-family:ui-monospace,'SF Mono',monospace;font-size:11.5px;line-height:1.7;color:rgba(252,237,227,.85);white-space:pre;overflow-x:auto;">{{ jsonText }}</div>
+        </div>
+
+        <!-- output log -->
+        <div style="background:#15100D;border:1px solid rgba(252,237,227,.08);border-radius:18px;padding:20px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div style="font-size:13px;font-weight:700;color:#FCEDE3;">Output log</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(252,237,227,.4);">input + output, every job</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <sc-for list="{{ log }}" as="row" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:11px;background:rgba(252,237,227,.03);border-radius:11px;padding:11px 13px;">
+                <div style="width:30px;height:30px;border-radius:9px;flex:none;background:{{ row.thumb }};"></div>
+                <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:#FCEDE3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ row.garment }}</div><div style="font-size:10.5px;color:rgba(252,237,227,.42);font-family:ui-monospace,monospace;">{{ row.time }} · {{ row.path }} path</div></div>
+                <div style="text-align:right;flex:none;"><div style="font-size:11px;font-weight:700;color:{{ row.tierColor }};">{{ row.tier }}</div><div style="font-size:10.5px;color:rgba(252,237,227,.42);font-family:ui-monospace,monospace;">{{ row.ms }}ms · ${{ row.cost }}</div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- economics strip -->
+      <div style="background:#15100D;border:1px solid rgba(252,237,227,.08);border-radius:18px;padding:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <div style="font-size:13px;font-weight:700;color:#FCEDE3;">Tier &amp; compute economics</div>
+          <div style="font-size:11px;color:rgba(252,237,227,.45);font-family:ui-monospace,monospace;">RTX 4090-class · ~$0.69/hr · scale-to-zero</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px;">
+          <div style="background:rgba(252,237,227,.03);border-radius:13px;padding:15px;"><div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(252,237,227,.4);margin-bottom:7px;">Free · monthly</div><div style="font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:#FCEDE3;line-height:1;">~$0.05</div><div style="font-size:11px;color:rgba(252,237,227,.45);margin-top:5px;">cheap path · 1 check/day · 25 cap</div></div>
+          <div style="background:rgba(252,237,227,.03);border-radius:13px;padding:15px;"><div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(252,237,227,.4);margin-bottom:7px;">Premium · monthly</div><div style="font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:#FCEDE3;line-height:1;">~$0.40</div><div style="font-size:11px;color:rgba(252,237,227,.45);margin-top:5px;">full path · unlimited</div></div>
+          <div style="background:rgba(252,237,227,.03);border-radius:13px;padding:15px;"><div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(252,237,227,.4);margin-bottom:7px;">Premium price</div><div style="font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:#FCEDE3;line-height:1;">$3.50</div><div style="font-size:11px;color:rgba(252,237,227,.45);margin-top:5px;">less 15% store fee</div></div>
+          <div style="background:linear-gradient(150deg,rgba(244,162,104,.18),rgba(244,162,104,.04));border:1px solid rgba(244,162,104,.25);border-radius:13px;padding:15px;"><div style="font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#F4A268;margin-bottom:7px;">Margin / premium</div><div style="font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:#F4A268;line-height:1;">~$2.57</div><div style="font-size:11px;color:rgba(252,237,227,.45);margin-top:5px;">break-even ≥ 2% conv.</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;background:rgba(252,237,227,.03);border-radius:13px;padding:14px 16px;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(252,237,227,.45);flex:none;">Spend alert</div>
+          <div style="flex:1;height:8px;border-radius:8px;background:rgba(252,237,227,.08);position:relative;overflow:visible;">
+            <div style="height:100%;width:21%;border-radius:8px;background:linear-gradient(90deg,#86C29A,#F4A268);"></div>
+            <div style="position:absolute;left:50%;top:-4px;width:2px;height:16px;background:#F4A268;"></div>
+            <div style="position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-size:9.5px;font-weight:700;color:#F4A268;white-space:nowrap;">notify $150</div>
+            <div style="position:absolute;left:100%;top:-4px;width:2px;height:16px;background:#E0764A;"></div>
+            <div style="position:absolute;left:100%;top:-22px;transform:translateX(-50%);font-size:9.5px;font-weight:700;color:#E0764A;white-space:nowrap;">cap $300</div>
+          </div>
+          <div style="font-family:ui-monospace,monospace;font-size:12px;color:#FCEDE3;flex:none;">$63 / mo</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240,&quot;height&quot;:940},&quot;speed&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Standard&quot;,&quot;options&quot;:[&quot;Calm&quot;,&quot;Standard&quot;,&quot;Quick&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;showModelNames&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;defaultView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;consumer&quot;,&quot;options&quot;:[&quot;consumer&quot;,&quot;operator&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    view: 'consumer', variant: 'a', tier: 'premium',
+    phase: 'ready', stageIdx: -1,
+    opRunning: false, opStageIdx: -1, opPath: 'full',
+    log: [
+      { garment: 'Charcoal wool overcoat', time: 'just now', path: 'full', tier: 'Premium', ms: 861, cost: '0.0050', thumb: 'linear-gradient(140deg,#5A5048,#34302C)' },
+      { garment: 'White poplin shirt', time: '2m ago', path: 'cheap', tier: 'Free', ms: 497, cost: '0.0010', thumb: 'linear-gradient(140deg,#F2EAE0,#D9C3A8)' },
+      { garment: 'Pleated sand midi skirt', time: '6m ago', path: 'full', tier: 'Premium', ms: 903, cost: '0.0052', thumb: 'linear-gradient(140deg,#E8DAC6,#C8B49B)' },
+      { garment: 'Cropped denim jacket', time: '12m ago', path: 'cheap', tier: 'Free', ms: 486, cost: '0.0009', thumb: 'linear-gradient(140deg,#9BB0C2,#6E8499)' },
+    ],
+  };
+
+  STAGES = [
+    { id: 'detect', dur: 1100 },
+    { id: 'segment', dur: 2100 },
+    { id: 'perceive', dur: 1500 },
+    { id: 'judge', dur: 1500 },
+    { id: 'render', dur: 1600, full: true },
+    { id: 'entry', dur: 800 },
+  ];
+
+  _t = [];
+  _ot = [];
+
+  componentDidMount() {
+    if (this.props.defaultView === 'operator') this.setState({ view: 'operator' });
+  }
+  componentWillUnmount() { this.clearTimers(); this.clearOp(); }
+  clearTimers() { this._t.forEach(clearTimeout); this._t = []; }
+  clearOp() { this._ot.forEach(clearTimeout); this._ot = []; }
+
+  speedFactor() { const s = this.props.speed; return s === 'Calm' ? 1.35 : s === 'Quick' ? 0.68 : 1; }
+  seq(tier) { const f = this.speedFactor(); return this.STAGES.filter(s => tier === 'premium' || !s.full).map(s => ({ ...s, dur: Math.round(s.dur * f) })); }
+
+  setBar = (el) => { this.barEl = el; if (el) el.style.width = '0%'; };
+  setRing = (el) => { this.ringEl = el; if (el) el.style.strokeDashoffset = 100; };
+
+  start = () => {
+    this.clearTimers();
+    this.curSeq = this.seq(this.state.tier);
+    this.curTotal = this.curSeq.reduce((a, s) => a + s.dur, 0);
+    this.setState({ phase: 'running', stageIdx: 0 });
+    this.run(0);
+  };
+  run = (i) => {
+    requestAnimationFrame(() => this.applyProgress(i));
+    this._t.push(setTimeout(() => {
+      if (i + 1 < this.curSeq.length) { this.setState({ stageIdx: i + 1 }); this.run(i + 1); }
+      else { this.setState({ phase: 'result' }); }
+    }, this.curSeq[i].dur));
+  };
+  applyProgress = (i) => {
+    if (!this.curSeq || !this.curSeq[i]) return;
+    let cum = 0; for (let j = 0; j <= i; j++) cum += this.curSeq[j].dur;
+    const frac = cum / this.curTotal;
+    if (this.barEl) { this.barEl.style.transition = 'width ' + this.curSeq[i].dur + 'ms linear'; this.barEl.style.width = (frac * 100) + '%'; }
+    if (this.ringEl) { this.ringEl.style.transition = 'stroke-dashoffset ' + this.curSeq[i].dur + 'ms linear'; this.ringEl.style.strokeDashoffset = 100 * (1 - frac); }
+  };
+  replay = () => {
+    this.clearTimers();
+    if (this.barEl) { this.barEl.style.transition = 'none'; this.barEl.style.width = '0%'; }
+    if (this.ringEl) { this.ringEl.style.transition = 'none'; this.ringEl.style.strokeDashoffset = 100; }
+    this.setState({ phase: 'ready', stageIdx: -1 });
+    requestAnimationFrame(() => this.start());
+  };
+
+  reset = (patch) => { this.clearTimers(); this.setState({ phase: 'ready', stageIdx: -1, ...patch }); };
+
+  // ---- operator ----
+  opSeq(path) { return this.STAGES.filter(s => path === 'full' || !s.full).map(s => s.id); }
+  opRun = () => {
+    this.clearOp();
+    const ids = this.opSeq(this.state.opPath);
+    this.setState({ opRunning: true, opStageIdx: 0 });
+    this.opStep(0, ids);
+  };
+  opStep = (i, ids) => {
+    this._ot.push(setTimeout(() => {
+      if (i + 1 < ids.length) { this.setState({ opStageIdx: i + 1 }); this.opStep(i + 1, ids); }
+      else {
+        const full = this.state.opPath === 'full';
+        const entry = { garment: 'Sand linen blouse', time: 'just now', path: this.state.opPath, tier: full ? 'Premium' : 'Free', ms: full ? 861 : 497, cost: full ? '0.0050' : '0.0010', thumb: 'linear-gradient(140deg,#E8DAC6,#C8B49B)' };
+        this.setState(st => ({ opRunning: false, opStageIdx: ids.length, log: [entry, ...st.log].slice(0, 6) }));
+      }
+    }, 540));
+  };
+
+  vis(id) {
+    const s = this.state;
+    const tier = s.tier;
+    if (tier === 'free' && id === 'render') return this._railStyle('locked');
+    const ids = this.seq(tier).map(x => x.id);
+    const pos = ids.indexOf(id);
+    let st = 'pending';
+    if (s.phase === 'result') st = 'done';
+    else if (s.phase === 'running' && pos >= 0) {
+      if (pos < s.stageIdx) st = 'done';
+      else if (pos === s.stageIdx) st = 'active';
+    }
+    return this._railStyle(st);
+  }
+  _railStyle(st) {
+    const map = {
+      done: { bub: 'rgba(224,118,74,.16)', icol: '#F4A268', lcol: '#FCEDE3', op: '1' },
+      active: { bub: 'linear-gradient(140deg,#FBC79E,#EE7E54)', icol: '#FFFFFF', lcol: '#FFFFFF', op: '1' },
+      pending: { bub: 'rgba(252,237,227,.07)', icol: 'rgba(252,237,227,.4)', lcol: 'rgba(252,237,227,.5)', op: '.55' },
+      locked: { bub: 'rgba(252,237,227,.05)', icol: 'rgba(252,237,227,.28)', lcol: 'rgba(252,237,227,.35)', op: '.45' },
+    };
+    const v = map[st];
+    return { ...v, done: st === 'done', active: st === 'active', pending: st === 'pending', locked: st === 'locked' };
+  }
+
+  oVis(id) {
+    const s = this.state;
+    if (s.opPath === 'cheap' && id === 'render') return { bg: '#181210', border: 'rgba(252,237,227,.05)', dot: 'rgba(252,237,227,.18)', st: 'Skipped', sc: 'rgba(252,237,227,.3)' };
+    const ids = this.opSeq(s.opPath);
+    const pos = ids.indexOf(id);
+    let st = 'idle';
+    if (s.opStageIdx >= 0) {
+      if (pos < s.opStageIdx) st = 'done';
+      else if (pos === s.opStageIdx && s.opRunning) st = 'running';
+    }
+    const map = {
+      idle: { bg: '#1B1512', border: 'rgba(252,237,227,.08)', dot: 'rgba(252,237,227,.25)', st: 'Idle', sc: 'rgba(252,237,227,.4)' },
+      running: { bg: 'linear-gradient(160deg,#3A2A20,#241C17)', border: 'rgba(244,162,104,.5)', dot: '#F4A268', st: 'Running', sc: '#F4A268' },
+      done: { bg: '#1F1915', border: 'rgba(134,194,154,.3)', dot: '#86C29A', st: 'Done', sc: '#86C29A' },
+    };
+    return map[st];
+  }
+
+  seg(v, t, f) { return v === t ? f.on : f.off; }
+
+  renderVals() {
+    const s = this.state;
+    const isConsumer = s.view === 'consumer';
+    const isOperator = s.view === 'operator';
+    const isPremium = s.tier === 'premium';
+    const isFree = s.tier === 'free';
+    const ids = this.seq(s.tier).map(x => x.id);
+    const cur = (s.phase === 'running') ? ids[s.stageIdx] : null;
+    const posSeg = ids.indexOf('segment');
+    const segmenting = cur === 'segment';
+    const segmented = s.phase === 'result' || (s.phase === 'running' && s.stageIdx > posSeg);
+    const cutShown = segmenting || segmented;
+    const boxed = s.phase === 'running';
+    const reading = cur === 'perceive' || cur === 'judge';
+
+    const STAGE_LABEL = {
+      detect: 'Finding your garment', segment: 'Lifting it from the background',
+      perceive: 'Reading colour, fabric & fit', judge: 'Forming a gentle verdict',
+      render: 'Styling a clean shot', entry: 'Adding to your wardrobe',
+    };
+    const STAGE_MODEL = {
+      detect: 'GroundingDINO', segment: 'SAM2', perceive: 'Qwen2.5-VL · perception',
+      judge: isFree ? 'Qwen2.5-VL · rule match' : 'Qwen2.5-VL · judgment', render: 'SDXL · Flux', entry: 'wardrobe',
+    };
+
+    const ON = { on: 'linear-gradient(135deg,#FBC79E,#EE7E54)', off: 'transparent' };
+    const opFull = s.opPath === 'full';
+
+    // ---- the framework moat: 6 evaluation dimensions ----
+    const DIMS = [
+      { key: 'color_harmony', name: 'Color Harmony' },
+      { key: 'elegance', name: 'Elegance' },
+      { key: 'outfit_cohesion', name: 'Outfit Cohesion' },
+      { key: 'confidence_boost', name: 'Confidence Boost' },
+      { key: 'consistency', name: 'Consistency' },
+      { key: 'style_growth', name: 'Style Growth' },
+    ];
+    const FULL_SCORES = { color_harmony: 8.6, elegance: 8.1, outfit_cohesion: 7.4, confidence_boost: 7.9, consistency: 8.8, style_growth: 6.5 };
+    const CHEAP_SCORES = { color_harmony: 8, elegance: 7, outfit_cohesion: 7, confidence_boost: 7, consistency: 9, style_growth: 6 };
+    const scores = opFull ? FULL_SCORES : CHEAP_SCORES;
+    const fillFor = (v) => v >= 8.2 ? 'linear-gradient(90deg,#FBC79E,#86C29A)' : v >= 7 ? 'linear-gradient(90deg,#FBC79E,#EE7E54)' : 'linear-gradient(90deg,#E0764A,#C16A41)';
+    const rubric = DIMS.map(d => { const v = scores[d.key]; return { name: d.name, label: (opFull ? v.toFixed(1) : v) + ' / 10', pct: v * 10, fill: fillFor(v), scoreColor: v >= 8.2 ? '#86C29A' : v >= 7 ? '#F4A268' : '#E0764A' }; });
+
+    // consumer-facing soft read (no numbers)
+    const CONS_DIMS = [
+      { name: 'Color Harmony', note: 'Sand on sand — a calm, low-contrast palette that never competes.', f: 5 },
+      { name: 'Elegance', note: 'Restraint reads as polish; nothing here is trying too hard.', f: 4 },
+      { name: 'Outfit Cohesion', note: 'Sits easily with the neutrals already in your wardrobe.', f: 4 },
+      { name: 'Confidence Boost', note: 'Quietly assured — easy enough to forget you are wearing it.', f: 4 },
+      { name: 'Consistency', note: 'True to the soft, considered tone you keep returning to.', f: 5 },
+      { name: 'Style Growth', note: 'A gentle step — room to push contrast when you feel like it.', f: 3 },
+    ];
+    const dimensions = CONS_DIMS.map((d, i) => ({
+      name: d.name, note: d.note, dot: '#E0764A',
+      border: i === CONS_DIMS.length - 1 ? 'transparent' : 'rgba(160,110,80,.1)',
+      pips: Array.from({ length: 5 }, (_, k) => ({ c: k < d.f ? '#E0764A' : 'rgba(160,110,80,.18)' })),
+    }));
+
+    const jsonText =
+'{\n' +
+'  "garment": {\n' +
+'    "category": "top",\n' +
+'    "subcategory": "linen blouse",\n' +
+'    "color_primary": "sand",\n' +
+'    "pattern": "solid",\n' +
+'    "fabric": "washed linen",\n' +
+'    "formality": "smart-casual",\n' +
+'    "fit": "relaxed"\n' +
+'  },\n' +
+'  "verdict": {\n' +
+'    "dimension_scores": {\n' +
+DIMS.map(d => '      "' + d.key + '": ' + scores[d.key]).join(',\n') + '\n' +
+'    },\n' +
+'    "editorial_read": "' + (opFull ? 'soft, low-contrast calm…' : 'rule-matched') + '",\n' +
+'    "elevate_suggestions": [' + (opFull ? ' "…", "…" ' : '') + ']\n' +
+'  }\n' +
+'}';
+
+    return {
+      rootBg: isOperator ? '#140F0C' : 'radial-gradient(130% 120% at 25% 0%, #F8D8C2 0%, #EFB89D 45%, #D99E86 100%)',
+
+      isConsumer, isOperator,
+      showConsumer: () => this.setState({ view: 'consumer' }),
+      showOperator: () => this.setState({ view: 'operator' }),
+      tabConsumerBg: isConsumer ? '#34302C' : 'transparent',
+      tabConsumerColor: isConsumer ? '#FCEDE3' : 'rgba(52,48,44,.5)',
+      tabOperatorBg: isOperator ? '#34302C' : 'transparent',
+      tabOperatorColor: isOperator ? '#FCEDE3' : 'rgba(52,48,44,.5)',
+
+      // consumer controls
+      setVariantA: () => this.reset({ variant: 'a' }),
+      setVariantB: () => this.reset({ variant: 'b' }),
+      varABg: s.variant === 'a' ? '#fff' : 'transparent',
+      varAColor: s.variant === 'a' ? '#34302C' : 'rgba(52,48,44,.5)',
+      varBBg: s.variant === 'b' ? '#fff' : 'transparent',
+      varBColor: s.variant === 'b' ? '#34302C' : 'rgba(52,48,44,.5)',
+      setFree: () => this.reset({ tier: 'free' }),
+      setPremium: () => this.reset({ tier: 'premium' }),
+      tierFreeBg: isFree ? '#34302C' : 'transparent',
+      tierFreeColor: isFree ? '#FCEDE3' : 'rgba(52,48,44,.5)',
+      tierPremBg: isPremium ? '#34302C' : 'transparent',
+      tierPremColor: isPremium ? '#FCEDE3' : 'rgba(52,48,44,.5)',
+      start: this.start,
+      replay: this.replay,
+      runLabel: s.phase === 'ready' ? 'Play the pipeline' : 'Replay',
+
+      // phase + variant flags
+      isReady: s.phase === 'ready',
+      isRunA: s.phase === 'running' && s.variant === 'a',
+      isRunB: s.phase === 'running' && s.variant === 'b',
+      isResult: s.phase === 'result',
+      isPremium, isFree,
+      statusColor: (s.phase === 'running') ? '#FCEDE3' : (s.phase === 'result' ? '#FFFFFF' : '#34302C'),
+      homeIndicatorColor: (s.phase === 'running') ? 'rgba(252,237,227,.5)' : 'rgba(52,48,44,.32)',
+
+      // ready screen
+      tierChipLabel: isPremium ? 'Premium · full path' : 'Free · cheap path',
+      tierChipBg: isPremium ? 'rgba(52,48,44,.78)' : 'rgba(252,237,227,.92)',
+      tierChipColor: isPremium ? '#FCEDE3' : '#C16A41',
+      tierChipDot: isPremium ? '#F4A268' : '#E0764A',
+      readyNote: isPremium
+        ? "I'll lift the garment out, read it gently, and tuck a clean shot into your wardrobe."
+        : "I'll lift the garment out and read it gently — that's your check for today.",
+
+      // scene flags
+      boxed, cutShown, segmenting, reading,
+      showModels: this.props.showModelNames !== false,
+      judgeModelLine: isFree ? 'Qwen2.5-VL · rule match' : 'Qwen2.5-VL · judgment',
+      pathLabel: isPremium ? 'full path · ' + ids.length + ' stages' : 'cheap path · ' + ids.length + ' stages',
+
+      // rail vis
+      vDetect: this.vis('detect'), vSegment: this.vis('segment'), vPerceive: this.vis('perceive'),
+      vJudge: this.vis('judge'), vRender: this.vis('render'), vEntry: this.vis('entry'),
+
+      // orbit (variant B)
+      orbitNum: cur ? String(s.stageIdx + 1).padStart(2, '0') + ' / ' + String(ids.length).padStart(2, '0') : '',
+      orbitLabel: cur ? STAGE_LABEL[cur] : 'Reading your look',
+      orbitModel: cur ? STAGE_MODEL[cur] : '',
+      progressRef: this.setBar,
+      setBar: this.setBar,
+      setRing: this.setRing,
+
+      // result
+      attrs: [
+        { k: 'Category', v: 'Top · blouse' },
+        { k: 'Fabric', v: 'Washed linen' },
+        { k: 'Pattern', v: 'Solid' },
+        { k: 'Fit', v: 'Relaxed' },
+        { k: 'Formality', v: 'Smart-casual' },
+        { k: 'Season', v: 'Spring · summer' },
+      ],
+      verdict: 'Soft sand linen in an easy, low-contrast calm — it reads effortless, and quietly assured.',
+      dimensions,
+      suggestions: [
+        'A light knit layer would echo the calm and add a little depth.',
+        'A loose half-tuck on one side hints at shape without losing the ease.',
+      ],
+      variantCaption: s.variant === 'a'
+        ? 'Stage rail — methodical and editorial. Each pipeline stage is named and checked off as it completes; the segmentation step lifts the garment out of frame.'
+        : 'Orbit — cinematic and immersive. One stage owns the screen at a time, wrapped in a breathing aura; the cut-out becomes the hero moment.',
+
+      // ---- operator ----
+      opRun: this.opRun,
+      opRunLabel: s.opRunning ? 'Running…' : 'Run sample job',
+      setOpFull: () => { this.clearOp(); this.setState({ opPath: 'full', opStageIdx: -1, opRunning: false }); },
+      setOpCheap: () => { this.clearOp(); this.setState({ opPath: 'cheap', opStageIdx: -1, opRunning: false }); },
+      opFullBg: opFull ? 'linear-gradient(135deg,#FBC79E,#EE7E54)' : 'transparent',
+      opFullColor: opFull ? '#fff' : 'rgba(252,237,227,.5)',
+      opCheapBg: !opFull ? 'linear-gradient(135deg,#FBC79E,#EE7E54)' : 'transparent',
+      opCheapColor: !opFull ? '#fff' : 'rgba(252,237,227,.5)',
+      opTotalCost: opFull ? '0.0050' : '0.0010',
+      opTotalMs: opFull ? '1310' : '550',
+      oDetect: this.oVis('detect'), oSegment: this.oVis('segment'), oPerceive: this.oVis('perceive'),
+      oJudge: this.oVis('judge'), oRender: this.oVis('render'), oEntry: this.oVis('entry'),
+      oJudgeModel: opFull ? 'Qwen2.5-VL' : 'rule match',
+      oJudgeMs: opFull ? '260ms' : '40ms',
+
+      jsonText,
+      rubric,
+      editorialRead: opFull
+        ? 'Soft sand linen in an easy, low-contrast calm — it reads effortless, and quietly assured.'
+        : 'Rule-matched summary only — the full editorial read renders on the Premium (full) path.',
+      rubricSuggestions: opFull
+        ? ['A light knit layer would echo the calm and add depth.', 'A loose half-tuck hints at shape without losing the ease.']
+        : ['Upgrade to the full path for tailored elevate suggestions.'],
+      rubricBadge: opFull ? 'full rubric · Qwen2.5-VL' : 'rule match · coarse',
+      rubricBadgeBg: opFull ? 'rgba(134,194,154,.12)' : 'rgba(252,237,227,.05)',
+      rubricBadgeBorder: opFull ? 'rgba(134,194,154,.3)' : 'rgba(252,237,227,.12)',
+      rubricBadgeDot: opFull ? '#86C29A' : 'rgba(252,237,227,.4)',
+      rubricBadgeColor: opFull ? '#86C29A' : 'rgba(252,237,227,.5)',
+      log: s.log.map(r => ({ ...r, tierColor: r.tier === 'Premium' ? '#F4A268' : 'rgba(252,237,227,.6)' })),
+    };
+  }
+}
+</script>
+</body>
+</html>
