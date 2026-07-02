@@ -3,7 +3,9 @@
 Open-weight, self-hosted wardrobe auto-fill / outfit-check pipeline. This pass is
 the **runnable stub scaffold**: the structure and all three build seams are real;
 the model stages are stubbed so it runs end-to-end with **no GPU**. Locked
-decisions live in `lovanya/design/claude-ui/uploads/files/architecture-decisions.md`.
+decisions live in `lovanya/design/claude-ui/uploads/files/architecture-decisions.md`;
+the visual layer (LookCards, dedup, segmentation-first) is locked in
+`docs/visual-pipeline-v1.md`.
 
 ## Run
 From the repo root (the folder containing both `lovanya/` and `pipeline/`):
