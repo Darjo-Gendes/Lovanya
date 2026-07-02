@@ -13,10 +13,10 @@ import sys
 import time
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from app import config  # noqa: E402
-from app.analyze import analyze  # noqa: E402
+from pipeline import config  # noqa: E402
+from pipeline.app.analyze import analyze  # noqa: E402
 
 # Chosen to cover the judgment rules: modest dress (r5c2, r5c3), garment-swap
 # phrasing (r4c4), print-on-print (r3c3), simple strong outfits (r1c1, r4c5),

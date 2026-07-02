@@ -1,15 +1,18 @@
-# torch + torchvision: install the CUDA builds explicitly (plain PyPI is CPU-only on Windows):
-#   python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
-torch
-torchvision
-transformers>=4.49.0
-accelerate
-bitsandbytes
-qwen-vl-utils
-pillow
-numpy
-huggingface_hub
-fastapi
-uvicorn
-python-multipart
-pytest
+# Base runtime — GPU-free. Enough for the honest-mock analyzer, both HTTP
+# servers, and the test suite (all a machine without the GPU needs).
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.5
+pillow>=10.0
+python-multipart>=0.0.9
+
+# Dev
+pytest>=8.0
+
+# Real-model (Qwen2.5-VL) deps live in requirements-gpu.txt — install those on
+# the GPU box on top of this file.
+
+# --- Not needed yet (added when the real stages are wired) ---
+# runpod                 # serverless GPU entrypoint (handler.py)
+# groundingdino, sam2    # detect + segment (segment.py)
+# diffusers              # SDXL/Flux clean shot (render.py)

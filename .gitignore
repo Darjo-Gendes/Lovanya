@@ -1,6 +1,21 @@
+# Portable Node.js used to work around PATH issues on this machine only —
+# the target machine should use its own normal Node install.
+.nodedist/
+
+# Python
 __pycache__/
 *.pyc
 .pytest_cache/
+venv/
+.venv/
+
+# Pipeline runtime output (regenerated locally, not project state)
 pipeline/logs/*.jsonl
+
+# Claude Code local state (machine-specific)
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# OS
+Thumbs.db
+.DS_Store

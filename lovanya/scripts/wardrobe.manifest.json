@@ -1,0 +1,642 @@
+﻿[
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  1,
+        "path":  "/wardrobe/top/1.png",
+        "primary":  "#ede8e0",
+        "secondary":  "#e5ddd2"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  2,
+        "path":  "/wardrobe/top/2.png",
+        "primary":  "#262521",
+        "secondary":  "#0f0f0b"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  3,
+        "path":  "/wardrobe/top/3.png",
+        "primary":  "#bac4d8",
+        "secondary":  "#9caac4"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  4,
+        "path":  "/wardrobe/top/4.png",
+        "primary":  "#e5d2c0",
+        "secondary":  "#dbbca9"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  5,
+        "path":  "/wardrobe/top/5.png",
+        "primary":  "#e5baae",
+        "secondary":  "#d29688"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  6,
+        "path":  "/wardrobe/top/6.png",
+        "primary":  "#e4c798",
+        "secondary":  "#d6b076"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  7,
+        "path":  "/wardrobe/top/7.png",
+        "primary":  "#aeac8e",
+        "secondary":  "#898661"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  8,
+        "path":  "/wardrobe/top/8.png",
+        "primary":  "#ebe5dd",
+        "secondary":  "#e0d8cd"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  9,
+        "path":  "/wardrobe/top/9.png",
+        "primary":  "#987f6e",
+        "secondary":  "#6e5340"
+    },
+    {
+        "key":  "top",
+        "cat":  "top",
+        "num":  10,
+        "path":  "/wardrobe/top/10.png",
+        "primary":  "#43423e",
+        "secondary":  "#0e0d09"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  1,
+        "path":  "/wardrobe/dress/1.png",
+        "primary":  "#eadfd1",
+        "secondary":  "#dac7b0"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  2,
+        "path":  "/wardrobe/dress/2.png",
+        "primary":  "#ccd1d8",
+        "secondary":  "#a7b1bf"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  3,
+        "path":  "/wardrobe/dress/3.png",
+        "primary":  "#676561",
+        "secondary":  "#13120d"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  4,
+        "path":  "/wardrobe/dress/4.png",
+        "primary":  "#e0d7cc",
+        "secondary":  "#c4b5a4"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  5,
+        "path":  "/wardrobe/dress/5.png",
+        "primary":  "#bfbda8",
+        "secondary":  "#918f71"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  6,
+        "path":  "/wardrobe/dress/6.png",
+        "primary":  "#e3beb7",
+        "secondary":  "#cd8f85"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  7,
+        "path":  "/wardrobe/dress/7.png",
+        "primary":  "#ddccbc",
+        "secondary":  "#c5ab92"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  8,
+        "path":  "/wardrobe/dress/8.png",
+        "primary":  "#ac826b",
+        "secondary":  "#71371a"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  9,
+        "path":  "/wardrobe/dress/9.png",
+        "primary":  "#ada794",
+        "secondary":  "#5c5333"
+    },
+    {
+        "key":  "dress",
+        "cat":  "dress",
+        "num":  10,
+        "path":  "/wardrobe/dress/10.png",
+        "primary":  "#6e6c68",
+        "secondary":  "#0f0d0a"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  1,
+        "path":  "/wardrobe/bottom/1.png",
+        "primary":  "#9bacb6",
+        "secondary":  "#7a8f9b"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  2,
+        "path":  "/wardrobe/bottom/2.png",
+        "primary":  "#ded1c2",
+        "secondary":  "#ccbaa6"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  3,
+        "path":  "/wardrobe/bottom/3.png",
+        "primary":  "#393834",
+        "secondary":  "#0e0e0a"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  4,
+        "path":  "/wardrobe/bottom/4.png",
+        "primary":  "#b6bec0",
+        "secondary":  "#96a2a6"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  5,
+        "path":  "/wardrobe/bottom/5.png",
+        "primary":  "#d7c0a8",
+        "secondary":  "#bfa182"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  6,
+        "path":  "/wardrobe/bottom/6.png",
+        "primary":  "#3d3b37",
+        "secondary":  "#11100c"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  7,
+        "path":  "/wardrobe/bottom/7.png",
+        "primary":  "#eae6df",
+        "secondary":  "#e0d9d0"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  8,
+        "path":  "/wardrobe/bottom/8.png",
+        "primary":  "#766253",
+        "secondary":  "#4e3827"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  9,
+        "path":  "/wardrobe/bottom/9.png",
+        "primary":  "#b2af93",
+        "secondary":  "#938f6d"
+    },
+    {
+        "key":  "bottom",
+        "cat":  "bottom",
+        "num":  10,
+        "path":  "/wardrobe/bottom/10.png",
+        "primary":  "#e7dfd4",
+        "secondary":  "#d8cdbd"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  1,
+        "path":  "/wardrobe/outerwear/1.png",
+        "primary":  "#d0b79e",
+        "secondary":  "#b39374"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  2,
+        "path":  "/wardrobe/outerwear/2.png",
+        "primary":  "#77878f",
+        "secondary":  "#425560"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  3,
+        "path":  "/wardrobe/outerwear/3.png",
+        "primary":  "#494743",
+        "secondary":  "#12110d"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  4,
+        "path":  "/wardrobe/outerwear/4.png",
+        "primary":  "#e1d7ca",
+        "secondary":  "#bfb19f"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  5,
+        "path":  "/wardrobe/outerwear/5.png",
+        "primary":  "#847c65",
+        "secondary":  "#4a4125"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  6,
+        "path":  "/wardrobe/outerwear/6.png",
+        "primary":  "#a29081",
+        "secondary":  "#6d5845"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  7,
+        "path":  "/wardrobe/outerwear/7.png",
+        "primary":  "#dac8b8",
+        "secondary":  "#c0a891"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  8,
+        "path":  "/wardrobe/outerwear/8.png",
+        "primary":  "#bd9f83",
+        "secondary":  "#8e6a48"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  9,
+        "path":  "/wardrobe/outerwear/9.png",
+        "primary":  "#686560",
+        "secondary":  "#14130e"
+    },
+    {
+        "key":  "outerwear",
+        "cat":  "outerwear",
+        "num":  10,
+        "path":  "/wardrobe/outerwear/10.png",
+        "primary":  "#e4d8ca",
+        "secondary":  "#cbb7a0"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  1,
+        "path":  "/wardrobe/shoes/1.png",
+        "primary":  "#e2ddd6",
+        "secondary":  "#cac3b8"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  2,
+        "path":  "/wardrobe/shoes/2.png",
+        "primary":  "#b5a390",
+        "secondary":  "#5d432c"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  3,
+        "path":  "/wardrobe/shoes/3.png",
+        "primary":  "#6f6a63",
+        "secondary":  "#181713"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  4,
+        "path":  "/wardrobe/shoes/4.png",
+        "primary":  "#d9cdbf",
+        "secondary":  "#b0987f"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  5,
+        "path":  "/wardrobe/shoes/5.png",
+        "primary":  "#806a5d",
+        "secondary":  "#3e2211"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  6,
+        "path":  "/wardrobe/shoes/6.png",
+        "primary":  "#8e8b86",
+        "secondary":  "#171713"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  7,
+        "path":  "/wardrobe/shoes/7.png",
+        "primary":  "#d6c0aa",
+        "secondary":  "#b38e6c"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  8,
+        "path":  "/wardrobe/shoes/8.png",
+        "primary":  "#cdc8c0",
+        "secondary":  "#9d958b"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  9,
+        "path":  "/wardrobe/shoes/9.png",
+        "primary":  "#8a8279",
+        "secondary":  "#14120e"
+    },
+    {
+        "key":  "shoes",
+        "cat":  "shoes",
+        "num":  10,
+        "path":  "/wardrobe/shoes/10.png",
+        "primary":  "#d3c6b8",
+        "secondary":  "#9e8b77"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  1,
+        "path":  "/wardrobe/bag/1.png",
+        "primary":  "#797671",
+        "secondary":  "#171612"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  2,
+        "path":  "/wardrobe/bag/2.png",
+        "primary":  "#d5bda3",
+        "secondary":  "#ba9873"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  3,
+        "path":  "/wardrobe/bag/3.png",
+        "primary":  "#a0958e",
+        "secondary":  "#362318"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  4,
+        "path":  "/wardrobe/bag/4.png",
+        "primary":  "#ebe2d8",
+        "secondary":  "#d5c5b1"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  5,
+        "path":  "/wardrobe/bag/5.png",
+        "primary":  "#84746a",
+        "secondary":  "#331d11"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  6,
+        "path":  "/wardrobe/bag/6.png",
+        "primary":  "#e3c5bd",
+        "secondary":  "#ca968b"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  7,
+        "path":  "/wardrobe/bag/7.png",
+        "primary":  "#ccaf90",
+        "secondary":  "#9c6b3e"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  8,
+        "path":  "/wardrobe/bag/8.png",
+        "primary":  "#cac7b7",
+        "secondary":  "#888565"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  9,
+        "path":  "/wardrobe/bag/9.png",
+        "primary":  "#74726d",
+        "secondary":  "#13120e"
+    },
+    {
+        "key":  "bag",
+        "cat":  "bag",
+        "num":  10,
+        "path":  "/wardrobe/bag/10.png",
+        "primary":  "#dbd7d1",
+        "secondary":  "#aba49a"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  1,
+        "path":  "/wardrobe/extras/1.png",
+        "primary":  "#d1c0ac",
+        "secondary":  "#b39f87"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  2,
+        "path":  "/wardrobe/extras/2.png",
+        "primary":  "#383733",
+        "secondary":  "#11100c"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  3,
+        "path":  "/wardrobe/extras/3.png",
+        "primary":  "#dbc4ab",
+        "secondary":  "#c1a17f"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  4,
+        "path":  "/wardrobe/extras/4.png",
+        "primary":  "#534e46",
+        "secondary":  "#171612"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  5,
+        "path":  "/wardrobe/extras/5.png",
+        "primary":  "#7f6958",
+        "secondary":  "#563e2c"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  6,
+        "path":  "/wardrobe/extras/6.png",
+        "primary":  "#5d5b59",
+        "secondary":  "#151512"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  7,
+        "path":  "/wardrobe/extras/7.png",
+        "primary":  "#dfc2a5",
+        "secondary":  "#cba076"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  8,
+        "path":  "/wardrobe/extras/8.png",
+        "primary":  "#404e42",
+        "secondary":  "#1d2c21"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  9,
+        "path":  "/wardrobe/extras/9.png",
+        "primary":  "#cbb8a4",
+        "secondary":  "#aa8f76"
+    },
+    {
+        "key":  "extras",
+        "cat":  "accessory",
+        "num":  10,
+        "path":  "/wardrobe/extras/10.png",
+        "primary":  "#383733",
+        "secondary":  "#171612"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  1,
+        "path":  "/wardrobe/accessories/1.png",
+        "primary":  "#eee5da",
+        "secondary":  "#d7c4a7"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  2,
+        "path":  "/wardrobe/accessories/2.png",
+        "primary":  "#dbc9b0",
+        "secondary":  "#a9895f"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  3,
+        "path":  "/wardrobe/accessories/3.png",
+        "primary":  "#efe8df",
+        "secondary":  "#dccdb7"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  4,
+        "path":  "/wardrobe/accessories/4.png",
+        "primary":  "#958e86",
+        "secondary":  "#2f241c"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  5,
+        "path":  "/wardrobe/accessories/5.png",
+        "primary":  "#e0d7ca",
+        "secondary":  "#b39e7f"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  6,
+        "path":  "/wardrobe/accessories/6.png",
+        "primary":  "#eee3d5",
+        "secondary":  "#d7be98"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  7,
+        "path":  "/wardrobe/accessories/7.png",
+        "primary":  "#e9e0d5",
+        "secondary":  "#d3c2ac"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  8,
+        "path":  "/wardrobe/accessories/8.png",
+        "primary":  "#e6d6c1",
+        "secondary":  "#caa87c"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  9,
+        "path":  "/wardrobe/accessories/9.png",
+        "primary":  "#e0d5c6",
+        "secondary":  "#c8b59e"
+    },
+    {
+        "key":  "accessories",
+        "cat":  "accessory",
+        "num":  10,
+        "path":  "/wardrobe/accessories/10.png",
+        "primary":  "#efe6da",
+        "secondary":  "#dac5a7"
+    }
+]

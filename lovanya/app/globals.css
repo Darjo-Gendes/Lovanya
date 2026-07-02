@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+@theme {
+  /* Lovanya palette — soft rose, porcelain blush, sage, champagne */
+  --color-porcelain: #faeded;
+  --color-card: #ffffff;
+  --color-ink: #48292e;
+  --color-ink-soft: #6e5a5a;
+  --color-ink-faint: #a2908f;
+  --color-rosewood: #d56f88;
+  --color-rosewood-deep: #c25c76;
+  --color-blush: #fbebeb;
+  --color-blush-deep: #f6dcde;
+  --color-champagne: #f4e7d6;
+  --color-gold: #c79a4a;
+  --color-sage: #8da767;
+  --color-sage-deep: #6e8a4e;
+  --color-line: #efdbdd;
+
+  --shadow-soft: 0 18px 36px -22px rgb(206 140 150 / 0.5);
+  --shadow-lift: 0 14px 28px -10px rgb(206 108 132 / 0.6);
+
+  --animate-breathe: breathe 5.2s ease-in-out infinite;
+  --animate-drift: drift 14s ease-in-out infinite alternate;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+
+  @keyframes breathe {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    50% {
+      transform: scale(1.08);
+      opacity: 1;
+    }
+  }
+  @keyframes drift {
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+    100% {
+      transform: translate(8px, -10px) scale(1.06);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
+
+@theme inline {
+  --font-display: var(--font-playfair);
+  --font-sans: var(--font-poppins);
+  --font-script: var(--font-parisienne);
+}
+
+html {
+  background: var(--color-porcelain);
+}
+
+body {
+  background: var(--color-porcelain);
+  color: var(--color-ink);
+  font-family: var(--font-poppins), sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Soft ambient washes behind everything */
+.app-wash {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(42rem 30rem at 110% -8%, rgb(213 111 136 / 0.1), transparent 60%),
+    radial-gradient(36rem 26rem at -18% 22%, rgb(246 220 222 / 0.55), transparent 65%),
+    radial-gradient(30rem 24rem at 80% 108%, rgb(141 167 103 / 0.12), transparent 60%);
+}
+
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.hairline {
+  border-color: var(--color-line);
+}
+
+/* Aura's luminous orb */
+.aura-orb {
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.95), transparent 42%),
+    radial-gradient(circle at 70% 70%, #f0aebb 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, #e48ea0 0%, #d56f88 55%, #c25c76 100%);
+  box-shadow:
+    0 0 22px rgb(213 111 136 / 0.5),
+    0 0 60px rgb(228 142 160 / 0.35),
+    inset 0 0 14px rgb(255 255 255 / 0.4);
+}
+
+.aura-thinking {
+  background:
+    linear-gradient(
+      100deg,
+      transparent 30%,
+      rgb(213 111 136 / 0.16) 50%,
+      transparent 70%
+    ),
+    var(--color-blush);
+  background-size:
+    200% 100%,
+    100% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+
+::selection {
+  background: var(--color-blush-deep);
+}
+
+input,
+textarea {
+  outline: none;
+}
+
+/* Hide scrollbars on chip rows while keeping scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================================
+   Home screen — ported 1:1 from public/prototype/lovanya-app.html
+   (the reference design). Scoped under .lv-home so it never
+   touches the rest of the app; literal font names swapped for
+   the next/font CSS variables.
+   ============================================================ */
+.lv-home {
+  --pink: #d56f88;
+  --ink: #48292e;
+  --ink2: #3e2a2e;
+  --body: #6e5a5a;
+  --muted: #a2908f;
+  --eyebrow: #ce6e86;
+}
+
+.lv-home .home-hero { position: relative; padding: 4px 22px 0; }
+.lv-home .home-deco { position: absolute; right: 4px; top: 12px; width: 128px; height: 128px; border-radius: 50% 50% 46% 64px; background: radial-gradient(circle at 60% 38%, #fce6e9, #f4cdd3); display: flex; align-items: center; justify-content: center; -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent); mask-image: linear-gradient(to bottom, #000 70%, transparent); z-index: 0; }
+.lv-home .home-deco svg { width: 58px; height: 58px; opacity: 0.45; }
+.lv-home .home-head { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; }
+.lv-home .home-logo { font-family: var(--font-parisienne), cursive; font-size: 32px; color: var(--pink); line-height: 1; display: flex; align-items: flex-start; gap: 3px; }
+.lv-home .home-actions { display: flex; gap: 10px; }
+.lv-home .home-ic { position: relative; width: 40px; height: 40px; border-radius: 13px; background: #fff; box-shadow: 0 7px 16px -8px rgba(206, 150, 150, 0.6); display: flex; align-items: center; justify-content: center; color: #5a4a4a; border: none; cursor: pointer; }
+.lv-home .home-ic .dot { position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 50%; background: var(--pink); border: 1.5px solid #fff; }
+.lv-home .home-greet { position: relative; z-index: 2; margin-top: 24px; font-family: var(--font-dancing), cursive; font-weight: 600; font-size: 27px; color: var(--pink); line-height: 1; }
+.lv-home .home-name { position: relative; z-index: 2; margin-top: 8px; font-family: var(--font-playfair), serif; font-weight: 600; font-size: 42px; color: var(--ink); line-height: 1; letter-spacing: -0.5px; display: flex; align-items: flex-start; gap: 9px; }
+.lv-home .home-sub { position: relative; z-index: 2; margin-top: 14px; font-size: 16px; color: var(--body); line-height: 1.32; }
+.lv-home .home-weather { position: relative; z-index: 2; margin-top: 16px; display: flex; align-items: center; gap: 9px; font-size: 15px; color: var(--body); }
+
+.lv-home .home-check { position: relative; margin: 22px 22px 0; height: 200px; border-radius: 28px; overflow: hidden; background: linear-gradient(155deg, #f8e1e1, #f3d2d7); box-shadow: 0 18px 36px -20px rgba(206, 140, 150, 0.55); cursor: pointer; display: block; }
+.lv-home .home-check img { position: absolute; right: -8px; top: 6px; width: 168px; height: 168px; object-fit: cover; object-position: 50% 10%; -webkit-mask-image: linear-gradient(to right, transparent, #000 26%); mask-image: linear-gradient(to right, transparent, #000 26%); }
+.lv-home .check-ico { position: absolute; left: 18px; top: 20px; width: 42px; height: 42px; border-radius: 13px; background: linear-gradient(150deg, #eba7af, #df8b99); box-shadow: 0 10px 18px -8px rgba(216, 130, 145, 0.7); display: flex; align-items: center; justify-content: center; color: #fff; }
+.lv-home .check-eye { position: absolute; left: 72px; top: 22px; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; color: var(--eyebrow); }
+.lv-home .check-title { position: absolute; left: 72px; top: 36px; font-family: var(--font-playfair), serif; font-weight: 600; font-size: 20px; color: var(--ink); line-height: 1.14; }
+.lv-home .check-body { position: absolute; left: 18px; top: 92px; width: 205px; font-size: 11.5px; color: var(--body); line-height: 1.4; }
+.lv-home .check-btn { position: absolute; left: 18px; right: 18px; bottom: 18px; height: 42px; border-radius: 24px; background: linear-gradient(135deg, #e48ea0, #ce6c84); box-shadow: 0 12px 22px -10px rgba(206, 108, 132, 0.7); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: #fff; }
+
+.lv-home .home-stats { display: flex; gap: 10px; margin: 14px 22px 0; }
+.lv-home .stat { flex: 1; border-radius: 18px; background: #fff; box-shadow: 0 12px 26px -18px rgba(206, 150, 150, 0.5); padding: 13px 12px 14px; }
+.lv-home .stat .si { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.lv-home .stat .sn { margin-top: 8px; font-family: var(--font-playfair), serif; font-weight: 700; font-size: 30px; color: var(--ink2); line-height: 1; }
+.lv-home .stat .sl { margin-top: 5px; font-size: 13px; font-weight: 600; color: var(--ink); }
+.lv-home .stat .sx { margin-top: 1px; font-size: 11px; color: var(--muted); }
+
+.lv-home .home-insight { position: relative; margin: 14px 22px 0; min-height: 150px; border-radius: 28px; overflow: hidden; background: linear-gradient(150deg, #f8e1e1, #f3d3d7); box-shadow: 0 18px 36px -20px rgba(206, 140, 150, 0.5); padding: 20px; cursor: pointer; display: block; text-align: left; }
+.lv-home .home-insight .e { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; color: var(--eyebrow); }
+.lv-home .home-insight h3 { font-family: var(--font-playfair), serif; font-weight: 600; font-size: 21px; color: var(--ink); margin: 8px 0 0; max-width: 220px; line-height: 1.12; }
+.lv-home .home-insight p { font-size: 13px; color: var(--body); margin: 10px 0 0; max-width: 250px; line-height: 1.4; }
+.lv-home .home-insight .lk { margin-top: 14px; display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--eyebrow); }

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lovanya — Analyze</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#D56F88; --pink2:#CE6C84; --surface:#FAEDED; --ink:#48292E; --ink2:#3E2A2E;
+    --body:#6E5A5A; --muted:#A2908F; --card:#fff; --blush:#FBEBEB; --blush2:#F6DCDE;
+    --line:#EFD9DC; --sage:#8DA767; --sagebg:#E8F0D8; --gold:#E8B24A; --lilacbg:#EFE4F1; --eyebrow:#CE6E86;
+  }
+  html, body { margin: 0; height: 100%; background: #E8DADA; overflow: hidden; }
+  .stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .device { position: relative; width: 426px; height: 898px; flex: none; transform-origin: center center; background: #1d1714; border-radius: 56px; padding: 12px; box-shadow: 0 60px 110px -36px rgba(170,110,120,.55); }
+  .ascreen { position: relative; width: 100%; height: 100%; border-radius: 46px; overflow: hidden; background: var(--surface); }
+
+  .ascr { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--surface); font-family: 'Poppins', sans-serif; color: var(--ink); }
+  .ascr.on { display: flex; animation: aFade .34s cubic-bezier(.32,.72,.3,1) both; }
+  @keyframes aFade { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+  .ascr-scroll { flex: 1; min-height: 0; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; }
+  .ascr-scroll::-webkit-scrollbar { display: none; }
+  .abar { flex: none; height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 16px 26px 0; font-size: 14px; font-weight: 600; color: var(--ink); }
+  .abar svg { display: block; }
+  .abar .sb { display: flex; align-items: center; gap: 6px; }
+  .aback { position: absolute; top: 52px; left: 16px; z-index: 6; width: 36px; height: 36px; border: none; background: transparent; color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .12s; }
+  .aback:active { transform: scale(.88); }
+  .abtn { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; border: none; cursor: pointer; border-radius: 24px; font-family: 'Poppins'; font-size: 15px; font-weight: 600; padding: 16px; color: #fff; background: linear-gradient(135deg,#E48EA0,#CE6C84); box-shadow: 0 14px 26px -10px rgba(206,108,132,.7); transition: transform .14s; }
+  .abtn:active { transform: scale(.97); }
+  .eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--eyebrow); display: flex; align-items: center; gap: 6px; }
+
+  .cam { position: absolute; inset: 0; display: flex; flex-direction: column; background: #1b1714; overflow: hidden; }
+  .cam-view { position: relative; flex: 1; overflow: hidden; min-height: 0; }
+  .cam-view > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 16%; }
+  .cam-top { position: absolute; top: 0; left: 0; right: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 0; }
+  .cam-ic { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.85); color: var(--ink); border: none; cursor: pointer; box-shadow: 0 4px 12px -5px rgba(0,0,0,.35); transition: transform .12s; }
+  .cam-ic:active { transform: scale(.9); }
+  .cam-logo { font-family: 'Parisienne', cursive; font-size: 25px; color: var(--pink); line-height: 1; display: flex; align-items: flex-start; gap: 3px; text-shadow: 0 1px 9px rgba(255,255,255,.7); }
+  .cam-caption { position: absolute; left: 50%; bottom: 86px; transform: translateX(-50%); max-width: 82%; text-align: center; background: rgba(255,255,255,.93); color: #5A4A4A; font-size: 12.5px; font-weight: 500; line-height: 1.35; padding: 11px 18px; border-radius: 18px; box-shadow: 0 12px 26px -12px rgba(0,0,0,.45); }
+  .cam-zoom { position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%); display: flex; align-items: center; gap: 3px; background: rgba(28,21,18,.5); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 5px; border-radius: 22px; }
+  .cam-zoom span { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.82); padding: 5px 12px; border-radius: 16px; cursor: pointer; }
+  .cam-zoom span.on { background: #fff; color: var(--ink); }
+  .cam-controls { flex: none; height: 108px; background: #fff; border-radius: 26px 26px 0 0; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+  .cam-side { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+  .cam-sq { width: 46px; height: 46px; border-radius: 14px; background: var(--surface); display: flex; align-items: center; justify-content: center; color: #7A5A60; }
+  .cam-side span { font-size: 11px; color: #8C7375; font-weight: 500; }
+  .cam-shutter { width: 70px; height: 70px; border-radius: 50%; border: 5px solid #fff; cursor: pointer; background: radial-gradient(circle at 36% 30%, #E791A2, #D56F88 62%, #C25C76); box-shadow: 0 0 0 2px #EFC9D2, 0 12px 24px -8px rgba(206,108,132,.7); transition: transform .12s; }
+  .cam-shutter:active { transform: scale(.93); }
+
+  .occ { padding: 6px 24px 30px; }
+  .occ-title { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 27px; line-height: 1.18; color: var(--ink); margin: 8px 0 0; letter-spacing: -.3px; }
+  .occ-sub { font-size: 13px; color: var(--body); margin: 10px 0 0; }
+  .occ-input { margin-top: 20px; display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; }
+  .occ-input input { flex: 1; border: none; background: transparent; font-family: 'Poppins'; font-size: 13px; color: var(--ink); outline: none; }
+  .occ-input input::placeholder { color: var(--muted); }
+  .occ-label { font-size: 13px; font-weight: 600; color: var(--ink); margin: 22px 0 0; }
+  .occ-grid { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  .occ-chip { display: flex; align-items: center; gap: 9px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 13px; cursor: pointer; font-family: 'Poppins'; font-size: 13px; font-weight: 500; color: var(--ink); transition: transform .14s, box-shadow .16s, background .16s; text-align: left; }
+  .occ-chip:active { transform: scale(.97); }
+  .occ-ico { width: 30px; height: 30px; border-radius: 9px; background: var(--blush); display: flex; align-items: center; justify-content: center; color: var(--pink); flex: none; }
+  .occ-chip.sel { background: linear-gradient(135deg,#E48EA0,#CE6C84); border-color: transparent; color: #fff; box-shadow: 0 10px 20px -10px rgba(206,108,132,.7); }
+  .occ-chip.sel .occ-ico { background: rgba(255,255,255,.22); color: #fff; }
+  .occ-skip { display: block; width: 100%; text-align: center; background: none; border: none; margin-top: 14px; font-family: 'Poppins'; font-size: 13.5px; font-weight: 500; color: var(--muted); cursor: pointer; }
+
+  .anz { flex: 1; display: flex; flex-direction: column; padding: 4px 32px 30px; }
+  .anz-title { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 26px; color: var(--ink); margin: 6px 0 0; display: flex; align-items: center; gap: 8px; }
+  .anz-ringwrap { align-self: center; position: relative; width: 130px; height: 130px; margin: 28px 0 30px; }
+  .anz-ring { transform: rotate(-90deg); }
+  .anz-prog { transition: stroke-dashoffset 3.1s linear; }
+  .anz-spark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--pink); }
+  .anz-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 15px; }
+  .anz-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); transition: color .3s; }
+  .anz-item .adot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); flex: none; display: flex; align-items: center; justify-content: center; color: #fff; transition: all .3s; }
+  .anz-item .adot svg { opacity: 0; transition: opacity .2s; }
+  .anz-item.act { color: var(--pink); font-weight: 500; }
+  .anz-item.act .adot { border-color: var(--pink); }
+  .anz-item.done { color: var(--ink); }
+  .anz-item.done .adot { background: var(--pink); border-color: var(--pink); }
+  .anz-item.done .adot svg { opacity: 1; }
+  .anz-note { margin-top: auto; display: flex; gap: 10px; background: var(--blush); border-radius: 16px; padding: 14px 16px; font-size: 12px; color: var(--body); line-height: 1.4; }
+
+  .res-hero { flex: none; position: relative; height: 300px; }
+  .res-hero > img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
+  .res-hero .ov { position: absolute; inset: 0; background: linear-gradient(to top, rgba(40,26,22,.5), rgba(40,26,22,.04) 46%); }
+  .res-hbtn { position: absolute; top: 56px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.85); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: none; display: flex; align-items: center; justify-content: center; color: var(--ink); cursor: pointer; transition: transform .12s; }
+  .res-hbtn:active { transform: scale(.9); }
+  .res-view { position: absolute; right: 16px; bottom: 16px; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.92); border-radius: 20px; padding: 7px 13px; font-size: 11.5px; font-weight: 600; color: var(--ink); cursor: pointer; }
+  .res-body { padding: 22px 24px 30px; }
+  .res-verdict { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 22px; line-height: 1.28; color: var(--ink); margin: 10px 0 0; }
+  .res-sub { font-size: 13px; line-height: 1.5; color: var(--body); margin: 12px 0 0; }
+  .res-list { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .res-li { display: flex; gap: 12px; }
+  .res-li .ic { width: 34px; height: 34px; border-radius: 10px; flex: none; display: flex; align-items: center; justify-content: center; }
+  .res-li h4 { margin: 0; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .res-li p { margin: 2px 0 0; font-size: 12px; color: var(--body); line-height: 1.4; }
+  .res-actions { margin-top: 24px; display: flex; gap: 11px; }
+  .res-heart { width: 54px; height: 54px; flex: none; border-radius: 18px; background: var(--card); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--pink); cursor: pointer; transition: transform .12s; }
+  .res-heart:active { transform: scale(.93); }
+
+  .snap-wrap { padding: 16px 22px 26px; }
+  .snap { border-radius: 26px; overflow: hidden; background: var(--card); box-shadow: 0 26px 46px -22px rgba(206,140,150,.65); border: 1px solid var(--line); }
+  .snap-top { padding: 18px 20px 0; display: flex; align-items: center; justify-content: space-between; }
+  .snap-logo { font-family: 'Parisienne', cursive; font-size: 23px; color: var(--pink); }
+  .snap-tag { font-size: 9px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); }
+  .snap-h { padding: 4px 20px 0; }
+  .snap-h h3 { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 18px; color: var(--ink); margin: 6px 0 0; }
+  .snap-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .snap-photo { margin: 14px 20px 0; height: 198px; border-radius: 18px; overflow: hidden; position: relative; }
+  .snap-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 16%; }
+  .snap-imp { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 16px 12px; background: linear-gradient(to top, rgba(40,26,22,.74), transparent); }
+  .snap-imp .e { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255,255,255,.82); }
+  .snap-imp .t { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 19px; color: #fff; margin-top: 2px; }
+  .snap-imp .s { font-size: 10.5px; color: rgba(255,255,255,.8); margin-top: 3px; }
+  .snap-strength { padding: 18px 20px 6px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .bar-row .lbl { flex: none; width: 100px; display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--ink); }
+  .bar-track { flex: 1; height: 7px; border-radius: 6px; background: #F3DEE2; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg,#D56F88,#C25C76); width: 0; transition: width 1s cubic-bezier(.32,.72,.3,1); }
+  .bar-val { flex: none; width: 36px; text-align: right; font-size: 11px; font-weight: 600; color: var(--pink); }
+  .snap-refl { padding: 16px 20px 18px; border-top: 1px solid var(--line); margin-top: 14px; }
+  .snap-refl p { font-size: 12.5px; line-height: 1.5; color: var(--body); margin: 8px 0 0; }
+  .snap-foot { padding: 16px 20px 20px; text-align: center; border-top: 1px solid var(--line); }
+  .snap-foot .f1 { font-family: 'Parisienne', cursive; font-size: 21px; color: var(--pink); }
+  .snap-foot .f2 { font-size: 11px; color: var(--muted); margin-top: 3px; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="device" id="device">
+      <div class="ascreen">
+
+        <!-- 1) Camera -->
+        <div class="ascr on" id="scr-cam">
+          <div class="cam">
+            <div class="cam-view">
+              <img src="analyze/outfit.png" alt="">
+              <div class="cam-top">
+                <button class="cam-ic" data-close aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+                <div class="cam-logo">Lovanya<svg width="11" height="11" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg></div>
+                <button class="cam-ic" aria-label="Flash"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 5 13h6l-1 9 8-11h-6l1-9z"/></svg></button>
+              </div>
+              <div class="cam-caption">Stand back, relax, and let natural light do the magic <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B24A" style="vertical-align:-1px"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg></div>
+              <div class="cam-zoom"><span>0.5</span><span class="on">1x</span><span>2</span></div>
+            </div>
+            <div class="cam-controls">
+              <div class="cam-side"><div class="cam-sq"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="4"/><circle cx="8.5" cy="9.5" r="1.7"/><path d="m4 17 4.8-4.3 3.6 3.2 3.1-2.6L20 16.5"/></svg></div><span>Gallery</span></div>
+              <button class="cam-shutter" data-next aria-label="Capture"></button>
+              <div class="cam-side"><div class="cam-sq"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5a8.5 8.5 0 0 1 14-3.2M3.5 5v3.5H7"/><path d="M20.5 15.5a8.5 8.5 0 0 1-14 3.2M20.5 19v-3.5H17"/></svg></div><span>Flip</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2) Add Occasion -->
+        <div class="ascr" id="scr-occasion">
+          <div class="abar"><span>9:41</span><span class="sb"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>
+          <button class="aback" data-back aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="ascr-scroll"><div class="occ">
+            <h1 class="occ-title">Where are you going or what&rsquo;s the occasion? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E7A0B2" stroke-width="1.7" style="vertical-align:-2px"><path d="M12 20s-7-4.4-7-9.4A3.6 3.6 0 0 1 12 8a3.6 3.6 0 0 1 7-2.4C19 10.6 12 20 12 20z"/></svg></h1>
+            <p class="occ-sub">This helps Lovanya give more personalized insights.</p>
+            <div class="occ-input"><input type="text" placeholder="e.g. Brunch with friends, Office meeting…"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A9AE" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></svg></div>
+            <p class="occ-label">Popular Suggestions</p>
+            <div class="occ-grid">
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 0 12 6 6 0 0 0 0-12zM12 1v1.5M12 21.5V23M3 12H1.5M22.5 12H21"/></svg></span>Casual Outing</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="18" height="12.5" rx="3"/><path d="M8.5 7.5V6a2.5 2.5 0 0 1 2.5-2.5h2A2.5 2.5 0 0 1 15.5 6v1.5"/></svg></span>Office / Work</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg></span>Date Night</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11a4 4 0 0 1 0 8H8a4 4 0 0 1-4-4z"/><path d="M15 10h2.5a2.5 2.5 0 0 1 0 5H15"/><path d="M7 6.5c0-1 1-1.5 1-2.5M11 6.5c0-1 1-1.5 1-2.5"/></svg></span>Brunch</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l9-2.5L7 6l2-.5 5 6 6-1.6a1.6 1.6 0 0 1 .8 3.1L4 18z"/></svg></span>Travel</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6M5 21l1.5-6h11L19 21M9 6 7.5 3M15 6l1.5-3"/></svg></span>Event / Party</button>
+            </div>
+            <button class="abtn" data-next style="margin-top:24px">Continue</button>
+            <button class="occ-skip" data-next>Skip for now</button>
+          </div></div>
+        </div>
+
+        <!-- 3) Analyzing -->
+        <div class="ascr" id="scr-analyzing">
+          <div class="abar"><span>9:41</span><span class="sb"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>
+          <button class="aback" data-back aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="anz">
+            <h1 class="anz-title">Analyzing your look&hellip; <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E7A0B2" stroke-width="1.7"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l2-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg></h1>
+            <div class="anz-ringwrap">
+              <svg class="anz-ring" width="130" height="130" viewBox="0 0 130 130">
+                <circle cx="65" cy="65" r="58" fill="none" stroke="#F6DCDE" stroke-width="9"/>
+                <circle class="anz-prog" cx="65" cy="65" r="58" fill="none" stroke="#D56F88" stroke-width="9" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+              </svg>
+              <div class="anz-spark"><svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/><path d="M19 13c.2 1.7.9 2.4 2.6 2.6-1.7.2-2.4.9-2.6 2.6-.2-1.7-.9-2.4-2.6-2.6 1.7-.2 2.4-.9 2.6-2.6z"/></svg></div>
+            </div>
+            <ul class="anz-list">
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Understanding your style</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Examining color harmony</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Checking proportions</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Evaluating outfit balance</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Considering the occasion</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Almost done!</li>
+            </ul>
+            <div class="anz-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="#D56F88" style="flex:none"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Lovanya looks at styling, coordination, and presentation — not perfection.</div>
+          </div>
+        </div>
+
+        <!-- 4) Analysis Results -->
+        <div class="ascr" id="scr-results">
+          <div class="ascr-scroll">
+            <div class="res-hero">
+              <img src="analyze/outfit.png" alt="">
+              <div class="ov"></div>
+              <button class="res-hbtn" data-back style="left:18px" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+              <button class="res-hbtn" style="right:18px" aria-label="Save"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.8 15.3 3.8 9.4A3.9 3.9 0 0 1 12 7.2a3.9 3.9 0 0 1 8.2 2.2C20.2 15.3 12 20.5 12 20.5Z"/></svg></button>
+              <div class="res-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 15v4a1 1 0 0 1-1 1h-4M4 15v4a1 1 0 0 0 1 1h4M20 9V5a1 1 0 0 0-1-1h-4"/></svg>View Details</div>
+            </div>
+            <div class="res-body">
+              <p class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="#CE6E86"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Style Reflection</p>
+              <h2 class="res-verdict">This outfit feels relaxed, approachable, and effortlessly put together.</h2>
+              <p class="res-sub">The neutral palette creates harmony while the denim adds structure and familiarity.</p>
+              <p class="eyebrow" style="margin-top:24px"><svg width="12" height="12" viewBox="0 0 24 24" fill="#8DA767"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>What Works Well</p>
+              <ul class="res-list">
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="11.5" r="2.5"/><circle cx="16.5" cy="14.5" r="2.5"/><circle cx="9" cy="18" r="2"/></svg></span><div><h4>Balanced color palette</h4><p>The neutrals work beautifully together.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V8M4 8l5-4 5 4 6-2v12"/></svg></span><div><h4>Great proportions</h4><p>The fit creates a flattering silhouette.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></span><div><h4>Appropriate for the occasion</h4><p>Perfect for a casual day out.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S4 15.5 4 9.5A3.7 3.7 0 0 1 12 7a3.7 3.7 0 0 1 8 2.5c0 6-8 11-8 11z"/></svg></span><div><h4>Comfort meets style</h4><p>Effortless and easy to wear.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span><div><h4>Clean visual flow</h4><p>Nothing competes — everything works together.</p></div></li>
+              </ul>
+              <p class="eyebrow" style="margin-top:24px"><svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B24A"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Opportunities To Elevate</p>
+              <ul class="res-list">
+                <li class="res-li"><span class="ic" style="background:var(--blush);color:var(--pink)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg></span><div><h4>Add a touch of structure</h4><p>A structured bag or blazer would sharpen the silhouette.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--blush);color:var(--pink)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M18 3v18M6 12h12"/></svg></span><div><h4>Define the waist</h4><p>Try a partial tuck or belt to create more shape.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--blush);color:var(--pink)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h7l2 3h9v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><div><h4>Elevate the footwear</h4><p>A structured shoe could strengthen the look.</p></div></li>
+              </ul>
+              <div class="res-actions">
+                <button class="res-heart" aria-label="Love"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.8 15.3 3.8 9.4A3.9 3.9 0 0 1 12 7.2a3.9 3.9 0 0 1 8.2 2.2C20.2 15.3 12 20.5 12 20.5Z"/></svg></button>
+                <button class="abtn" data-next><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21V8a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v13l7-3z"/></svg>Save to Journal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5) Shareable Card (Preview) -->
+        <div class="ascr" id="scr-preview">
+          <div class="abar"><span>9:41</span><span class="sb"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>
+          <button class="aback" data-back aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="ascr-scroll"><div class="snap-wrap">
+            <div class="snap">
+              <div class="snap-top"><span class="snap-logo">Lovanya</span><span class="snap-tag">Photo Style</span></div>
+              <div class="snap-h"><h3>My Style Snapshot</h3><div class="snap-date">May 20, 2025</div></div>
+              <div class="snap-photo"><img src="analyze/outfit.png" alt=""><div class="snap-imp"><div class="e">Overall Impression</div><div class="t">Effortlessly Put Together</div><div class="s">Relaxed · Approachable · Balanced</div></div></div>
+              <div class="snap-strength">
+                <p class="eyebrow">Style Strengths</p>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><circle cx="12" cy="12" r="9"/></svg>Color Harmony</span><span class="bar-track"><span class="bar-fill" data-val="90"></span></span><span class="bar-val">90%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D56F88" stroke-width="2"><path d="M4 20V8l4-3 4 3 4-2v14"/></svg>Fit &amp; Proportion</span><span class="bar-track"><span class="bar-fill" data-val="85"></span></span><span class="bar-val">85%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D56F88" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Occasion Fit</span><span class="bar-track"><span class="bar-fill" data-val="85"></span></span><span class="bar-val">85%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 20.5S4 15 4 9.5A3.7 3.7 0 0 1 12 7a3.7 3.7 0 0 1 8 2.5c0 5.5-8 11-8 11z"/></svg>Comfort Level</span><span class="bar-track"><span class="bar-fill" data-val="95"></span></span><span class="bar-val">95%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Personal Style</span><span class="bar-track"><span class="bar-fill" data-val="80"></span></span><span class="bar-val">80%</span></div>
+              </div>
+              <div class="snap-refl"><p class="eyebrow">Style Reflection</p><p>This outfit feels relaxed, approachable, and effortlessly put together. The neutral palette creates harmony while the denim adds structure.</p></div>
+            </div>
+            <button class="abtn" data-next style="margin-top:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13M7 8l5-5 5 5"/></svg>Share Card</button>
+          </div></div>
+        </div>
+
+        <!-- 6) Shareable Card (Final) -->
+        <div class="ascr" id="scr-final">
+          <div class="abar"><span>9:41</span><span class="sb"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>
+          <button class="aback" data-back aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="ascr-scroll"><div class="snap-wrap">
+            <div class="snap">
+              <div class="snap-top"><span class="snap-logo">Lovanya</span><span class="snap-tag">Avatar Style</span></div>
+              <div class="snap-h"><h3>My Style Snapshot</h3><div class="snap-date">May 20, 2025</div></div>
+              <div class="snap-photo"><img src="analyze/outfit.png" alt=""><div class="snap-imp"><div class="e">Overall Impression</div><div class="t">Effortlessly Put Together</div><div class="s">Relaxed · Approachable · Balanced</div></div></div>
+              <div class="snap-strength">
+                <p class="eyebrow">Style Strengths</p>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><circle cx="12" cy="12" r="9"/></svg>Color Harmony</span><span class="bar-track"><span class="bar-fill" data-val="90"></span></span><span class="bar-val">90%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D56F88" stroke-width="2"><path d="M4 20V8l4-3 4 3 4-2v14"/></svg>Fit &amp; Proportion</span><span class="bar-track"><span class="bar-fill" data-val="85"></span></span><span class="bar-val">85%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D56F88" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Occasion Fit</span><span class="bar-track"><span class="bar-fill" data-val="85"></span></span><span class="bar-val">85%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 20.5S4 15 4 9.5A3.7 3.7 0 0 1 12 7a3.7 3.7 0 0 1 8 2.5c0 5.5-8 11-8 11z"/></svg>Comfort Level</span><span class="bar-track"><span class="bar-fill" data-val="95"></span></span><span class="bar-val">95%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Personal Style</span><span class="bar-track"><span class="bar-fill" data-val="80"></span></span><span class="bar-val">80%</span></div>
+              </div>
+              <div class="snap-foot"><div class="f1">Captured with Lovanya</div><div class="f2">Your personal AI stylist &amp; style journal</div></div>
+            </div>
+            <button class="abtn" data-home style="margin-top:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M10 20v-6h4v6"/></svg>Back to Home</button>
+            <button class="occ-skip" data-restart style="margin-top:10px">Style another look</button>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const device = document.getElementById('device');
+    function fit() {
+      const w = window.innerWidth || 426, h = window.innerHeight || 898;
+      device.style.transform = 'scale(' + Math.max(0.25, Math.min((w - 24) / 426, (h - 24) / 898, 1.15)) + ')';
+    }
+    addEventListener('resize', fit); addEventListener('load', fit); fit();
+
+    const SCREENS = [...document.querySelectorAll('.ascr')];
+    let fi = 0, anzTimer = null;
+    function showFlow(i) {
+      fi = i;
+      SCREENS.forEach((s, idx) => s.classList.toggle('on', idx === i));
+      const cur = SCREENS[i];
+      const sc = cur.querySelector('.ascr-scroll'); if (sc) sc.scrollTop = 0;
+      clearTimeout(anzTimer);
+      if (cur.id === 'scr-analyzing') runAnalyzing(cur);
+      if (cur.id === 'scr-preview' || cur.id === 'scr-final') animateBars(cur);
+    }
+    function nextFlow() { if (fi < SCREENS.length - 1) showFlow(fi + 1); else showFlow(0); }
+    function backFlow() { if (fi > 0) showFlow(fi - 1); }
+    function runAnalyzing(scr) {
+      const items = scr.querySelectorAll('.anz-item');
+      const prog = scr.querySelector('.anz-prog');
+      items.forEach(it => it.classList.remove('act', 'done'));
+      if (prog) { prog.style.transition = 'none'; prog.style.strokeDashoffset = '364.4'; void prog.getBoundingClientRect(); prog.style.transition = ''; prog.style.strokeDashoffset = '0'; }
+      let k = 0;
+      (function tick() {
+        if (k > 0) { items[k - 1].classList.remove('act'); items[k - 1].classList.add('done'); }
+        if (k < items.length) { items[k].classList.add('act'); k++; anzTimer = setTimeout(tick, 520); }
+        else { anzTimer = setTimeout(() => { if (SCREENS[fi].id === 'scr-analyzing') nextFlow(); }, 550); }
+      })();
+    }
+    function animateBars(scr) {
+      scr.querySelectorAll('.bar-fill').forEach(b => { b.style.width = '0%'; });
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        scr.querySelectorAll('.bar-fill').forEach(b => { b.style.width = b.dataset.val + '%'; });
+      }));
+    }
+    document.getElementById('device').addEventListener('click', (e) => {
+      const chip = e.target.closest('.occ-chip');
+      if (chip) { chip.classList.toggle('sel'); return; }
+      const heart = e.target.closest('.res-heart');
+      if (heart) { const p = heart.querySelector('path'); const on = heart.dataset.on === '1'; heart.dataset.on = on ? '0' : '1'; if (p) p.setAttribute('fill', on ? 'none' : '#D56F88'); return; }
+      if (e.target.closest('[data-restart]')) return showFlow(0);
+      if (e.target.closest('[data-home]') || e.target.closest('[data-close]')) { window.location.href = 'index.html'; return; }
+      if (e.target.closest('[data-back]')) return backFlow();
+      if (e.target.closest('[data-next]')) return nextFlow();
+    });
+    showFlow(0);
+  </script>
+</body>
+</html>

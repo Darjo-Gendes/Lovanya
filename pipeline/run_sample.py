@@ -5,8 +5,8 @@ First run downloads and loads the Qwen2.5-VL-3B-Instruct weights, which takes
 a while - subsequent runs in the same process would be fast, but each CLI
 invocation reloads the model since this is meant for one-off manual testing.
 
-Usage:
-    python run_sample.py samples/my_outfit.jpg --occasion "date night"
+Usage (from the repo root):
+    python pipeline/run_sample.py pipeline/samples/my_outfit.jpg --occasion "date night"
 """
 
 import argparse
@@ -15,9 +15,9 @@ import sys
 import time
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.analyze import analyze  # noqa: E402
+from pipeline.app.analyze import analyze  # noqa: E402
 
 
 def main():

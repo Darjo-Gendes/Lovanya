@@ -4,7 +4,7 @@ import torch
 from qwen_vl_utils import process_vision_info
 from transformers import AutoModelForImageTextToText, AutoProcessor
 
-from . import config
+from .. import config
 from .json_utils import extract_json
 
 PERCEIVE_PROMPT = """Look at this outfit photo. Respond with ONLY a JSON object
