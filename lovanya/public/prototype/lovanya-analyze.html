@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lovanya — Analyze (standalone)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#D56F88; --pink2:#CE6C84; --surface:#FAEDED; --ink:#48292E; --ink2:#3E2A2E;
+    --body:#6E5A5A; --muted:#A2908F; --card:#fff; --blush:#FBEBEB; --blush2:#F6DCDE;
+    --line:#EFD9DC; --sage:#8DA767; --sagebg:#E8F0D8; --gold:#E8B24A; --lilacbg:#EFE4F1; --eyebrow:#CE6E86;
+  }
+  html, body { margin: 0; height: 100%; background: #E8DADA; overflow: hidden; }
+  .stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .device { position: relative; width: 426px; height: 898px; flex: none; transform-origin: center center; background: #1d1714; border-radius: 56px; padding: 12px; box-shadow: 0 60px 110px -36px rgba(170,110,120,.55); }
+  .ascreen { position: relative; width: 100%; height: 100%; border-radius: 46px; overflow: hidden; background: var(--surface); }
+
+  .ascr { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--surface); font-family: 'Poppins', sans-serif; color: var(--ink); }
+  .ascr.on { display: flex; animation: aFade .34s cubic-bezier(.32,.72,.3,1) both; }
+  @keyframes aFade { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+  .ascr-scroll { flex: 1; min-height: 0; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; }
+  .ascr-scroll::-webkit-scrollbar { display: none; }
+  .abar { flex: none; height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 16px 26px 0; font-size: 14px; font-weight: 600; color: var(--ink); }
+  .abar svg { display: block; }
+  .abar .sb { display: flex; align-items: center; gap: 6px; }
+  .aback { position: absolute; top: 52px; left: 16px; z-index: 6; width: 36px; height: 36px; border: none; background: transparent; color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .12s; }
+  .aback:active { transform: scale(.88); }
+  .abtn { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; border: none; cursor: pointer; border-radius: 24px; font-family: 'Poppins'; font-size: 15px; font-weight: 600; padding: 16px; color: #fff; background: linear-gradient(135deg,#E48EA0,#CE6C84); box-shadow: 0 14px 26px -10px rgba(206,108,132,.7); transition: transform .14s; }
+  .abtn:active { transform: scale(.97); }
+  .eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--eyebrow); display: flex; align-items: center; gap: 6px; }
+
+  .cam { position: absolute; inset: 0; display: flex; flex-direction: column; background: #1b1714; overflow: hidden; }
+  .cam-view { position: relative; flex: 1; overflow: hidden; min-height: 0; }
+  .cam-view > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 16%; }
+  .cam-top { position: absolute; top: 0; left: 0; right: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 0; }
+  .cam-ic { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.85); color: var(--ink); border: none; cursor: pointer; box-shadow: 0 4px 12px -5px rgba(0,0,0,.35); transition: transform .12s; }
+  .cam-ic:active { transform: scale(.9); }
+  .cam-logo { font-family: 'Parisienne', cursive; font-size: 25px; color: var(--pink); line-height: 1; display: flex; align-items: flex-start; gap: 3px; text-shadow: 0 1px 9px rgba(255,255,255,.7); }
+  .cam-caption { position: absolute; left: 50%; bottom: 86px; transform: translateX(-50%); max-width: 82%; text-align: center; background: rgba(255,255,255,.93); color: #5A4A4A; font-size: 12.5px; font-weight: 500; line-height: 1.35; padding: 11px 18px; border-radius: 18px; box-shadow: 0 12px 26px -12px rgba(0,0,0,.45); }
+  .cam-zoom { position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%); display: flex; align-items: center; gap: 3px; background: rgba(28,21,18,.5); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 5px; border-radius: 22px; }
+  .cam-zoom span { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.82); padding: 5px 12px; border-radius: 16px; cursor: pointer; }
+  .cam-zoom span.on { background: #fff; color: var(--ink); }
+  .cam-controls { flex: none; height: 108px; background: #fff; border-radius: 26px 26px 0 0; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+  .cam-side { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+  .cam-sq { width: 46px; height: 46px; border-radius: 14px; background: var(--surface); display: flex; align-items: center; justify-content: center; color: #7A5A60; }
+  .cam-side span { font-size: 11px; color: #8C7375; font-weight: 500; }
+  .cam-shutter { width: 70px; height: 70px; border-radius: 50%; border: 5px solid #fff; cursor: pointer; background: radial-gradient(circle at 36% 30%, #E791A2, #D56F88 62%, #C25C76); box-shadow: 0 0 0 2px #EFC9D2, 0 12px 24px -8px rgba(206,108,132,.7); transition: transform .12s; }
+  .cam-shutter:active { transform: scale(.93); }
+
+  .occ { padding: 6px 24px 30px; }
+  .occ-title { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 27px; line-height: 1.18; color: var(--ink); margin: 8px 0 0; letter-spacing: -.3px; }
+  .occ-sub { font-size: 13px; color: var(--body); margin: 10px 0 0; }
+  .occ-input { margin-top: 20px; display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; }
+  .occ-input input { flex: 1; border: none; background: transparent; font-family: 'Poppins'; font-size: 13px; color: var(--ink); outline: none; }
+  .occ-input input::placeholder { color: var(--muted); }
+  .occ-label { font-size: 13px; font-weight: 600; color: var(--ink); margin: 22px 0 0; }
+  .occ-grid { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  .occ-chip { display: flex; align-items: center; gap: 9px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 13px; cursor: pointer; font-family: 'Poppins'; font-size: 13px; font-weight: 500; color: var(--ink); transition: transform .14s, box-shadow .16s, background .16s; text-align: left; }
+  .occ-chip:active { transform: scale(.97); }
+  .occ-ico { width: 30px; height: 30px; border-radius: 9px; background: var(--blush); display: flex; align-items: center; justify-content: center; color: var(--pink); flex: none; }
+  .occ-chip.sel { background: linear-gradient(135deg,#E48EA0,#CE6C84); border-color: transparent; color: #fff; box-shadow: 0 10px 20px -10px rgba(206,108,132,.7); }
+  .occ-chip.sel .occ-ico { background: rgba(255,255,255,.22); color: #fff; }
+  .occ-skip { display: block; width: 100%; text-align: center; background: none; border: none; margin-top: 14px; font-family: 'Poppins'; font-size: 13.5px; font-weight: 500; color: var(--muted); cursor: pointer; }
+
+  .anz { flex: 1; display: flex; flex-direction: column; padding: 4px 32px 30px; }
+  .anz-title { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 26px; color: var(--ink); margin: 6px 0 0; display: flex; align-items: center; gap: 8px; }
+  .anz-ringwrap { align-self: center; position: relative; width: 130px; height: 130px; margin: 28px 0 30px; }
+  .anz-ring { transform: rotate(-90deg); }
+  .anz-prog { transition: stroke-dashoffset 3.1s linear; }
+  .anz-spark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--pink); }
+  .anz-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 15px; }
+  .anz-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); transition: color .3s; }
+  .anz-item .adot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); flex: none; display: flex; align-items: center; justify-content: center; color: #fff; transition: all .3s; }
+  .anz-item .adot svg { opacity: 0; transition: opacity .2s; }
+  .anz-item.act { color: var(--pink); font-weight: 500; }
+  .anz-item.act .adot { border-color: var(--pink); }
+  .anz-item.done { color: var(--ink); }
+  .anz-item.done .adot { background: var(--pink); border-color: var(--pink); }
+  .anz-item.done .adot svg { opacity: 1; }
+  .anz-note { margin-top: auto; display: flex; gap: 10px; background: var(--blush); border-radius: 16px; padding: 14px 16px; font-size: 12px; color: var(--body); line-height: 1.4; }
+
+  .res-hero { flex: none; position: relative; height: 300px; }
+  .res-hero > img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
+  .res-hero .ov { position: absolute; inset: 0; background: linear-gradient(to top, rgba(40,26,22,.5), rgba(40,26,22,.04) 46%); }
+  .res-hbtn { position: absolute; top: 56px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.85); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: none; display: flex; align-items: center; justify-content: center; color: var(--ink); cursor: pointer; transition: transform .12s; }
+  .res-hbtn:active { transform: scale(.9); }
+  .res-view { position: absolute; right: 16px; bottom: 16px; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.92); border-radius: 20px; padding: 7px 13px; font-size: 11.5px; font-weight: 600; color: var(--ink); cursor: pointer; }
+  .res-body { padding: 22px 24px 30px; }
+  .res-verdict { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 22px; line-height: 1.28; color: var(--ink); margin: 10px 0 0; }
+  .res-sub { font-size: 13px; line-height: 1.5; color: var(--body); margin: 12px 0 0; }
+  .res-list { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .res-li { display: flex; gap: 12px; }
+  .res-li .ic { width: 34px; height: 34px; border-radius: 10px; flex: none; display: flex; align-items: center; justify-content: center; }
+  .res-li h4 { margin: 0; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .res-li p { margin: 2px 0 0; font-size: 12px; color: var(--body); line-height: 1.4; }
+  .res-actions { margin-top: 24px; display: flex; gap: 11px; }
+  .res-heart { width: 54px; height: 54px; flex: none; border-radius: 18px; background: var(--card); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--pink); cursor: pointer; transition: transform .12s; }
+  .res-heart:active { transform: scale(.93); }
+
+  .snap-wrap { padding: 16px 22px 26px; }
+  .snap { border-radius: 26px; overflow: hidden; background: var(--card); box-shadow: 0 26px 46px -22px rgba(206,140,150,.65); border: 1px solid var(--line); }
+  .snap-top { padding: 18px 20px 0; display: flex; align-items: center; justify-content: space-between; }
+  .snap-logo { font-family: 'Parisienne', cursive; font-size: 23px; color: var(--pink); }
+  .snap-tag { font-size: 9px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); }
+  .snap-h { padding: 4px 20px 0; }
+  .snap-h h3 { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 18px; color: var(--ink); margin: 6px 0 0; }
+  .snap-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .snap-photo { margin: 14px 20px 0; height: 198px; border-radius: 18px; overflow: hidden; position: relative; }
+  .snap-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 16%; }
+  .snap-imp { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 16px 12px; background: linear-gradient(to top, rgba(40,26,22,.74), transparent); }
+  .snap-imp .e { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255,255,255,.82); }
+  .snap-imp .t { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 19px; color: #fff; margin-top: 2px; }
+  .snap-imp .s { font-size: 10.5px; color: rgba(255,255,255,.8); margin-top: 3px; }
+  .snap-strength { padding: 18px 20px 6px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .bar-row .lbl { flex: none; width: 100px; display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--ink); }
+  .bar-track { flex: 1; height: 7px; border-radius: 6px; background: #F3DEE2; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg,#D56F88,#C25C76); width: 0; transition: width 1s cubic-bezier(.32,.72,.3,1); }
+  .bar-val { flex: none; width: 36px; text-align: right; font-size: 11px; font-weight: 600; color: var(--pink); }
+  .snap-refl { padding: 16px 20px 18px; border-top: 1px solid var(--line); margin-top: 14px; }
+  .snap-refl p { font-size: 12.5px; line-height: 1.5; color: var(--body); margin: 8px 0 0; }
+  .snap-foot { padding: 16px 20px 20px; text-align: center; border-top: 1px solid var(--line); }
+  .snap-foot .f1 { font-family: 'Parisienne', cursive; font-size: 21px; color: var(--pink); }
+  .snap-foot .f2 { font-size: 11px; color: var(--muted); margin-top: 3px; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="device" id="device">
+      <div class="ascreen">
+
+        <!-- 1) Camera -->
+        <div class="ascr on" id="scr-cam">
+          <div class="cam">
+            <div class="cam-view">
+              <img data-photo alt="">
+              <div class="cam-top">
+                <button class="cam-ic" data-close aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+                <div class="cam-logo">Lovanya<svg width="11" height="11" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg></div>
+                <button class="cam-ic" aria-label="Flash"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 5 13h6l-1 9 8-11h-6l1-9z"/></svg></button>
+              </div>
+              <div class="cam-caption">Stand back, relax, and let natural light do the magic <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B24A" style="vertical-align:-1px"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg></div>
+              <div class="cam-zoom"><span>0.5</span><span class="on">1x</span><span>2</span></div>
+            </div>
+            <div class="cam-controls">
+              <div class="cam-side"><div class="cam-sq"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="4"/><circle cx="8.5" cy="9.5" r="1.7"/><path d="m4 17 4.8-4.3 3.6 3.2 3.1-2.6L20 16.5"/></svg></div><span>Gallery</span></div>
+              <button class="cam-shutter" data-next aria-label="Capture"></button>
+              <div class="cam-side"><div class="cam-sq"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5a8.5 8.5 0 0 1 14-3.2M3.5 5v3.5H7"/><path d="M20.5 15.5a8.5 8.5 0 0 1-14 3.2M20.5 19v-3.5H17"/></svg></div><span>Flip</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2) Add Occasion -->
+        <div class="ascr" id="scr-occasion">
+          <div class="abar"><span>9:41</span><span class="sb"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>
+          <button class="aback" data-back aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="ascr-scroll"><div class="occ">
+            <h1 class="occ-title">Where are you going or what&rsquo;s the occasion? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E7A0B2" stroke-width="1.7" style="vertical-align:-2px"><path d="M12 20s-7-4.4-7-9.4A3.6 3.6 0 0 1 12 8a3.6 3.6 0 0 1 7-2.4C19 10.6 12 20 12 20z"/></svg></h1>
+            <p class="occ-sub">This helps Lovanya give more personalized insights.</p>
+            <div class="occ-input"><input type="text" placeholder="e.g. Brunch with friends, Office meeting…"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A9AE" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></svg></div>
+            <p class="occ-label">Popular Suggestions</p>
+            <div class="occ-grid">
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 0 12 6 6 0 0 0 0-12zM12 1v1.5M12 21.5V23M3 12H1.5M22.5 12H21"/></svg></span>Casual Outing</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="18" height="12.5" rx="3"/><path d="M8.5 7.5V6a2.5 2.5 0 0 1 2.5-2.5h2A2.5 2.5 0 0 1 15.5 6v1.5"/></svg></span>Office / Work</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg></span>Date Night</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11a4 4 0 0 1 0 8H8a4 4 0 0 1-4-4z"/><path d="M15 10h2.5a2.5 2.5 0 0 1 0 5H15"/><path d="M7 6.5c0-1 1-1.5 1-2.5M11 6.5c0-1 1-1.5 1-2.5"/></svg></span>Brunch</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l9-2.5L7 6l2-.5 5 6 6-1.6a1.6 1.6 0 0 1 .8 3.1L4 18z"/></svg></span>Travel</button>
+              <button class="occ-chip"><span class="occ-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6M5 21l1.5-6h11L19 21M9 6 7.5 3M15 6l1.5-3"/></svg></span>Event / Party</button>
+            </div>
+            <button class="abtn" data-next style="margin-top:24px">Continue</button>
+            <button class="occ-skip" data-next>Skip for now</button>
+          </div></div>
+        </div>
+
+        <!-- 3) Analyzing -->
+        <div class="ascr" id="scr-analyzing">
+          <div class="abar"><span>9:41</span><span class="sb"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>
+          <button class="aback" data-back aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="anz">
+            <h1 class="anz-title">Analyzing your look&hellip; <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E7A0B2" stroke-width="1.7"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l2-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg></h1>
+            <div class="anz-ringwrap">
+              <svg class="anz-ring" width="130" height="130" viewBox="0 0 130 130">
+                <circle cx="65" cy="65" r="58" fill="none" stroke="#F6DCDE" stroke-width="9"/>
+                <circle class="anz-prog" cx="65" cy="65" r="58" fill="none" stroke="#D56F88" stroke-width="9" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+              </svg>
+              <div class="anz-spark"><svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/><path d="M19 13c.2 1.7.9 2.4 2.6 2.6-1.7.2-2.4.9-2.6 2.6-.2-1.7-.9-2.4-2.6-2.6 1.7-.2 2.4-.9 2.6-2.6z"/></svg></div>
+            </div>
+            <ul class="anz-list">
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Understanding your style</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Examining color harmony</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Checking proportions</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Evaluating outfit balance</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Considering the occasion</li>
+              <li class="anz-item"><span class="adot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>Almost done!</li>
+            </ul>
+            <div class="anz-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="#D56F88" style="flex:none"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Lovanya looks at styling, coordination, and presentation — not perfection.</div>
+          </div>
+        </div>
+
+        <!-- 4) Analysis Results -->
+        <div class="ascr" id="scr-results">
+          <div class="ascr-scroll">
+            <div class="res-hero">
+              <img data-photo alt="">
+              <div class="ov"></div>
+              <button class="res-hbtn" data-back style="left:18px" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+              <button class="res-hbtn" style="right:18px" aria-label="Save"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.8 15.3 3.8 9.4A3.9 3.9 0 0 1 12 7.2a3.9 3.9 0 0 1 8.2 2.2C20.2 15.3 12 20.5 12 20.5Z"/></svg></button>
+              <div class="res-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 15v4a1 1 0 0 1-1 1h-4M4 15v4a1 1 0 0 0 1 1h4M20 9V5a1 1 0 0 0-1-1h-4"/></svg>View Details</div>
+            </div>
+            <div class="res-body">
+              <p class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="#CE6E86"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Style Reflection</p>
+              <h2 class="res-verdict">This outfit feels relaxed, approachable, and effortlessly put together.</h2>
+              <p class="res-sub">The neutral palette creates harmony while the denim adds structure and familiarity.</p>
+              <p class="eyebrow" style="margin-top:24px"><svg width="12" height="12" viewBox="0 0 24 24" fill="#8DA767"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>What Works Well</p>
+              <ul class="res-list">
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="11.5" r="2.5"/><circle cx="16.5" cy="14.5" r="2.5"/><circle cx="9" cy="18" r="2"/></svg></span><div><h4>Balanced color palette</h4><p>The neutrals work beautifully together.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V8M4 8l5-4 5 4 6-2v12"/></svg></span><div><h4>Great proportions</h4><p>The fit creates a flattering silhouette.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></span><div><h4>Appropriate for the occasion</h4><p>Perfect for a casual day out.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S4 15.5 4 9.5A3.7 3.7 0 0 1 12 7a3.7 3.7 0 0 1 8 2.5c0 6-8 11-8 11z"/></svg></span><div><h4>Comfort meets style</h4><p>Effortless and easy to wear.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--sagebg);color:var(--sage)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span><div><h4>Clean visual flow</h4><p>Nothing competes — everything works together.</p></div></li>
+              </ul>
+              <p class="eyebrow" style="margin-top:24px"><svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B24A"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Opportunities To Elevate</p>
+              <ul class="res-list">
+                <li class="res-li"><span class="ic" style="background:var(--blush);color:var(--pink)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg></span><div><h4>Add a touch of structure</h4><p>A structured bag or blazer would sharpen the silhouette.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--blush);color:var(--pink)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M18 3v18M6 12h12"/></svg></span><div><h4>Define the waist</h4><p>Try a partial tuck or belt to create more shape.</p></div></li>
+                <li class="res-li"><span class="ic" style="background:var(--blush);color:var(--pink)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h7l2 3h9v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><div><h4>Elevate the footwear</h4><p>A structured shoe could strengthen the look.</p></div></li>
+              </ul>
+              <div class="res-actions">
+                <button class="res-heart" aria-label="Love"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.8 15.3 3.8 9.4A3.9 3.9 0 0 1 12 7.2a3.9 3.9 0 0 1 8.2 2.2C20.2 15.3 12 20.5 12 20.5Z"/></svg></button>
+                <button class="abtn" data-next><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21V8a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v13l7-3z"/></svg>Save to Journal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5) Shareable Card (Preview) -->
+        <div class="ascr" id="scr-preview">
+          <div class="abar"><span>9:41</span><span class="sb"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>
+          <button class="aback" data-back aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="ascr-scroll"><div class="snap-wrap">
+            <div class="snap">
+              <div class="snap-top"><span class="snap-logo">Lovanya</span><span class="snap-tag">Photo Style</span></div>
+              <div class="snap-h"><h3>My Style Snapshot</h3><div class="snap-date">May 20, 2025</div></div>
+              <div class="snap-photo"><img data-photo alt=""><div class="snap-imp"><div class="e">Overall Impression</div><div class="t">Effortlessly Put Together</div><div class="s">Relaxed · Approachable · Balanced</div></div></div>
+              <div class="snap-strength">
+                <p class="eyebrow">Style Strengths</p>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><circle cx="12" cy="12" r="9"/></svg>Color Harmony</span><span class="bar-track"><span class="bar-fill" data-val="90"></span></span><span class="bar-val">90%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D56F88" stroke-width="2"><path d="M4 20V8l4-3 4 3 4-2v14"/></svg>Fit &amp; Proportion</span><span class="bar-track"><span class="bar-fill" data-val="85"></span></span><span class="bar-val">85%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D56F88" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Occasion Fit</span><span class="bar-track"><span class="bar-fill" data-val="85"></span></span><span class="bar-val">85%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 20.5S4 15 4 9.5A3.7 3.7 0 0 1 12 7a3.7 3.7 0 0 1 8 2.5c0 5.5-8 11-8 11z"/></svg>Comfort Level</span><span class="bar-track"><span class="bar-fill" data-val="95"></span></span><span class="bar-val">95%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Personal Style</span><span class="bar-track"><span class="bar-fill" data-val="80"></span></span><span class="bar-val">80%</span></div>
+              </div>
+              <div class="snap-refl"><p class="eyebrow">Style Reflection</p><p>This outfit feels relaxed, approachable, and effortlessly put together. The neutral palette creates harmony while the denim adds structure.</p></div>
+            </div>
+            <button class="abtn" data-next style="margin-top:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13M7 8l5-5 5 5"/></svg>Share Card</button>
+          </div></div>
+        </div>
+
+        <!-- 6) Shareable Card (Final) -->
+        <div class="ascr" id="scr-final">
+          <div class="abar"><span>9:41</span><span class="sb"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>
+          <button class="aback" data-back aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="ascr-scroll"><div class="snap-wrap">
+            <div class="snap">
+              <div class="snap-top"><span class="snap-logo">Lovanya</span><span class="snap-tag">Avatar Style</span></div>
+              <div class="snap-h"><h3>My Style Snapshot</h3><div class="snap-date">May 20, 2025</div></div>
+              <div class="snap-photo"><img data-photo alt=""><div class="snap-imp"><div class="e">Overall Impression</div><div class="t">Effortlessly Put Together</div><div class="s">Relaxed · Approachable · Balanced</div></div></div>
+              <div class="snap-strength">
+                <p class="eyebrow">Style Strengths</p>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><circle cx="12" cy="12" r="9"/></svg>Color Harmony</span><span class="bar-track"><span class="bar-fill" data-val="90"></span></span><span class="bar-val">90%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D56F88" stroke-width="2"><path d="M4 20V8l4-3 4 3 4-2v14"/></svg>Fit &amp; Proportion</span><span class="bar-track"><span class="bar-fill" data-val="85"></span></span><span class="bar-val">85%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D56F88" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Occasion Fit</span><span class="bar-track"><span class="bar-fill" data-val="85"></span></span><span class="bar-val">85%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 20.5S4 15 4 9.5A3.7 3.7 0 0 1 12 7a3.7 3.7 0 0 1 8 2.5c0 5.5-8 11-8 11z"/></svg>Comfort Level</span><span class="bar-track"><span class="bar-fill" data-val="95"></span></span><span class="bar-val">95%</span></div>
+                <div class="bar-row"><span class="lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="#D56F88"><path d="M12 2c.4 4 2 5.6 6 6-4 .4-5.6 2-6 6-.4-4-2-5.6-6-6 4-.4 5.6-2 6-6z"/></svg>Personal Style</span><span class="bar-track"><span class="bar-fill" data-val="80"></span></span><span class="bar-val">80%</span></div>
+              </div>
+              <div class="snap-foot"><div class="f1">Captured with Lovanya</div><div class="f2">Your personal AI stylist &amp; style journal</div></div>
+            </div>
+            <button class="abtn" data-home style="margin-top:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M10 20v-6h4v6"/></svg>Back to Home</button>
+            <button class="occ-skip" data-restart style="margin-top:10px">Style another look</button>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const OUTFIT = 'data:image/jpeg;base64,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';
+    document.querySelectorAll('img[data-photo]').forEach(i => { i.src = OUTFIT; });
+    const device = document.getElementById('device');
+    function fit() {
+      const w = window.innerWidth || 426, h = window.innerHeight || 898;
+      device.style.transform = 'scale(' + Math.max(0.25, Math.min((w - 24) / 426, (h - 24) / 898, 1.15)) + ')';
+    }
+    addEventListener('resize', fit); addEventListener('load', fit); fit();
+
+    const SCREENS = [...document.querySelectorAll('.ascr')];
+    let fi = 0, anzTimer = null;
+    function showFlow(i) {
+      fi = i;
+      SCREENS.forEach((s, idx) => s.classList.toggle('on', idx === i));
+      const cur = SCREENS[i];
+      const sc = cur.querySelector('.ascr-scroll'); if (sc) sc.scrollTop = 0;
+      clearTimeout(anzTimer);
+      if (cur.id === 'scr-analyzing') runAnalyzing(cur);
+      if (cur.id === 'scr-preview' || cur.id === 'scr-final') animateBars(cur);
+    }
+    function nextFlow() { if (fi < SCREENS.length - 1) showFlow(fi + 1); else showFlow(0); }
+    function backFlow() { if (fi > 0) showFlow(fi - 1); }
+    function runAnalyzing(scr) {
+      const items = scr.querySelectorAll('.anz-item');
+      const prog = scr.querySelector('.anz-prog');
+      items.forEach(it => it.classList.remove('act', 'done'));
+      if (prog) { prog.style.transition = 'none'; prog.style.strokeDashoffset = '364.4'; void prog.getBoundingClientRect(); prog.style.transition = ''; prog.style.strokeDashoffset = '0'; }
+      let k = 0;
+      (function tick() {
+        if (k > 0) { items[k - 1].classList.remove('act'); items[k - 1].classList.add('done'); }
+        if (k < items.length) { items[k].classList.add('act'); k++; anzTimer = setTimeout(tick, 520); }
+        else { anzTimer = setTimeout(() => { if (SCREENS[fi].id === 'scr-analyzing') nextFlow(); }, 550); }
+      })();
+    }
+    function animateBars(scr) {
+      scr.querySelectorAll('.bar-fill').forEach(b => { b.style.width = '0%'; });
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        scr.querySelectorAll('.bar-fill').forEach(b => { b.style.width = b.dataset.val + '%'; });
+      }));
+    }
+    document.getElementById('device').addEventListener('click', (e) => {
+      const chip = e.target.closest('.occ-chip');
+      if (chip) { chip.classList.toggle('sel'); return; }
+      const heart = e.target.closest('.res-heart');
+      if (heart) { const p = heart.querySelector('path'); const on = heart.dataset.on === '1'; heart.dataset.on = on ? '0' : '1'; if (p) p.setAttribute('fill', on ? 'none' : '#D56F88'); return; }
+      if (e.target.closest('[data-restart]')) return showFlow(0);
+      if (e.target.closest('[data-home]') || e.target.closest('[data-close]')) { showFlow(0); return; }
+      if (e.target.closest('[data-back]')) return backFlow();
+      if (e.target.closest('[data-next]')) return nextFlow();
+    });
+    showFlow(0);
+  </script>
+</body>
+</html>

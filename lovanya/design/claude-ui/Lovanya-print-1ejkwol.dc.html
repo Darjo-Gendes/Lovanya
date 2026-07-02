@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style data-omelette-print-defaults>
+@media print {
+  @page { margin: 0.5in; }
+  h1, h2, h3, h4, h5, h6 { break-after: avoid; }
+  figure, table, pre, blockquote, img, svg, tr, [class~="card" i] { break-inside: avoid; }
+  img, svg { max-width: 100%; }
+  p { orphans: 3; widows: 3; }
+}
+</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { margin: 0; font-family: 'Hanken Grotesk', system-ui, sans-serif; }
+  @keyframes lvFadeUp { from { transform: translateY(16px); } to { transform: translateY(0); } }
+  @keyframes lvFadeIn { from { transform: translateY(8px); } to { transform: translateY(0); } }
+  @keyframes lvRise { from { transform: translateY(22px); } to { transform: translateY(0); } }
+  @keyframes lvToast { 0% { opacity: 0; transform: translate(-50%, 18px); } 14% { opacity: 1; transform: translate(-50%, 0); } 86% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, 8px); } }
+  @keyframes lvSpin { to { transform: rotate(360deg); } }
+  @keyframes lvBreath { 0%,100% { transform: scale(1); opacity:.55; } 50% { transform: scale(1.16); opacity:.9; } }
+  .lv-scroll::-webkit-scrollbar { width: 0; height: 0; }
+  .lv-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+  .lv-stagger > * { animation: lvRise .55s cubic-bezier(.2,.7,.25,1) both; }
+  .lv-stagger > *:nth-child(1){animation-delay:.04s}.lv-stagger > *:nth-child(2){animation-delay:.10s}.lv-stagger > *:nth-child(3){animation-delay:.16s}.lv-stagger > *:nth-child(4){animation-delay:.22s}.lv-stagger > *:nth-child(5){animation-delay:.28s}.lv-stagger > *:nth-child(6){animation-delay:.34s}.lv-stagger > *:nth-child(7){animation-delay:.40s}
+  image-slot { display:block; }
+</style>
+</helmet>
+<div style="min-height:100vh;width:100%;display:flex;align-items:center;justify-content:center;background:radial-gradient(130% 120% at 25% 0%, #F8D8C2 0%, #EFB89D 45%, #D99E86 100%);padding:44px 20px;font-family:'Hanken Grotesk',sans-serif;">
+
+  <div style="position:relative;width:394px;height:850px;background:#1d1714;border-radius:56px;padding:10px;box-shadow:0 60px 100px -34px rgba(150,80,50,.55), 0 0 0 1px rgba(255,255,255,.05) inset;flex:none;">
+    <div style="position:relative;width:100%;height:100%;border-radius:46px;overflow:hidden;display:flex;flex-direction:column;background:#FCF6F0;">
+
+      <!-- status bar -->
+      <div style="position:absolute;top:0;left:0;right:0;height:54px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:19px 32px 0;pointer-events:none;color:{{ statusColor }};">
+        <span style="font-size:15px;font-weight:600;letter-spacing:.2px;">9:41</span>
+        <div style="display:flex;align-items:center;gap:7px;">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity=".4"/></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 4.2C4 2.4 6.3 1.5 8.5 1.5S13 2.4 15 4.2"/><path d="M4.4 6.8c1.2-1 2.6-1.6 4.1-1.6s2.9.6 4.1 1.6"/><path d="M6.8 9.3c.5-.4 1.1-.6 1.7-.6s1.2.2 1.7.6"/></svg>
+          <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="22" height="11" rx="3.2" stroke="currentColor" stroke-width="1.2" opacity=".5"/><rect x="2.6" y="2.6" width="16" height="7.8" rx="1.8" fill="currentColor"/><rect x="24" y="4.2" width="1.6" height="4.6" rx=".8" fill="currentColor" opacity=".5"/></svg>
+        </div>
+      </div>
+
+      <!-- scroll viewport -->
+      <div class="lv-scroll" ref="{{ setVp }}" style="position:relative;flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;z-index:2;">
+
+        <!-- ============ HOME ============ -->
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:lvFadeIn .4s ease both;min-height:850px;">
+
+          <!-- gradient header -->
+          <div style="position:relative;background:linear-gradient(135deg,#FBC79E 0%,#F59A6E 52%,#EE7E54 100%);padding:64px 24px 64px;border-radius:0 0 36px 36px;overflow:hidden;">
+            <div style="position:absolute;right:-40px;top:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.32),transparent 70%);"></div>
+            <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+              <div>
+                <div style="font-size:12px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.82);margin-bottom:6px;">Tuesday morning</div>
+                <div style="font-family:'Newsreader',serif;font-size:42px;font-weight:600;line-height:.98;color:#FFFFFF;letter-spacing:-.5px;">Hello, Maya</div>
+                <div style="font-size:13.5px;color:rgba(255,255,255,.9);margin-top:8px;max-width:230px;line-height:1.45;">Ready when you are — let's see what today's look is saying.</div>
+              </div>
+              <div style="width:50px;height:50px;border-radius:50%;overflow:hidden;box-shadow:0 6px 16px rgba(150,80,50,.3), 0 0 0 2.5px rgba(255,255,255,.7);flex:none;background:#FBD9C4;">
+                <image-slot id="lv-avatar" style="width:100%;height:100%;" shape="circle" placeholder="you"></image-slot>
+              </div>
+            </div>
+          </div>
+
+          <div class="lv-stagger" style="padding:0 22px 132px;margin-top:-40px;">
+
+            <!-- hero scan card (overlapping) -->
+            <div onClick="{{ goAnalyze }}" style="cursor:pointer;position:relative;background:#FFFFFF;border-radius:28px;padding:22px;box-shadow:0 22px 44px -20px rgba(225,130,80,.5);transition:transform .26s cubic-bezier(.2,.7,.3,1);display:flex;align-items:center;gap:18px;" style-active="transform:scale(.985)">
+              <div style="width:62px;height:62px;border-radius:20px;flex:none;background:linear-gradient(140deg,#FBC79E,#EE7E54);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 10px 20px -6px rgba(238,126,84,.6);">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 7 4h10l4 4.5"/><rect x="3" y="8.5" width="18" height="11.5" rx="3.5"/><circle cx="12" cy="14" r="3.4"/></svg>
+              </div>
+              <div style="flex:1;">
+                <div style="font-family:'Newsreader',serif;font-size:25px;font-weight:600;line-height:1;color:#34302C;margin-bottom:4px;">Scan an outfit</div>
+                <div style="font-size:13px;line-height:1.4;color:#9B8B80;">No scores — just gentle clarity.</div>
+              </div>
+              <div style="width:36px;height:36px;border-radius:50%;background:#FCEDE3;display:flex;align-items:center;justify-content:center;color:#E0764A;flex:none;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+              </div>
+            </div>
+
+            <!-- quick actions -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:14px;">
+              <div onClick="{{ goUpload }}" style="cursor:pointer;background:#FFFFFF;border-radius:16px;padding:18px;box-shadow:0 10px 28px -16px rgba(160,110,80,.4);transition:transform .2s;" style-active="transform:scale(.97)">
+                <div style="width:42px;height:42px;border-radius:14px;background:#FCEDE3;color:#E0764A;display:flex;align-items:center;justify-content:center;margin-bottom:13px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="4"/><circle cx="8.6" cy="9.6" r="1.8"/><path d="m4 17 4.8-4.3 3.6 3.2 3.1-2.6L20 16.6"/></svg>
+                </div>
+                <div style="font-size:15px;font-weight:600;color:#34302C;margin-bottom:2px;">Upload a photo</div>
+                <div style="font-size:12.5px;color:#9B8B80;">From your gallery</div>
+              </div>
+              <div onClick="{{ goProfile }}" style="cursor:pointer;background:#FFFFFF;border-radius:16px;padding:18px;box-shadow:0 10px 28px -16px rgba(160,110,80,.4);transition:transform .2s;" style-active="transform:scale(.97)">
+                <div style="width:42px;height:42px;border-radius:14px;background:#F6E7DF;color:#C97E5A;display:flex;align-items:center;justify-content:center;margin-bottom:13px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg>
+                </div>
+                <div style="font-size:15px;font-weight:600;color:#34302C;margin-bottom:2px;">Style identity</div>
+                <div style="font-size:12.5px;color:#9B8B80;">Soft Minimalist</div>
+              </div>
+            </div>
+
+            <!-- gentle insight -->
+            <div style="margin-top:14px;position:relative;background:linear-gradient(135deg,#FDEEE3,#FBE0D0);border-radius:16px;padding:20px 22px;overflow:hidden;">
+              <div style="font-family:'Newsreader',serif;font-size:54px;line-height:.4;color:#EE9E78;position:absolute;top:26px;left:18px;">&ldquo;</div>
+              <div style="padding-left:32px;font-family:'Newsreader',serif;font-style:italic;font-weight:600;font-size:19px;line-height:1.4;color:#7A4F3C;">You've leaned into warm neutrals this week — it really suits the calm you're after.</div>
+            </div>
+
+            <!-- recent looks -->
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin:30px 0 16px;">
+              <div style="font-family:'Newsreader',serif;font-size:25px;font-weight:600;color:#34302C;">Recent looks</div>
+              <div onClick="{{ goHistory }}" style="cursor:pointer;font-size:13px;font-weight:600;color:#E0764A;">See all</div>
+            </div>
+            <div class="lv-scroll" style="display:flex;gap:14px;overflow-x:auto;padding:2px 22px 8px;margin:0 -22px;">
+              <sc-for list="{{ recentLooks }}" as="look" hint-placeholder-count="3">
+                <div onClick="{{ look.open }}" style="cursor:pointer;flex:none;width:152px;">
+                  <div style="position:relative;border-radius:18px;overflow:hidden;box-shadow:0 16px 30px -16px rgba(160,100,70,.55);">
+                    <image-slot id="{{ look.slot }}" style="width:152px;height:200px;" shape="rounded" radius="24" placeholder="outfit photo"></image-slot>
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(50,32,26,.45) 0%, transparent 42%);"></div>
+                    <div style="position:absolute;left:11px;top:11px;background:rgba(255,255,255,.92);font-size:10.5px;font-weight:700;letter-spacing:.3px;color:#C16A41;padding:5px 11px;border-radius:20px;">{{ look.vibe }}</div>
+                    <div style="position:absolute;left:13px;bottom:11px;right:13px;font-family:'Newsreader',serif;font-size:20px;font-weight:600;color:#fff;line-height:1;">{{ look.title }}</div>
+                  </div>
+                  <div style="font-size:12px;color:#9B8B80;margin-top:8px;">{{ look.date }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ ANALYZE ============ -->
+        <sc-if value="{{ isAnalyze }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:lvFadeIn .35s ease both;min-height:850px;background:#1C1512;display:flex;flex-direction:column;">
+          <div style="padding:62px 22px 14px;display:flex;align-items:center;justify-content:space-between;">
+            <div onClick="{{ goHome }}" style="cursor:pointer;width:40px;height:40px;border-radius:50%;background:rgba(252,237,227,.14);display:flex;align-items:center;justify-content:center;color:#FCEDE3;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>
+            </div>
+            <div style="font-family:'Newsreader',serif;font-size:22px;font-weight:600;color:#FCEDE3;">New look</div>
+            <div style="width:40px;height:40px;"></div>
+          </div>
+
+          <div style="flex:1;margin:10px 20px;border-radius:30px;position:relative;overflow:hidden;background:radial-gradient(120% 90% at 50% 18%, #322A24 0%, #221C18 70%);display:flex;align-items:center;justify-content:center;">
+            <image-slot id="lv-capture" style="position:absolute;inset:0;width:100%;height:100%;" shape="rounded" radius="30" placeholder="drop your outfit photo"></image-slot>
+
+            <!-- rule-of-thirds grid -->
+            <div style="position:absolute;inset:0;pointer-events:none;opacity:.5;">
+              <div style="position:absolute;left:33.33%;top:0;bottom:0;width:1px;background:rgba(252,237,227,.18);"></div>
+              <div style="position:absolute;left:66.66%;top:0;bottom:0;width:1px;background:rgba(252,237,227,.18);"></div>
+              <div style="position:absolute;top:33.33%;left:0;right:0;height:1px;background:rgba(252,237,227,.18);"></div>
+              <div style="position:absolute;top:66.66%;left:0;right:0;height:1px;background:rgba(252,237,227,.18);"></div>
+            </div>
+
+            <!-- soft framing silhouette -->
+            <svg viewBox="0 0 120 220" fill="none" style="position:absolute;width:118px;height:auto;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;opacity:.32;" stroke="#FCEDE3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 7">
+              <circle cx="60" cy="30" r="20"/>
+              <path d="M30 78c0-9 10-16 30-16s30 7 30 16l-6 60c-1 8-3 14-3 22v34M30 78l6 60c1 8 3 14 3 22v34"/>
+              <path d="M30 80 8 132M90 80l22 52"/>
+            </svg>
+
+            <!-- corner brackets -->
+            <div style="position:absolute;inset:0;pointer-events:none;">
+              <div style="position:absolute;left:22px;top:22px;width:30px;height:30px;border-left:2.5px solid rgba(252,237,227,.9);border-top:2.5px solid rgba(252,237,227,.9);border-radius:10px 0 0 0;"></div>
+              <div style="position:absolute;right:22px;top:22px;width:30px;height:30px;border-right:2.5px solid rgba(252,237,227,.9);border-top:2.5px solid rgba(252,237,227,.9);border-radius:0 10px 0 0;"></div>
+              <div style="position:absolute;left:22px;bottom:22px;width:30px;height:30px;border-left:2.5px solid rgba(252,237,227,.9);border-bottom:2.5px solid rgba(252,237,227,.9);border-radius:0 0 0 10px;"></div>
+              <div style="position:absolute;right:22px;bottom:22px;width:30px;height:30px;border-right:2.5px solid rgba(252,237,227,.9);border-bottom:2.5px solid rgba(252,237,227,.9);border-radius:0 0 10px 0;"></div>
+            </div>
+
+            <!-- top hint chip -->
+            <div style="position:absolute;top:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:7px;white-space:nowrap;background:rgba(28,21,18,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 15px;border-radius:30px;pointer-events:none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F4A268" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+              <span style="font-size:12px;font-weight:500;color:rgba(252,237,227,.92);">Fit your whole outfit in frame</span>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:center;padding:18px 0 8px;">
+            <div style="display:flex;gap:4px;background:rgba(252,237,227,.1);border-radius:30px;padding:4px;">
+              <div onClick="{{ setCamera }}" style="cursor:pointer;font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:{{ cameraTabColor }};background:{{ cameraTabBg }};padding:9px 22px;border-radius:24px;transition:all .2s;">Camera</div>
+              <div onClick="{{ setUpload }}" style="cursor:pointer;font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:{{ uploadTabColor }};background:{{ uploadTabBg }};padding:9px 22px;border-radius:24px;transition:all .2s;">Upload</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 46px 42px;">
+            <div onClick="{{ goUpload }}" style="cursor:pointer;width:48px;height:48px;border-radius:15px;background:rgba(252,237,227,.12);display:flex;align-items:center;justify-content:center;color:#FCEDE3;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="4"/><circle cx="8.6" cy="9.6" r="1.8"/><path d="m4 17 4.8-4.3 3.6 3.2 3.1-2.6L20 16.6"/></svg>
+            </div>
+            <div onClick="{{ goPreview }}" style="cursor:pointer;width:80px;height:80px;border-radius:50%;background:rgba(252,237,227,.18);display:flex;align-items:center;justify-content:center;transition:transform .15s;" style-active="transform:scale(.92)">
+              <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(140deg,#FBC79E,#EE7E54);box-shadow:0 0 0 3px #1C1512, 0 0 0 5px rgba(252,237,227,.45);"></div>
+            </div>
+            <div style="width:48px;height:48px;border-radius:15px;background:rgba(252,237,227,.12);display:flex;align-items:center;justify-content:center;color:#FCEDE3;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8.5a8.5 8.5 0 1 0-2.4 6"/><path d="M21 4v4.5h-4.5"/></svg>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ PREVIEW ============ -->
+        <sc-if value="{{ isPreview }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:lvFadeIn .4s ease both;min-height:850px;background:#FCF6F0;padding:62px 22px 40px;display:flex;flex-direction:column;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+            <div onClick="{{ goAnalyze }}" style="cursor:pointer;width:40px;height:40px;border-radius:50%;background:#fff;box-shadow:0 4px 14px -4px rgba(160,100,70,.3);display:flex;align-items:center;justify-content:center;color:#34302C;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>
+            </div>
+            <div style="font-family:'Newsreader',serif;font-size:22px;font-weight:600;color:#34302C;">Before we begin</div>
+            <div style="width:40px;"></div>
+          </div>
+          <div style="border-radius:30px;overflow:hidden;box-shadow:0 28px 50px -22px rgba(160,100,70,.5);flex:1;margin-bottom:20px;">
+            <image-slot id="lv-capture" style="width:100%;height:100%;" shape="rounded" radius="30" placeholder="your outfit photo"></image-slot>
+          </div>
+          <div style="text-align:center;font-family:'Newsreader',serif;font-style:italic;font-size:20px;line-height:1.5;color:#7A4F3C;margin-bottom:22px;padding:0 14px;">I'll keep this gentle — just sharing what I notice. You stay in charge.</div>
+          <div onClick="{{ startAnalyze }}" style="cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#FBC79E,#EE7E54);color:#fff;font-size:16px;font-weight:600;padding:18px;border-radius:30px;box-shadow:0 18px 34px -14px rgba(238,126,84,.7);transition:transform .15s;" style-active="transform:scale(.98)">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg>
+            Read this look
+          </div>
+          <div onClick="{{ goAnalyze }}" style="cursor:pointer;text-align:center;font-size:14px;font-weight:600;color:#B7A89E;margin-top:16px;">Retake</div>
+        </div>
+        </sc-if>
+
+        <!-- ============ ANALYZING ============ -->
+        <sc-if value="{{ isAnalyzing }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:lvFadeIn .3s ease both;min-height:850px;background:linear-gradient(176deg,#FDEEE3 0%,#F8D2BC 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 44px;text-align:center;">
+          <div style="position:relative;width:128px;height:128px;margin-bottom:36px;">
+            <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#FBC79E,#EE7E54);animation:lvBreath 2.4s ease-in-out infinite;"></div>
+            <div style="position:absolute;inset:34px;border-radius:50%;border:2px solid rgba(224,118,74,.25);border-top-color:#E0764A;animation:lvSpin 1.5s linear infinite;"></div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#C16A41;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg>
+            </div>
+          </div>
+          <div style="font-family:'Newsreader',serif;font-size:31px;font-weight:600;color:#34302C;margin-bottom:10px;">Taking this in&hellip;</div>
+          <div style="font-size:14.5px;line-height:1.55;color:#9B8B80;max-width:250px;">Reading the colours, the fit, and the feeling of your look.</div>
+        </div>
+        </sc-if>
+
+        <!-- ============ RESULT ============ -->
+        <sc-if value="{{ isResult }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:lvFadeIn .4s ease both;min-height:850px;background:#FCF6F0;">
+
+          <!-- hero -->
+          <div style="position:relative;height:392px;">
+            <image-slot id="lv-capture" style="position:absolute;inset:0;width:100%;height:100%;" shape="rect" placeholder="your outfit photo"></image-slot>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(40,26,22,.82) 0%, rgba(40,26,22,.12) 46%, rgba(40,26,22,.28) 100%);"></div>
+            <div style="position:absolute;top:60px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;">
+              <div onClick="{{ goHome }}" style="cursor:pointer;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:#fff;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>
+              </div>
+              <div onClick="{{ saveLook }}" style="cursor:pointer;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:#fff;" style-active="transform:scale(.9)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7-4.3-9.2-8.6C1.3 9 2.6 5.5 5.8 5.1 7.9 4.8 9.4 6 12 8.6c2.6-2.6 4.1-3.8 6.2-3.5 3.2.4 4.5 3.9 3 6.8C19 16.2 12 20.5 12 20.5Z"/></svg>
+              </div>
+            </div>
+            <div style="position:absolute;left:22px;right:22px;bottom:46px;">
+              <div style="display:inline-block;white-space:nowrap;background:rgba(255,255,255,.92);font-size:10.5px;font-weight:700;letter-spacing:.4px;color:#C16A41;padding:6px 11px;border-radius:6px;margin-bottom:13px;">RELAXED &middot; WARM NEUTRALS</div>
+              <div style="font-family:'Newsreader',serif;font-size:38px;font-weight:600;line-height:1;color:#fff;letter-spacing:-.4px;">Quiet linen</div>
+            </div>
+          </div>
+
+          <!-- body sheet -->
+          <div style="position:relative;margin-top:-26px;border-radius:30px 30px 0 0;background:#FCF6F0;padding:26px 22px 130px;">
+
+            <!-- summary -->
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:500;font-size:21px;line-height:1.42;color:#5A4A40;margin-bottom:18px;">This look feels calm and grounded — soft linen, an easy silhouette, and a quiet palette that lets you breathe.</div>
+
+            <!-- tags -->
+            <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px;">
+              <span style="font-size:12.5px;font-weight:600;color:#7A6B60;background:#fff;border:1px solid rgba(160,110,80,.16);padding:7px 12px;border-radius:6px;">Linen</span>
+              <span style="font-size:12.5px;font-weight:600;color:#7A6B60;background:#fff;border:1px solid rgba(160,110,80,.16);padding:7px 12px;border-radius:6px;">Oversized</span>
+              <span style="font-size:12.5px;font-weight:600;color:#7A6B60;background:#fff;border:1px solid rgba(160,110,80,.16);padding:7px 12px;border-radius:6px;">Sand &amp; cream</span>
+              <span style="font-size:12.5px;font-weight:600;color:#7A6B60;background:#fff;border:1px solid rgba(160,110,80,.16);padding:7px 12px;border-radius:6px;">Low contrast</span>
+            </div>
+
+            <!-- tabs -->
+            <div style="display:flex;gap:28px;border-bottom:1px solid rgba(160,110,80,.14);margin-bottom:18px;">
+              <div onClick="{{ setOverview }}" style="cursor:pointer;padding-bottom:12px;position:relative;">
+                <span style="font-size:15px;font-weight:700;color:{{ tabOverviewColor }};">Overview</span>
+                <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;bottom:-1px;left:0;right:0;height:2.5px;border-radius:2px;background:linear-gradient(90deg,#FBC79E,#EE7E54);"></div></sc-if>
+              </div>
+              <div onClick="{{ setSuggestions }}" style="cursor:pointer;padding-bottom:12px;position:relative;">
+                <span style="font-size:15px;font-weight:700;color:{{ tabSuggestionsColor }};">Suggestions</span>
+                <sc-if value="{{ isSuggestions }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;bottom:-1px;left:0;right:0;height:2.5px;border-radius:2px;background:linear-gradient(90deg,#FBC79E,#EE7E54);"></div></sc-if>
+              </div>
+            </div>
+
+            <!-- direction switcher -->
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+              <span style="font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#B7A89E;flex:none;">View as</span>
+              <div style="display:flex;gap:4px;background:#F3E6DC;border-radius:30px;padding:4px;flex:1;">
+                <sc-for list="{{ dirOptions }}" as="d" hint-placeholder-count="3">
+                  <div onClick="{{ d.pick }}" style="cursor:pointer;flex:1;text-align:center;font-size:12px;font-weight:700;padding:8px 4px;border-radius:24px;background:{{ d.bg }};color:{{ d.color }};transition:all .2s;">{{ d.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!--DIRA-->
+            <sc-if value="{{ dirA }}" hint-placeholder-val="{{ true }}">
+
+              <!-- OVERVIEW · cards -->
+              <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+              <div class="lv-stagger" style="display:flex;flex-direction:column;gap:13px;">
+                <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 10px 28px -18px rgba(160,110,80,.5);">
+                  <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px;">
+                    <div style="width:36px;height:36px;border-radius:12px;background:#FCEDE3;color:#E0764A;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="12" r="2.5"/><circle cx="6.5" cy="8" r="2.5"/><circle cx="8.5" cy="15" r="2.5"/><path d="M12 22c-2 0-3-1-3-2.5s1.5-2 3-2 3 .5 3-1-2-2-2-4"/></svg></div>
+                    <div style="font-size:15px;font-weight:700;color:#34302C;">Colour story</div>
+                  </div>
+                  <div style="display:flex;gap:8px;margin-bottom:12px;">
+                    <div style="width:34px;height:34px;border-radius:10px;background:#E8DAC6;"></div>
+                    <div style="width:34px;height:34px;border-radius:10px;background:#D9C3A8;"></div>
+                    <div style="width:34px;height:34px;border-radius:10px;background:#C8B49B;"></div>
+                    <div style="width:34px;height:34px;border-radius:10px;background:#F2EAE0;"></div>
+                  </div>
+                  <div style="font-size:13.5px;line-height:1.5;color:#7A6B60;">Warm sand and cream sit close together — a soft, low-contrast palette that feels easy and unhurried.</div>
+                </div>
+
+                <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 10px 28px -18px rgba(160,110,80,.5);">
+                  <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+                    <div style="width:36px;height:36px;border-radius:12px;background:#F6E7DF;color:#C97E5A;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 5 6v15h14V6l-3-3"/><path d="M9 3a3 3 0 0 0 6 0"/></svg></div>
+                    <div style="font-size:15px;font-weight:700;color:#34302C;">Fit &amp; silhouette</div>
+                  </div>
+                  <div style="font-size:13.5px;line-height:1.5;color:#7A6B60;">Relaxed and a little oversized through the top, balanced by a cleaner line below. It reads effortless rather than undone.</div>
+                </div>
+
+                <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 10px 28px -18px rgba(160,110,80,.5);">
+                  <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px;">
+                    <div style="width:36px;height:36px;border-radius:12px;background:#FCEDE3;color:#E0764A;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1 2.2 1.5 3.5 1.5s2.5-.5 3.5-1.5"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></div>
+                    <div style="font-size:15px;font-weight:700;color:#34302C;">Mood &amp; energy</div>
+                  </div>
+                  <div style="font-size:13.5px;line-height:1.5;color:#7A6B60;">Grounded and quietly confident. This is a look that doesn't ask for attention — it just feels like you.</div>
+                </div>
+              </div>
+              </sc-if>
+
+              <!-- SUGGESTIONS · cards -->
+              <sc-if value="{{ isSuggestions }}" hint-placeholder-val="{{ false }}">
+              <div class="lv-stagger" style="display:flex;flex-direction:column;gap:22px;">
+
+                <div>
+                  <div style="font-family:'Newsreader',serif;font-size:22px;font-weight:600;color:#34302C;margin-bottom:4px;">A gentle tweak or two</div>
+                  <div style="font-size:13px;color:#9B8B80;margin-bottom:13px;">Only if you feel like it — your look already works.</div>
+                  <div style="display:flex;flex-direction:column;gap:11px;">
+                    <div style="display:flex;gap:13px;background:#fff;border-radius:14px;padding:16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);">
+                      <div style="width:40px;height:40px;border-radius:13px;flex:none;background:#FCEDE3;color:#E0764A;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 14.5 16 10 4 22"/><path d="m14 6 1.5-1.5a2.1 2.1 0 0 1 3 3L17 9"/></svg></div>
+                      <div><div style="font-size:14.5px;font-weight:600;color:#34302C;margin-bottom:2px;">A softer layer</div><div style="font-size:13px;line-height:1.45;color:#7A6B60;">A light knit cardigan would echo the calm and add a little depth.</div></div>
+                    </div>
+                    <div style="display:flex;gap:13px;background:#fff;border-radius:14px;padding:16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);">
+                      <div style="width:40px;height:40px;border-radius:13px;flex:none;background:#F6E7DF;color:#C97E5A;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h12"/></svg></div>
+                      <div><div style="font-size:14.5px;font-weight:600;color:#34302C;margin-bottom:2px;">A loose half-tuck</div><div style="font-size:13px;line-height:1.45;color:#7A6B60;">Just on one side — it hints at shape without losing the ease.</div></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font-family:'Newsreader',serif;font-size:22px;font-weight:600;color:#34302C;margin-bottom:13px;">Try next</div>
+                  <div class="lv-scroll" style="display:flex;gap:11px;overflow-x:auto;margin:0 -22px;padding:2px 22px;">
+                    <div style="flex:none;width:130px;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);"><image-slot id="lv-next-1" style="width:130px;height:118px;" shape="rect" placeholder="idea"></image-slot><div style="padding:10px 12px;font-size:13px;font-weight:600;color:#34302C;">Add warm gold</div></div>
+                    <div style="flex:none;width:130px;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);"><image-slot id="lv-next-2" style="width:130px;height:118px;" shape="rect" placeholder="idea"></image-slot><div style="padding:10px 12px;font-size:13px;font-weight:600;color:#34302C;">Crisp white base</div></div>
+                    <div style="flex:none;width:130px;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);"><image-slot id="lv-next-3" style="width:130px;height:118px;" shape="rect" placeholder="idea"></image-slot><div style="padding:10px 12px;font-size:13px;font-weight:600;color:#34302C;">Soft structure</div></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font-family:'Newsreader',serif;font-size:22px;font-weight:600;color:#34302C;margin-bottom:13px;">For the occasion</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:9px;">
+                    <span style="font-size:13px;font-weight:600;color:#C16A41;background:#FCEDE3;padding:9px 14px;border-radius:6px;">Coffee &amp; errands</span>
+                    <span style="font-size:13px;font-weight:600;color:#7A6B60;background:#fff;border:1px solid rgba(160,110,80,.16);padding:9px 14px;border-radius:6px;">A relaxed workday</span>
+                    <span style="font-size:13px;font-weight:600;color:#7A6B60;background:#fff;border:1px solid rgba(160,110,80,.16);padding:9px 14px;border-radius:6px;">Easy dinner out</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font-family:'Newsreader',serif;font-size:22px;font-weight:600;color:#34302C;margin-bottom:4px;">Three directions to explore</div>
+                  <div style="font-size:13px;color:#9B8B80;margin-bottom:13px;">Wherever you feel drawn — there's no wrong one.</div>
+                  <div style="display:flex;flex-direction:column;gap:11px;">
+                    <div style="display:flex;align-items:center;gap:14px;background:#fff;border-radius:14px;padding:16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);"><div style="width:46px;height:46px;border-radius:50%;flex:none;background:linear-gradient(140deg,#F2EAE0,#D9C3A8);"></div><div style="flex:1;"><div style="font-size:14.5px;font-weight:700;color:#34302C;">Lean softer</div><div style="font-size:12.5px;color:#7A6B60;">More flow, rounded edges, gentle drape.</div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A88A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+                    <div style="display:flex;align-items:center;gap:14px;background:#fff;border-radius:14px;padding:16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);"><div style="width:46px;height:46px;border-radius:50%;flex:none;background:linear-gradient(140deg,#E8DAC6,#B7A089);"></div><div style="flex:1;"><div style="font-size:14.5px;font-weight:700;color:#34302C;">Add quiet structure</div><div style="font-size:12.5px;color:#7A6B60;">A defined shoulder, a cleaner line.</div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A88A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+                    <div style="display:flex;align-items:center;gap:14px;background:#fff;border-radius:14px;padding:16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);"><div style="width:46px;height:46px;border-radius:50%;flex:none;background:linear-gradient(140deg,#FBC79E,#EE7E54);"></div><div style="flex:1;"><div style="font-size:14.5px;font-weight:700;color:#34302C;">Play with warmth</div><div style="font-size:12.5px;color:#7A6B60;">One warm accent — terracotta, rust, gold.</div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A88A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+                  </div>
+                </div>
+
+              </div>
+              </sc-if>
+
+            </sc-if>
+            <!--DIRB-->
+            <sc-if value="{{ dirB }}" hint-placeholder-val="{{ false }}">
+
+              <!-- OVERVIEW · editorial -->
+              <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+              <div class="lv-stagger">
+                <div style="padding:4px 0 22px;border-bottom:1px solid rgba(160,110,80,.16);">
+                  <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px;"><span style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#EE9E78;line-height:1;">01</span><span style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#B7A89E;">Colour</span></div>
+                  <div style="font-family:'Newsreader',serif;font-size:25px;font-weight:600;line-height:1.18;color:#34302C;margin-bottom:12px;">Warm sand, cream and soft taupe, held in a low-contrast hush.</div>
+                  <div style="display:flex;gap:8px;"><div style="width:30px;height:30px;border-radius:8px;background:#E8DAC6;"></div><div style="width:30px;height:30px;border-radius:8px;background:#D9C3A8;"></div><div style="width:30px;height:30px;border-radius:8px;background:#C8B49B;"></div><div style="width:30px;height:30px;border-radius:8px;background:#F2EAE0;"></div></div>
+                </div>
+                <div style="padding:22px 0;border-bottom:1px solid rgba(160,110,80,.16);">
+                  <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px;"><span style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#EE9E78;line-height:1;">02</span><span style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#B7A89E;">Silhouette</span></div>
+                  <div style="font-family:'Newsreader',serif;font-size:25px;font-weight:600;line-height:1.18;color:#34302C;">Relaxed up top, a cleaner line below — effortless, never undone.</div>
+                </div>
+                <div style="padding:22px 0;">
+                  <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px;"><span style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#EE9E78;line-height:1;">03</span><span style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#B7A89E;">Mood</span></div>
+                  <div style="font-family:'Newsreader',serif;font-size:25px;font-weight:600;line-height:1.18;color:#34302C;">Grounded and quietly confident. It simply feels like you.</div>
+                </div>
+              </div>
+              </sc-if>
+
+              <!-- SUGGESTIONS · editorial -->
+              <sc-if value="{{ isSuggestions }}" hint-placeholder-val="{{ false }}">
+              <div class="lv-stagger">
+                <div style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#B7A89E;margin-bottom:6px;">If you feel like it</div>
+                <div style="font-family:'Newsreader',serif;font-size:26px;font-weight:600;line-height:1.16;color:#34302C;margin-bottom:20px;">Two small things could deepen the calm.</div>
+                <div style="display:flex;gap:14px;padding:16px 0;border-top:1px solid rgba(160,110,80,.16);"><span style="font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:#EE9E78;line-height:1;">&mdash;</span><div><div style="font-size:15px;font-weight:700;color:#34302C;margin-bottom:3px;">A softer layer</div><div style="font-size:13.5px;line-height:1.5;color:#7A6B60;">A light knit cardigan would echo the calm and add depth.</div></div></div>
+                <div style="display:flex;gap:14px;padding:16px 0;border-top:1px solid rgba(160,110,80,.16);border-bottom:1px solid rgba(160,110,80,.16);margin-bottom:26px;"><span style="font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:#EE9E78;line-height:1;">&mdash;</span><div><div style="font-size:15px;font-weight:700;color:#34302C;margin-bottom:3px;">A loose half-tuck</div><div style="font-size:13.5px;line-height:1.5;color:#7A6B60;">Just on one side — shape without losing the ease.</div></div></div>
+
+                <div style="font-family:'Newsreader',serif;font-size:26px;font-weight:600;color:#34302C;margin-bottom:16px;">Three directions</div>
+                <div style="position:relative;border-radius:18px;overflow:hidden;margin-bottom:11px;"><image-slot id="lv-dir-1" style="width:100%;height:150px;" shape="rect" placeholder="lean softer"></image-slot><div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(40,26,22,.66),rgba(40,26,22,.05));"></div><div style="position:absolute;left:18px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;"><div style="font-family:'Newsreader',serif;font-size:24px;font-weight:600;color:#fff;line-height:1;">Lean softer</div><div style="font-size:12.5px;color:rgba(255,255,255,.85);margin-top:4px;">More flow &amp; gentle drape</div></div></div>
+                <div style="position:relative;border-radius:18px;overflow:hidden;margin-bottom:11px;"><image-slot id="lv-dir-2" style="width:100%;height:150px;" shape="rect" placeholder="add structure"></image-slot><div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(40,26,22,.66),rgba(40,26,22,.05));"></div><div style="position:absolute;left:18px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;"><div style="font-family:'Newsreader',serif;font-size:24px;font-weight:600;color:#fff;line-height:1;">Add structure</div><div style="font-size:12.5px;color:rgba(255,255,255,.85);margin-top:4px;">A defined shoulder, cleaner line</div></div></div>
+                <div style="position:relative;border-radius:18px;overflow:hidden;"><image-slot id="lv-dir-3" style="width:100%;height:150px;" shape="rect" placeholder="play with warmth"></image-slot><div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(40,26,22,.66),rgba(40,26,22,.05));"></div><div style="position:absolute;left:18px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;"><div style="font-family:'Newsreader',serif;font-size:24px;font-weight:600;color:#fff;line-height:1;">Play with warmth</div><div style="font-size:12.5px;color:rgba(255,255,255,.85);margin-top:4px;">One terracotta or gold accent</div></div></div>
+              </div>
+              </sc-if>
+
+            </sc-if>
+            <!--DIRC-->
+            <sc-if value="{{ dirC }}" hint-placeholder-val="{{ false }}">
+
+              <!-- OVERVIEW · chat -->
+              <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+              <div class="lv-stagger" style="display:flex;flex-direction:column;gap:14px;">
+                <div style="display:flex;gap:10px;align-items:flex-end;">
+                  <div style="width:30px;height:30px;border-radius:50%;flex:none;background:linear-gradient(140deg,#FBC79E,#EE7E54);display:flex;align-items:center;justify-content:center;color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg></div>
+                  <div style="background:#fff;border-radius:22px 22px 22px 6px;padding:14px 16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);max-width:255px;"><div style="font-size:14px;line-height:1.5;color:#4A3F38;">Okay, I've had a look — this one feels really <b style="color:#C16A41;">calm and grounded</b>. 🌾</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-end;">
+                  <div style="width:30px;height:30px;flex:none;"></div>
+                  <div style="background:#fff;border-radius:22px 22px 22px 6px;padding:14px 16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);max-width:255px;"><div style="font-size:14px;line-height:1.5;color:#4A3F38;margin-bottom:10px;">The colours sit so close together — warm sand, cream, a little taupe.</div><div style="display:flex;gap:7px;"><div style="width:26px;height:26px;border-radius:8px;background:#E8DAC6;"></div><div style="width:26px;height:26px;border-radius:8px;background:#D9C3A8;"></div><div style="width:26px;height:26px;border-radius:8px;background:#C8B49B;"></div><div style="width:26px;height:26px;border-radius:8px;background:#F2EAE0;"></div></div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-end;">
+                  <div style="width:30px;height:30px;flex:none;"></div>
+                  <div style="background:#fff;border-radius:22px 22px 22px 6px;padding:14px 16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);max-width:255px;"><div style="font-size:14px;line-height:1.5;color:#4A3F38;">Relaxed up top, cleaner below. It looks effortless — and quietly confident. That's very you.</div></div>
+                </div>
+                <div style="align-self:flex-end;background:linear-gradient(135deg,#FBC79E,#EE7E54);border-radius:22px 22px 6px 22px;padding:13px 16px;max-width:230px;"><div style="font-size:14px;line-height:1.45;color:#fff;">I love that. What could I add? ✨</div></div>
+              </div>
+              </sc-if>
+
+              <!-- SUGGESTIONS · chat -->
+              <sc-if value="{{ isSuggestions }}" hint-placeholder-val="{{ false }}">
+              <div class="lv-stagger" style="display:flex;flex-direction:column;gap:14px;">
+                <div style="display:flex;gap:10px;align-items:flex-end;">
+                  <div style="width:30px;height:30px;border-radius:50%;flex:none;background:linear-gradient(140deg,#FBC79E,#EE7E54);display:flex;align-items:center;justify-content:center;color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.1 4.6 5 .5-3.8 3.4 1.1 5L12 14.8 7.6 17l1.1-5L4.9 8.6l5-.5z"/></svg></div>
+                  <div style="background:#fff;border-radius:22px 22px 22px 6px;padding:14px 16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);max-width:255px;"><div style="font-size:14px;line-height:1.5;color:#4A3F38;">Two tiny things — only if you feel like it. A <b style="color:#C16A41;">soft knit layer</b>, and maybe a loose half-tuck on one side. 🤍</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-end;">
+                  <div style="width:30px;height:30px;flex:none;"></div>
+                  <div style="background:#fff;border-radius:22px;padding:8px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);"><div class="lv-scroll" style="display:flex;gap:8px;overflow-x:auto;max-width:255px;"><div style="flex:none;width:96px;border-radius:14px;overflow:hidden;"><image-slot id="lv-c1" style="width:96px;height:108px;" shape="rect" placeholder="idea"></image-slot></div><div style="flex:none;width:96px;border-radius:14px;overflow:hidden;"><image-slot id="lv-c2" style="width:96px;height:108px;" shape="rect" placeholder="idea"></image-slot></div></div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-end;">
+                  <div style="width:30px;height:30px;flex:none;"></div>
+                  <div style="background:#fff;border-radius:22px 22px 22px 6px;padding:14px 16px;box-shadow:0 8px 24px -18px rgba(160,110,80,.5);max-width:255px;"><div style="font-size:14px;line-height:1.5;color:#4A3F38;">Where do you want to take it? Pick whatever feels right today —</div></div>
+                </div>
+                <div style="align-self:flex-end;display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+                  <div style="cursor:pointer;background:#FCEDE3;border:1px solid rgba(224,118,74,.25);border-radius:22px;padding:11px 17px;font-size:13.5px;font-weight:600;color:#C16A41;">Lean softer →</div>
+                  <div style="cursor:pointer;background:#FCEDE3;border:1px solid rgba(224,118,74,.25);border-radius:22px;padding:11px 17px;font-size:13.5px;font-weight:600;color:#C16A41;">Add quiet structure →</div>
+                  <div style="cursor:pointer;background:#FCEDE3;border:1px solid rgba(224,118,74,.25);border-radius:22px;padding:11px 17px;font-size:13.5px;font-weight:600;color:#C16A41;">Play with warmth →</div>
+                </div>
+              </div>
+              </sc-if>
+
+            </sc-if>
+
+            <!-- save -->
+            <div onClick="{{ saveLook }}" style="cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#FBC79E,#EE7E54);color:#fff;font-size:16px;font-weight:600;padding:17px;border-radius:30px;box-shadow:0 18px 32px -14px rgba(238,126,84,.7);margin-top:26px;transition:transform .15s;" style-active="transform:scale(.98)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7-4.3-9.2-8.6C1.3 9 2.6 5.5 5.8 5.1 7.9 4.8 9.4 6 12 8.6c2.6-2.6 4.1-3.8 6.2-3.5 3.2.4 4.5 3.9 3 6.8C19 16.2 12 20.5 12 20.5Z"/></svg>
+              Save this look
+            </div>
+
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ HISTORY ============ -->
+        <sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:lvFadeIn .4s ease both;min-height:850px;">
+          <div style="background:linear-gradient(135deg,#FBC79E 0%,#F59A6E 52%,#EE7E54 100%);padding:64px 24px 30px;border-radius:0 0 32px 32px;">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.82);margin-bottom:5px;">Your wardrobe diary</div>
+            <div style="font-family:'Newsreader',serif;font-size:36px;font-weight:600;line-height:1;color:#fff;">Your looks</div>
+            <div style="font-size:13.5px;color:rgba(255,255,255,.9);margin-top:7px;">24 looks read &middot; a softening, warmer story over time.</div>
+          </div>
+
+          <div style="padding:20px 22px 132px;">
+            <!-- view toggle -->
+            <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+              <div style="display:flex;gap:18px;">
+                <div onClick="{{ setGrid }}" style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:{{ gridColor }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>Grid</div>
+                <div onClick="{{ setTimeline }}" style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:{{ timelineColor }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>Timeline</div>
+              </div>
+            </div>
+
+            <!-- filters -->
+            <div class="lv-scroll" style="display:flex;gap:9px;overflow-x:auto;margin:0 -22px 20px;padding:2px 22px;">
+              <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+                <span onClick="{{ f.pick }}" style="cursor:pointer;flex:none;font-size:13px;font-weight:600;padding:9px 16px;border-radius:22px;background:{{ f.bg }};color:{{ f.color }};border:1px solid rgba(160,110,80,.12);">{{ f.label }}</span>
+              </sc-for>
+            </div>
+
+            <!-- GRID -->
+            <sc-if value="{{ isGrid }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <sc-for list="{{ historyLooks }}" as="look" hint-placeholder-count="6">
+                <div onClick="{{ look.open }}" style="cursor:pointer;">
+                  <div style="position:relative;border-radius:18px;overflow:hidden;box-shadow:0 14px 28px -18px rgba(160,100,70,.6);">
+                    <image-slot id="{{ look.slot }}" style="width:100%;height:190px;" shape="rounded" radius="18" placeholder="outfit"></image-slot>
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(40,26,22,.5), transparent 46%);"></div>
+                    <div style="position:absolute;left:10px;top:10px;background:rgba(255,255,255,.92);font-size:9.5px;font-weight:700;letter-spacing:.3px;color:#C16A41;padding:4px 9px;border-radius:18px;">{{ look.vibe }}</div>
+                    <div style="position:absolute;left:11px;bottom:9px;right:10px;font-family:'Newsreader',serif;font-size:18px;font-weight:600;color:#fff;line-height:1;">{{ look.title }}</div>
+                  </div>
+                  <div style="font-size:11.5px;color:#9B8B80;margin-top:6px;">{{ look.date }}</div>
+                </div>
+              </sc-for>
+            </div>
+            </sc-if>
+
+            <!-- TIMELINE -->
+            <sc-if value="{{ isTimeline }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;padding-left:22px;">
+              <div style="position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:linear-gradient(#FBC79E,#EE7E54);border-radius:2px;"></div>
+              <sc-for list="{{ historyLooks }}" as="look" hint-placeholder-count="6">
+                <div onClick="{{ look.open }}" style="cursor:pointer;position:relative;display:flex;gap:14px;align-items:center;background:#fff;border-radius:14px;padding:12px;margin-bottom:13px;box-shadow:0 10px 26px -18px rgba(160,110,80,.5);">
+                  <div style="position:absolute;left:-21px;top:50%;transform:translateY(-50%);width:11px;height:11px;border-radius:50%;background:#EE7E54;border:2.5px solid #FCF6F0;"></div>
+                  <div style="width:62px;height:62px;border-radius:16px;overflow:hidden;flex:none;"><image-slot id="{{ look.slot }}" style="width:62px;height:62px;" shape="rounded" radius="16" placeholder="look"></image-slot></div>
+                  <div style="flex:1;"><div style="font-family:'Newsreader',serif;font-size:20px;font-weight:600;color:#34302C;line-height:1;margin-bottom:4px;">{{ look.title }}</div><div style="font-size:12px;color:#9B8B80;">{{ look.vibe }} &middot; {{ look.date }}</div></div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A88A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+                </div>
+              </sc-for>
+            </div>
+            </sc-if>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ PROFILE ============ -->
+        <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:lvFadeIn .4s ease both;min-height:850px;">
+          <div style="position:relative;background:linear-gradient(135deg,#FBC79E 0%,#F59A6E 52%,#EE7E54 100%);padding:64px 24px 56px;border-radius:0 0 36px 36px;text-align:center;overflow:hidden;">
+            <div style="position:absolute;left:-30px;bottom:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.25),transparent 70%);"></div>
+            <div style="position:relative;width:92px;height:92px;border-radius:50%;margin:0 auto 14px;overflow:hidden;background:#FBD9C4;box-shadow:0 8px 22px rgba(150,80,50,.32), 0 0 0 3px rgba(255,255,255,.7);">
+              <image-slot id="lv-avatar" style="width:100%;height:100%;" shape="circle" placeholder="you"></image-slot>
+            </div>
+            <div style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#fff;line-height:1;">Maya Adeyemi</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.88);margin-top:6px;">Soft Minimalist &middot; refining, gently</div>
+          </div>
+
+          <div class="lv-stagger" style="padding:22px 22px 132px;">
+            <!-- style identity -->
+            <div style="background:#fff;border-radius:18px;padding:22px;box-shadow:0 14px 32px -20px rgba(160,110,80,.6);margin-bottom:14px;">
+              <div style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#B7A89E;margin-bottom:8px;">Your style identity</div>
+              <div style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#34302C;line-height:1;margin-bottom:10px;">Soft Minimalist</div>
+              <div style="font-size:14px;line-height:1.55;color:#7A6B60;margin-bottom:16px;">You gravitate toward warm neutrals, easy silhouettes and quiet detail. Calm, considered, and unmistakably you.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <span style="font-size:12px;font-weight:600;color:#C16A41;background:#FCEDE3;padding:7px 12px;border-radius:6px;">Warm neutrals</span>
+                <span style="font-size:12px;font-weight:600;color:#C16A41;background:#FCEDE3;padding:7px 12px;border-radius:6px;">Relaxed fit</span>
+                <span style="font-size:12px;font-weight:600;color:#C16A41;background:#FCEDE3;padding:7px 12px;border-radius:6px;">Low contrast</span>
+              </div>
+              <div style="display:flex;gap:7px;margin-top:16px;">
+                <div style="flex:1;height:30px;border-radius:9px;background:#E8DAC6;"></div>
+                <div style="flex:1;height:30px;border-radius:9px;background:#D9C3A8;"></div>
+                <div style="flex:1;height:30px;border-radius:9px;background:#C8B49B;"></div>
+                <div style="flex:1;height:30px;border-radius:9px;background:#EE9E78;"></div>
+                <div style="flex:1;height:30px;border-radius:9px;background:#F2EAE0;"></div>
+              </div>
+            </div>
+
+            <!-- stats -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:22px;">
+              <div style="background:#fff;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 10px 26px -20px rgba(160,110,80,.6);"><div style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#EE7E54;line-height:1;">24</div><div style="font-size:11px;color:#9B8B80;margin-top:4px;">Looks read</div></div>
+              <div style="background:#fff;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 10px 26px -20px rgba(160,110,80,.6);"><div style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#EE7E54;line-height:1;">11</div><div style="font-size:11px;color:#9B8B80;margin-top:4px;">Saved</div></div>
+              <div style="background:#fff;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 10px 26px -20px rgba(160,110,80,.6);"><div style="font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:#EE7E54;line-height:1;">6</div><div style="font-size:11px;color:#9B8B80;margin-top:4px;">This week</div></div>
+            </div>
+
+            <!-- settings -->
+            <div style="background:#fff;border-radius:18px;padding:6px 4px;box-shadow:0 14px 32px -22px rgba(160,110,80,.6);">
+              <div style="display:flex;align-items:center;gap:14px;padding:15px 16px;border-bottom:1px solid rgba(160,110,80,.1);"><div style="width:34px;height:34px;border-radius:11px;background:#FCEDE3;color:#E0764A;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></div><span style="flex:1;font-size:14.5px;font-weight:600;color:#34302C;">Notifications</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A88A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+              <div style="display:flex;align-items:center;gap:14px;padding:15px 16px;border-bottom:1px solid rgba(160,110,80,.1);"><div style="width:34px;height:34px;border-radius:11px;background:#F6E7DF;color:#C97E5A;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><span style="flex:1;font-size:14.5px;font-weight:600;color:#34302C;">Privacy &amp; data</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A88A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+              <div style="display:flex;align-items:center;gap:14px;padding:15px 16px;border-bottom:1px solid rgba(160,110,80,.1);"><div style="width:34px;height:34px;border-radius:11px;background:#FCEDE3;color:#E0764A;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 4.5 1.5c0 1.7-2.5 2-2.5 3.5"/><path d="M12 17h.01"/></svg></div><span style="flex:1;font-size:14.5px;font-weight:600;color:#34302C;">Help &amp; gentle FAQ</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A88A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></div>
+              <div onClick="{{ goHome }}" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:15px 16px;"><div style="width:34px;height:34px;border-radius:11px;background:#F6E7DF;color:#C97E5A;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3"/><path d="m16 17 5-5-5-5M21 12H9"/></svg></div><span style="flex:1;font-size:14.5px;font-weight:600;color:#34302C;">Sign out</span></div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!--SCREENS2-->
+
+      </div>
+
+      <!-- ============ BOTTOM NAV ============ -->
+      <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;bottom:0;left:0;right:0;z-index:55;padding:12px 24px 26px;background:linear-gradient(to top,#FCF6F0 58%,rgba(252,246,240,0));">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:30px;padding:11px 24px;box-shadow:0 16px 34px -14px rgba(160,100,70,.45);">
+          <div onClick="{{ goHome }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ navHomeColor }};width:48px;">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V9.5"/></svg>
+            <span style="font-size:9.5px;font-weight:700;letter-spacing:.4px;">Home</span>
+          </div>
+          <div onClick="{{ goHistory }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ navLooksColor }};width:48px;">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2.2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2.2"/></svg>
+            <span style="font-size:9.5px;font-weight:700;letter-spacing:.4px;">Looks</span>
+          </div>
+          <div onClick="{{ goAnalyze }}" style="cursor:pointer;width:58px;height:58px;margin-top:-28px;border-radius:50%;background:linear-gradient(150deg,#FBC79E,#EE7E54);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 14px 26px -8px rgba(238,126,84,.8), 0 0 0 5px #FCF6F0;transition:transform .15s;" style-active="transform:scale(.92)">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 7 4h10l4 4.5"/><rect x="3" y="8.5" width="18" height="11.5" rx="3.5"/><circle cx="12" cy="14" r="3.4"/></svg>
+          </div>
+          <div onClick="{{ goHistory }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ navSavedColor }};width:48px;">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7-4.3-9.2-8.6C1.3 9 2.6 5.5 5.8 5.1 7.9 4.8 9.4 6 12 8.6c2.6-2.6 4.1-3.8 6.2-3.5 3.2.4 4.5 3.9 3 6.8C19 16.2 12 20.5 12 20.5Z"/></svg>
+            <span style="font-size:9.5px;font-weight:700;letter-spacing:.4px;">Saved</span>
+          </div>
+          <div onClick="{{ goProfile }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ navProfileColor }};width:48px;">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 20c.6-3.6 3.3-5.6 6.5-5.6s5.9 2 6.5 5.6"/></svg>
+            <span style="font-size:9.5px;font-weight:700;letter-spacing:.4px;">You</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- toast -->
+      <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;bottom:108px;left:50%;z-index:70;animation:lvToast 2.6s ease forwards;display:flex;align-items:center;gap:9px;background:#34302C;color:#FCEDE3;font-size:13.5px;font-weight:600;padding:13px 20px;border-radius:30px;box-shadow:0 16px 34px -12px rgba(52,48,44,.6);white-space:nowrap;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F4A268" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        {{ toastMsg }}
+      </div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:434,&quot;height&quot;:890}}">
+class Component extends DCLogic {
+  state = { screen: 'home', mode: 'camera', tab: 'overview', dir: 'a', filter: 'All looks', histView: 'grid', toast: '' };
+
+  componentDidMount() { window.__lv = (a) => { if (typeof a === 'string') this.go(a); else this.setState(a); }; }
+  setVp = (el) => { this.vp = el; };
+  go = (screen) => { this.setState({ screen }); if (this.vp) this.vp.scrollTop = 0; };
+  showToast = (msg) => {
+    this.setState({ toast: '' });
+    clearTimeout(this._t);
+    requestAnimationFrame(() => this.setState({ toast: msg }));
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2600);
+  };
+  startAnalyze = () => { this.go('analyzing'); clearTimeout(this._a); this._a = setTimeout(() => this.go('result'), 2300); };
+
+  renderVals() {
+    const s = this.state;
+    const ACCENT = '#E0764A';
+    const MUTE = 'rgba(52,48,44,.4)';
+    const looks = [
+      { slot: 'lv-look-1', title: 'Quiet linen', vibe: 'Relaxed', date: 'Today' },
+      { slot: 'lv-look-2', title: 'Soft tailoring', vibe: 'Polished', date: 'Yesterday' },
+      { slot: 'lv-look-3', title: 'Sunday knit', vibe: 'Cosy', date: 'Sun' },
+    ];
+    return {
+      isHome: s.screen === 'home',
+      isAnalyze: s.screen === 'analyze',
+      isPreview: s.screen === 'preview',
+      isAnalyzing: s.screen === 'analyzing',
+      isResult: s.screen === 'result',
+      isHistory: s.screen === 'history',
+      isProfile: s.screen === 'profile',
+      showNav: ['home', 'result', 'history', 'profile'].includes(s.screen),
+      statusColor: ['analyze', 'analyzing', 'result', 'home', 'profile', 'history'].includes(s.screen) ? '#FFFFFF' : '#34302C',
+      navHomeColor: s.screen === 'home' ? ACCENT : MUTE,
+      navLooksColor: s.screen === 'history' ? ACCENT : MUTE,
+      navSavedColor: MUTE,
+      navProfileColor: s.screen === 'profile' ? ACCENT : MUTE,
+
+      goHome: () => this.go('home'),
+      goAnalyze: () => this.go('analyze'),
+      goUpload: () => this.go('analyze'),
+      goPreview: () => this.go('preview'),
+      goHistory: () => this.go('history'),
+      goProfile: () => this.go('profile'),
+      goResult: () => this.go('result'),
+      startAnalyze: this.startAnalyze,
+      saveLook: () => this.showToast('Saved to your looks'),
+
+      recentLooks: looks.map((l) => ({ ...l, open: () => this.go('result') })),
+
+      cameraTabColor: s.mode === 'camera' ? '#26201C' : 'rgba(252,237,227,.6)',
+      uploadTabColor: s.mode === 'upload' ? '#26201C' : 'rgba(252,237,227,.6)',
+      cameraTabBg: s.mode === 'camera' ? '#FCEDE3' : 'transparent',
+      uploadTabBg: s.mode === 'upload' ? '#FCEDE3' : 'transparent',
+      setCamera: () => this.setState({ mode: 'camera' }),
+      setUpload: () => this.setState({ mode: 'upload' }),
+
+      isOverview: s.tab === 'overview',
+      isSuggestions: s.tab === 'suggestions',
+      setOverview: () => this.setState({ tab: 'overview' }),
+      setSuggestions: () => this.setState({ tab: 'suggestions' }),
+      tabOverviewColor: s.tab === 'overview' ? '#34302C' : 'rgba(52,48,44,.36)',
+      tabSuggestionsColor: s.tab === 'suggestions' ? '#34302C' : 'rgba(52,48,44,.36)',
+
+      dirA: s.dir === 'a', dirB: s.dir === 'b', dirC: s.dir === 'c',
+      dirOptions: [
+        { key: 'a', label: 'Cards' },
+        { key: 'b', label: 'Editorial' },
+        { key: 'c', label: 'Gentle chat' },
+      ].map((d) => ({
+        label: d.label,
+        bg: s.dir === d.key ? 'linear-gradient(135deg,#FBC79E,#EE7E54)' : 'transparent',
+        color: s.dir === d.key ? '#FFFFFF' : 'rgba(52,48,44,.5)',
+        pick: () => this.setState({ dir: d.key }),
+      })),
+
+      filters: ['All looks', 'Relaxed', 'Polished', 'Cosy', 'Evening'].map((f) => ({
+        label: f,
+        bg: s.filter === f ? '#34302C' : '#FFFFFF',
+        color: s.filter === f ? '#FCEDE3' : '#7A6B60',
+        pick: () => this.setState({ filter: f }),
+      })),
+      historyLooks: [
+        { slot: 'lv-h1', title: 'Quiet linen', vibe: 'Relaxed', date: 'Today' },
+        { slot: 'lv-h2', title: 'Soft tailoring', vibe: 'Polished', date: 'Yesterday' },
+        { slot: 'lv-h3', title: 'Sunday knit', vibe: 'Cosy', date: 'Sun' },
+        { slot: 'lv-h4', title: 'Evening ease', vibe: 'Evening', date: 'Fri' },
+        { slot: 'lv-h5', title: 'Denim & cream', vibe: 'Relaxed', date: 'Thu' },
+        { slot: 'lv-h6', title: 'Layered greys', vibe: 'Polished', date: 'Wed' },
+      ].map((l) => ({ ...l, open: () => this.go('result') })),
+
+      isGrid: s.histView === 'grid',
+      isTimeline: s.histView === 'timeline',
+      gridColor: s.histView === 'grid' ? '#34302C' : 'rgba(52,48,44,.42)',
+      timelineColor: s.histView === 'timeline' ? '#34302C' : 'rgba(52,48,44,.42)',
+      setGrid: () => this.setState({ histView: 'grid' }),
+      setTimeline: () => this.setState({ histView: 'timeline' }),
+
+      hasToast: !!s.toast,
+      toastMsg: s.toast,
+    };
+  }
+}
+</script>
+<script>
+(async () => {
+  if (!document.title || !document.title.trim()) document.title = "Lovanya";
+  // Prepend so page-supplied @page / break rules (deck-stage's margin:0,
+  // author CSS) keep source-order precedence over the baseline.
+  const baseCss = document.createElement('style');
+  baseCss.textContent = "@media print {\n  figure, table { break-inside: avoid; }\n  *, *::before, *::after {\n    print-color-adjust: exact; -webkit-print-color-adjust: exact;\n    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;\n    animation-delay: -99s !important; animation-duration: .001s !important;\n    animation-iteration-count: 1 !important; animation-fill-mode: both !important;\n    animation-play-state: running !important; transition-duration: 0s !important;\n  }\n}";
+  document.head.prepend(baseCss);
+  if (document.readyState === 'loading') {
+    await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+  }
+  let ds = document.querySelector('deck-stage');
+  // whenDefined never resolves when nothing registers the element, so only
+  // await it when a <deck-stage> tag exists (and race a timeout regardless).
+  if (ds && !customElements.get('deck-stage')) {
+    try {
+      await Promise.race([
+        customElements.whenDefined('deck-stage'),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch (e) {}
+    ds = document.querySelector('deck-stage');
+  }
+  // dc-runtime assigns window.DCLogic at init and mounts into #dc-root on
+  // DOMContentLoaded; settle on that subtree so React has rendered before
+  // print(). Non-DC pages fall through to weighing body.
+  const isDc = !ds && 'DCLogic' in window;
+  const settleRoot = ds || (isDc ? document.getElementById('dc-root') : null) || document.body;
+  if (settleRoot) {
+    // Weigh only content children — skip script/style/template so inline
+    // Babel/CSS doesn't register as stable "content" before the framework
+    // has mounted anything.
+    const MEDIA = 'img,svg,canvas,video,picture,iframe,embed,object';
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of settleRoot.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll(MEDIA).length + (c.matches(MEDIA) ? 1 : 0);
+      }
+      return text + media * 100;
+    };
+    // "Non-zero and stable" alone is not sufficient to mean rendered: generic
+    // body can carry a static shell while async main content is pending, and
+    // #dc-root can carry the root DC's static text while child refs are still
+    // .sc-placeholder boxes. Gate generic on readyState 'complete', and never
+    // accept stability while a dc-runtime placeholder is present.
+    const isGeneric = settleRoot === document.body;
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      const ready =
+        (!isGeneric || document.readyState === 'complete') &&
+        !settleRoot.querySelector('.sc-placeholder');
+      if (n > 0 && n === last && ready) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  // Reveal content gated on scroll or visibility before printing. Lazy <img>,
+  // IntersectionObserver fade-ins, and collapsed <details> don't render while
+  // off-screen, so a long page would print with them blank or closed. Open
+  // every <details>, force native-lazy images eager, and scroll the document
+  // through its full height to trip lazy-load + IO; then wait (bounded) for the
+  // newly-triggered images. Inert for deck-stage (slides aren't scroll-gated).
+  try {
+    for (const d of document.querySelectorAll('details')) d.open = true;
+    for (const img of document.querySelectorAll('img[loading="lazy"]'))
+      img.loading = 'eager';
+    const scroller = document.scrollingElement || document.documentElement;
+    const full = Math.max(scroller.scrollHeight, document.body.scrollHeight);
+    const step = window.innerHeight || 800;
+    for (let y = 0; y <= full; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+    window.scrollTo(0, 0);
+    await Promise.race([
+      Promise.all(
+        [...document.images].map((img) =>
+          img.complete
+            ? null
+            : new Promise((res) => {
+                img.addEventListener('load', res, { once: true });
+                img.addEventListener('error', res, { once: true });
+              })
+        )
+      ),
+      new Promise((r) => setTimeout(r, 4000)),
+    ]);
+  } catch (e) {}
+  try { await document.fonts.ready; } catch (e) {}
+  // Jump every animation to its end state so print() never captures a slide
+  // mid-entrance. Ordering matters: the 0s-transition style must be live
+  // BEFORE data-deck-active is set so attribute-keyed transitions don't
+  // start a (now-0s) run from the pre-active base.
+  const st = document.createElement('style');
+  st.textContent = '*,*::before,*::after{animation-delay:-99s !important;animation-duration:.001s !important;animation-iteration-count:1 !important;animation-fill-mode:both !important;animation-play-state:running !important;transition-duration:0s !important}';
+  document.head.appendChild(st);
+  for (const d of document.querySelectorAll('deck-stage')) {
+    for (const c of d.children) {
+      const t = c.tagName;
+      if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+      c.setAttribute('data-deck-active', '');
+    }
+  }
+  // Re-append deck-stage's @page last so no author @page can add a margin and
+  // spill each full-bleed slide onto two sheets. Backstop for old copies.
+  if (ds) {
+    let pg = document.getElementById('deck-stage-print-page');
+    if (!pg) {
+      pg = document.createElement('style');
+      pg.textContent = '@page{size:' + (+ds.getAttribute('width') || 1920) +
+        'px ' + (+ds.getAttribute('height') || 1080) + 'px;margin:0}';
+    }
+    document.body.appendChild(pg);
+  }
+  try {
+    const sweep = () => {
+      for (const a of document.getAnimations()) {
+        try { a.finish(); } catch (e) {
+          try { a.currentTime = (a.effect && a.effect.getComputedTiming().duration) || 0; a.pause(); } catch (e2) {}
+        }
+      }
+    };
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+  } catch (e) {}
+  // Size the PDF page to the rendered design unless the file opted into
+  // standard paper via @page{size:letter|A4|…}. Decks own their own @page.
+  var __m = null;
+  try { __m = (() => {
+  var docEl = document.documentElement;
+  var doc = { width: docEl.scrollWidth, height: docEl.scrollHeight };
+
+  var ds = document.querySelector('deck-stage');
+  if (ds) {
+    var dw = Number(ds.getAttribute('width')) || 1920;
+    var dh = Number(ds.getAttribute('height')) || 1080;
+    var n = typeof ds.length === 'number' ? ds.length : ds.children.length;
+    var idx = typeof ds.index === 'number' ? ds.index : 0;
+    var frames = [];
+    for (var i = 0; i < n; i++) frames.push({ left: 0, top: 0, width: dw, height: dh });
+    return { kind: 'deck', doc: doc, frames: frames,
+      authored: frames.map(function(){return{width:true,height:true}}),
+      deck: { width: dw, height: dh, slideCount: n, index: idx },
+      signals: { paperPage: false, pxPage: false } };
+  }
+
+  var paperPage = false, pxPage = false;
+  var eachRule = function (fn) {
+    for (var s = 0; s < document.styleSheets.length; s++) {
+      var rs; try { rs = document.styleSheets[s].cssRules; } catch (e) { continue; }
+      for (var r = 0; r < rs.length; r++) {
+        fn(rs[r]);
+        if (rs[r].cssRules) for (var n = 0; n < rs[r].cssRules.length; n++) fn(rs[r].cssRules[n]);
+      }
+    }
+  };
+  eachRule(function (r) {
+    if (r.type !== 6) return;
+    var m = /\bsize\s*:\s*([^;}]+)/i.exec(r.cssText || '');
+    if (!m) return;
+    if (/\b(letter|a[3-5]|legal|ledger)\b/i.test(m[1])) paperPage = true;
+    if (/\d+(?:\.\d+)?px\b/i.test(m[1])) pxPage = true;
+  });
+  var signals = { paperPage: paperPage, pxPage: pxPage };
+
+  if (paperPage) {
+    return { kind: 'paper-doc', doc: doc, signals: signals,
+      frames: [{ left: 0, top: 0, width: doc.width, height: doc.height }],
+      authored: [{ width: false, height: false }] };
+  }
+
+  var pxVal = function (v) {
+    var m = /^(\d+(?:\.\d+)?)px$/.exec(v || ''); return m ? +m[1] : 0;
+  };
+  var authoredPx = function (el, prop) {
+    if (pxVal(el.style[prop])) return true;
+    var attr = el.getAttribute(prop);
+    if (attr && /^\d+$/.test(attr)) return true;
+    var hit = false;
+    eachRule(function (r) {
+      if (hit || r.type !== 1 || !r.style) return;
+      try { if (el.matches(r.selectorText) && pxVal(r.style[prop])) hit = true; } catch (e) {}
+    });
+    return hit;
+  };
+
+  var el = document.body;
+  for (;;) {
+    var kids = [];
+    for (var c = 0; c < el.children.length; c++) {
+      var t = el.children[c].tagName;
+      if (t !== 'SCRIPT' && t !== 'STYLE' && t !== 'TEMPLATE') kids.push(el.children[c]);
+    }
+    if (kids.length !== 1 || !(kids[0] instanceof HTMLElement)) break;
+    el.setAttribute('data-om-frame-wrap', '');
+    el = kids[0];
+    if (authoredPx(el, 'width')) break;
+  }
+
+  var sx = window.scrollX || 0, sy = window.scrollY || 0;
+  var rectOf = function (e) {
+    var r = e.getBoundingClientRect();
+    var oy; try { oy = getComputedStyle(e).overflowY; } catch (err) {}
+    var h = oy === 'visible' ? Math.max(r.height, e.scrollHeight || 0) : r.height;
+    return { left: r.left + sx, top: r.top + sy, width: r.width, height: h };
+  };
+
+  // Multi-frame: ≥2 visible non-fixed children, each with authored px width
+  // AND height, all within ±2px of each other. Off unless the page opts in
+  // via data-om-multi-frame on the stop element — guards against card grids
+  // and pricing tables that match the geometry but aren't separate canvases.
+  if (el.hasAttribute('data-om-multi-frame')) {
+    var cands = [];
+    for (var k = 0; k < el.children.length; k++) {
+      var ch = el.children[k];
+      var cs; try { cs = getComputedStyle(ch); } catch (e) { continue; }
+      if (cs.display === 'none' || cs.visibility === 'hidden' || cs.position === 'fixed') continue;
+      var rc = rectOf(ch);
+      if (rc.width < 2 || rc.height < 2) continue;
+      if (!authoredPx(ch, 'width') || !authoredPx(ch, 'height')) continue;
+      cands.push(rc);
+    }
+    if (cands.length >= 2) {
+      var w0 = cands[0].width, h0 = cands[0].height, ok = true;
+      for (var q = 1; q < cands.length; q++)
+        if (Math.abs(cands[q].width - w0) > 2 || Math.abs(cands[q].height - h0) > 2) ok = false;
+      if (ok) return { kind: 'multi-frame', doc: doc, signals: signals,
+        frames: cands, authored: cands.map(function(){return{width:true,height:true}}) };
+    }
+  }
+
+  return { kind: 'single-canvas', doc: doc, signals: signals,
+    frames: [rectOf(el)],
+    authored: [{ width: authoredPx(el, 'width'), height: authoredPx(el, 'height') }] };
+})(); } catch (e) {}
+  var frame = null;
+  if (__m && __m.kind === 'single-canvas') {
+    var f = __m.frames && __m.frames[0];
+    if (f && f.width >= 200 && f.height >= 200) {
+      frame = f;
+      var fst = document.createElement('style');
+      fst.textContent = '@media print{@page{size:' + f.width + 'px ' + f.height +
+        'px;margin:0}html,body,[data-om-frame-wrap]{padding:0!important;' +
+        'margin:0!important;background:none!important}}';
+      document.body.appendChild(fst);
+    }
+  }
+  // Relax break-inside on oversized elements. An element taller than a
+  // printable page can't honor break-inside: avoid — browsers either overflow
+  // it or push it whole to the next page, leaving a blank gap, then break it
+  // anyway at an arbitrary point. After the final layout (content revealed,
+  // animations jumped), find elements taller than a page that still compute
+  // break-inside: avoid and reset them to auto, so the browser breaks them at
+  // their children's boundaries instead (children keep their own avoid). PAGE_PX
+  // is a conservative portrait estimate at 96 CSS px/in — Letter/A4 usable
+  // height minus our 0.5in margins — so only clearly-oversized elements are
+  // touched and under-page elements still stay whole. Skipped for decks (slides
+  // are sized to the page) and for fixed-size canvases (frame set, or an author
+  // px-based @page) — runs as before for flowing docs on letter/A4.
+  try {
+    if (!ds && !frame && !(__m && __m.signals && __m.signals.pxPage)) {
+      const PAGE_PX = 1024;
+      // Our print defaults add a real @page margin only when the source has
+      // no @page of its own; computed style can't tell us (it reports screen
+      // media), so read the injected rule directly.
+      const defaults = document.querySelector('style[data-omelette-print-defaults]');
+      const pageInset = /@page\s*\{[^}]*margin/.test(defaults ? defaults.textContent || '' : '');
+      const SEL = 'section,article,figure,table,pre,blockquote,[class~="card" i],[class~="page" i],[class~="sheet" i]';
+      for (const el of document.body.querySelectorAll(SEL)) {
+        if (el instanceof HTMLElement && el.offsetHeight > PAGE_PX) {
+          el.setAttribute('data-om-oversized', '');
+          // Fake-paged docs simulate sheets with over-tall break-after:page
+          // boxes; honoring the break spills half-blank pages and ends a
+          // colored box mid-sheet. Flow them, and (only when we own the page
+          // inset) drop the redundant padding/background via the rule below.
+          const cs = getComputedStyle(el);
+          if (cs.breakAfter === 'page' || cs.pageBreakAfter === 'always') {
+            el.setAttribute('data-om-fakepage', '');
+          }
+        }
+      }
+      const ost = document.createElement('style');
+      ost.textContent = '@media print{' +
+        '[data-om-oversized]{break-inside:auto !important;page-break-inside:auto !important}' +
+        '[data-om-fakepage]{break-after:auto !important;page-break-after:auto !important}' +
+        (pageInset ? '[data-om-fakepage]{padding:0 !important;background:none !important}' : '') +
+        '}';
+      document.head.appendChild(ost);
+    }
+  } catch (e) {}
+  // macOS Preview renders Skia-PDF Luminosity soft-masks as opaque grey boxes;
+  // swap the CSS that triggers them for Preview-safe forms.
+  try {
+    for (const el of document.body.querySelectorAll('*')) {
+      const cs = getComputedStyle(el);
+
+      if (cs.boxShadow !== 'none' && cs.filter === 'none') {
+        const outs = [], kept = [];
+        for (const s of cs.boxShadow.split(/,(?![^(]*[)])/)) {
+          const t = s.trim();
+          const m = t.match(/^(rgba?[(][^)]+[)]) (-?[0-9.]+px) (-?[0-9.]+px) ([0-9.]+px) -?[0-9.]+px$/);
+          if (m && parseFloat(m[4]) > 0) outs.push('drop-shadow(' + m[2] + ' ' + m[3] + ' ' + m[4] + ' ' + m[1] + ')');
+          else kept.push(t);
+        }
+        if (outs.length) {
+          el.style.setProperty('filter', outs.join(' '), 'important');
+          el.style.setProperty('box-shadow', kept.join(', ') || 'none', 'important');
+        }
+      }
+
+      const mask = cs.maskImage && cs.maskImage !== 'none' ? cs.maskImage : cs.webkitMaskImage;
+      if (mask && mask !== 'none' && cs.filter === 'none') el.style.setProperty('filter', 'opacity(1)', 'important');
+    }
+  } catch (e) {}
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>

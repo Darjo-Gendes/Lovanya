@@ -1,0 +1,14 @@
+# Runtime (GPU-free — the stub scaffold runs anywhere)
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.5
+pillow>=10.0
+
+# Dev
+pytest>=8.0
+
+# --- Not needed yet (added when the real stages are wired) ---
+# runpod                 # serverless GPU entrypoint (handler.py)
+# torch, transformers    # Qwen2.5-VL (analyze.py)
+# groundingdino, sam2    # detect + segment (segment.py)
+# diffusers              # SDXL/Flux clean shot (render.py)
