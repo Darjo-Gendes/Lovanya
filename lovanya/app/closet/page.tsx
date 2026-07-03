@@ -21,6 +21,7 @@ import Button from "@/components/ui/Button";
 import Chip from "@/components/ui/Chip";
 import Sheet from "@/components/ui/Sheet";
 import { stylist, type ItemDraft } from "@/lib/ai";
+import { findLikelyDuplicate, type DuplicateMatch } from "@/lib/dedup";
 import { colorFamily, colorName, downscaleImage, extractPalette } from "@/lib/color";
 import { uid, useLovanya } from "@/lib/store";
 import { CATEGORIES, type Category, type WardrobeItem } from "@/lib/types";
@@ -401,14 +402,18 @@ function AddItemSheet({
   onClose: () => void;
 }) {
   const addItem = useLovanya((s) => s.addItem);
+  const mergeVariant = useLovanya((s) => s.mergeVariant);
+  const items = useLovanya((s) => s.items);
   const [photo, setPhoto] = useState<string | null>(null);
   const [draft, setDraft] = useState<ItemDraft | null>(null);
   const [busy, setBusy] = useState(false);
+  const [dupe, setDupe] = useState<DuplicateMatch | null>(null);
 
   const reset = () => {
     setPhoto(null);
     setDraft(null);
     setBusy(false);
+    setDupe(null);
   };
 
   const handleCapture = async (dataUrl: string) => {
@@ -421,7 +426,7 @@ function AddItemSheet({
     setBusy(false);
   };
 
-  const save = () => {
+  const commitNew = () => {
     if (!draft || !photo) return;
     const item: WardrobeItem = {
       id: uid(),
@@ -437,6 +442,21 @@ function AddItemSheet({
       addedAt: Date.now(),
     };
     addItem(item);
+    reset();
+    onClose();
+  };
+
+  // Dedup gate (visual-pipeline-v1 §4): suggest, never silent-merge.
+  const save = () => {
+    if (!draft || !photo) return;
+    const match = findLikelyDuplicate(draft, items);
+    if (match) setDupe(match);
+    else commitNew();
+  };
+
+  const confirmSame = () => {
+    if (!dupe || !photo) return;
+    mergeVariant(dupe.item.id, { photo, addedAt: Date.now() });
     reset();
     onClose();
   };
@@ -468,7 +488,52 @@ function AddItemSheet({
         </div>
       )}
 
-      {photo && draft && !busy && (
+      {photo && dupe && !busy && (
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-rosewood">
+            Wait — I might know this one
+          </p>
+          <h3 className="mt-1.5 font-display text-[22px] font-semibold leading-snug text-ink">
+            Looks like your {dupe.item.name} — same piece?
+          </h3>
+          <div className="mt-5 flex items-center justify-center gap-4">
+            <div className="text-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photo}
+                alt="Just captured"
+                className="h-28 w-28 rounded-2xl border border-line object-cover shadow-soft"
+              />
+              <p className="mt-2 text-[11px] text-ink-faint">Just captured</p>
+            </div>
+            <span className="font-display text-xl text-ink-faint">=?</span>
+            <div className="text-center">
+              <ItemThumb
+                item={dupe.item}
+                className="h-28 w-28 shadow-soft"
+                rounded="rounded-2xl"
+              />
+              <p className="mt-2 line-clamp-1 max-w-28 text-[11px] text-ink-faint">
+                {dupe.item.name}
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-center text-[12.5px] text-ink-soft">
+            Same category, nearly identical colors. If it&rsquo;s the same
+            garment I&rsquo;ll keep one entry and remember this photo.
+          </p>
+          <div className="mt-6 flex gap-2.5">
+            <Button variant="soft" className="flex-1" onClick={commitNew}>
+              No, it&rsquo;s new
+            </Button>
+            <Button className="flex-1" onClick={confirmSame}>
+              Same piece
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {photo && draft && !busy && !dupe && (
         <div className="space-y-5">
           <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}

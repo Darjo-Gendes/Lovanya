@@ -7,10 +7,13 @@ export default function ItemThumb({
   item,
   className = "",
   rounded = "rounded-2xl",
+  style,
 }: {
   item: WardrobeItem;
   className?: string;
   rounded?: string;
+  /** Merged last, so callers can override position/aspect (e.g. LookCard layouts). */
+  style?: React.CSSProperties;
 }) {
   const c0 = item.colors[0] ?? "#d8c4bc";
   return (
@@ -20,6 +23,7 @@ export default function ItemThumb({
         background: item.photo
           ? undefined
           : `linear-gradient(160deg, ${shade(c0, 86)}, ${shade(c0, 62)})`,
+        ...style,
       }}
     >
       {item.photo ? (

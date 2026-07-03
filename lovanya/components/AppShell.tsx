@@ -37,11 +37,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     );
   }
 
-  const showNav = profile.onboarded && pathname !== "/onboarding";
+  // /check is an immersive full-screen flow (like the prototype's overlay) —
+  // no bottom nav there; its own back/home controls handle navigation.
+  const immersive = pathname === "/check";
+  const showNav = profile.onboarded && pathname !== "/onboarding" && !immersive;
 
   return (
     <div className="relative mx-auto min-h-dvh w-full max-w-[430px]">
-      <main className={`px-5 pt-6 ${showNav ? "pb-36" : "pb-10"}`}>
+      <main className={immersive ? "" : `px-5 pt-6 ${showNav ? "pb-36" : "pb-10"}`}>
         {children}
       </main>
       {showNav && <BottomNav />}

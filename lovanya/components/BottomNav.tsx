@@ -35,7 +35,7 @@ export default function BottomNav() {
 
           <Link
             href="/check"
-            aria-label="Analyze an outfit"
+            aria-label="Style Me — check an outfit"
             className="flex w-[54px] flex-col items-center"
           >
             <span
@@ -51,7 +51,7 @@ export default function BottomNav() {
                 analyzeActive ? "text-rosewood" : "text-ink-faint"
               }`}
             >
-              Analyze
+              Style Me
             </span>
           </Link>
 

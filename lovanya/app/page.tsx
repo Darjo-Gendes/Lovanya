@@ -110,6 +110,19 @@ export default function Today() {
         </div>
       </Link>
 
+      {/* Recommendations entry — distinct name so it doesn't clash with the
+          Style Me tab (the analyze flow). */}
+      <Link
+        href="/style-me"
+        className="mt-2.5 flex items-center justify-center gap-1.5 text-[13px] font-semibold text-rosewood"
+        style={{ padding: "4px 22px 0" }}
+      >
+        or let me dress you from your closet
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 6l6 6-6 6" />
+        </svg>
+      </Link>
+
       {/* ===== Stats ===== */}
       <div className="home-stats">
         <div className="stat">

@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "note": "LookCard interchange fixture — visual-pipeline-v1. Garments accept the app shape (colors[]) or the pipeline's canonical shape (color_primary/color_secondary). cutout_url uses seed photos as stand-ins for real segmentation cutouts.",
+  "garments": [
+    {
+      "id": "g-dress",
+      "name": "Blush midi dress",
+      "category": "dress",
+      "colors": ["#e3beb7", "#cd8f85"],
+      "cutout_url": "/wardrobe/dress/6.png",
+      "clarity": 0.95,
+      "dominance": 0.8
+    },
+    {
+      "id": "g-trench",
+      "category": "outerwear",
+      "subcategory": "trench coat",
+      "color_primary": "#d0b79e",
+      "color_secondary": "#b39374",
+      "formality": "smart-casual",
+      "cutout_url": "/wardrobe/outerwear/1.png"
+    },
+    {
+      "id": "g-jeans",
+      "name": "Denim wide jeans",
+      "category": "bottom",
+      "colors": ["#9bacb6", "#7a8f9b"],
+      "cutout_url": "/wardrobe/bottom/1.png"
+    },
+    {
+      "id": "g-tank",
+      "name": "Champagne knit tank",
+      "category": "top",
+      "colors": ["#e5d2c0", "#dbbca9"],
+      "cutout_url": "/wardrobe/top/4.png"
+    },
+    {
+      "id": "g-trousers",
+      "name": "Charcoal trousers",
+      "category": "bottom",
+      "colors": ["#393834", "#0e0e0a"],
+      "cutout_url": "/wardrobe/bottom/3.png"
+    },
+    {
+      "id": "g-flats",
+      "name": "Taupe cap-toe flats",
+      "category": "shoes",
+      "colors": ["#b5a390", "#5d432c"],
+      "cutout_url": "/wardrobe/shoes/2.png"
+    },
+    {
+      "id": "g-tote",
+      "name": "Camel tote",
+      "category": "bag",
+      "colors": ["#d5bda3", "#ba9873"],
+      "cutout_url": "/wardrobe/bag/2.png"
+    },
+    {
+      "id": "g-blazer",
+      "name": "Charcoal blazer",
+      "category": "outerwear",
+      "colors": ["#494743", "#12110d"],
+      "cutout_url": "/wardrobe/outerwear/3.png",
+      "clarity": 0.9
+    },
+    {
+      "id": "g-blouse",
+      "name": "Ivory blouse",
+      "category": "top",
+      "colors": ["#ede8e0", "#e5ddd2"],
+      "cutout_url": "/wardrobe/top/1.png"
+    },
+    {
+      "id": "g-tailored",
+      "name": "Cream tailored trousers",
+      "category": "bottom",
+      "colors": ["#ded1c2", "#ccbaa6"],
+      "cutout_url": "/wardrobe/bottom/2.png"
+    },
+    {
+      "id": "g-heels",
+      "name": "Slingback heels",
+      "category": "shoes",
+      "colors": ["#d9cdbf", "#b0987f"],
+      "cutout_url": "/wardrobe/shoes/4.png"
+    },
+    {
+      "id": "g-shoulder",
+      "name": "Ivory shoulder bag",
+      "category": "bag",
+      "colors": ["#ebe2d8", "#d5c5b1"],
+      "cutout_url": "/wardrobe/bag/4.png"
+    },
+    {
+      "id": "g-scarf",
+      "name": "Champagne scarf",
+      "category": "accessory",
+      "colors": ["#dbc4ab", "#c1a17f"],
+      "cutout_url": "/wardrobe/extras/3.png"
+    }
+  ],
+  "outfits": [
+    {
+      "id": "o-center",
+      "garment_ids": ["g-dress"],
+      "occasion": "date",
+      "created_at": 1781956800000
+    },
+    {
+      "id": "o-diagonal",
+      "garment_ids": ["g-jeans", "g-trench"],
+      "occasion": "casual",
+      "created_at": 1781956800000
+    },
+    {
+      "id": "o-stack",
+      "garment_ids": ["g-tank", "g-trousers", "g-flats", "g-tote"],
+      "occasion": "work",
+      "created_at": 1781956800000
+    },
+    {
+      "id": "o-grid",
+      "garment_ids": [
+        "g-blazer",
+        "g-blouse",
+        "g-tailored",
+        "g-heels",
+        "g-shoulder",
+        "g-scarf"
+      ],
+      "occasion": "event",
+      "created_at": 1781956800000
+    }
+  ]
+}
