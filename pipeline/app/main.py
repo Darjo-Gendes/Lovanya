@@ -137,9 +137,9 @@ def training_status():
     }
 
 
-# Dataset build (one perceive per image) vs training passes: rough relative
-# per-item cost observed on the 4060 Ti — build items are slower.
-_BUILD_WEIGHT = 0.55
+# Dataset build vs training passes: measured on the 4060 Ti (2026-07-03),
+# build is ~25s/item and cached after the first run; train passes ~120s.
+_BUILD_WEIGHT = 0.1
 
 
 def _parse_progress(lines: list) -> dict | None:
