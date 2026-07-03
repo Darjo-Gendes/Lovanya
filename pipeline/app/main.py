@@ -98,6 +98,41 @@ async def analyze_endpoint(
     return result
 
 
+@app.get("/api/training-status")
+def training_status():
+    """GPU + training-run visibility for remote monitoring."""
+    import subprocess
+
+    try:
+        out = subprocess.run(
+            ["nvidia-smi",
+             "--query-gpu=utilization.gpu,memory.used,memory.total",
+             "--format=csv,noheader,nounits"],
+            capture_output=True, text=True, timeout=5,
+        ).stdout.strip().split(", ")
+        gpu = {"util_pct": int(out[0]), "vram_used_mb": int(out[1]),
+               "vram_total_mb": int(out[2])}
+    except Exception:
+        gpu = {"error": "nvidia-smi unavailable"}
+
+    log_path = PIPELINE_DIR / "logs" / "training.log"
+    tail = []
+    if log_path.exists():
+        tail = log_path.read_text(encoding="utf-8", errors="replace").splitlines()[-15:]
+
+    adapters_dir = PIPELINE_DIR / "adapters"
+    adapters = (
+        sorted(p.name for p in adapters_dir.iterdir() if p.is_dir())
+        if adapters_dir.exists() else []
+    )
+    return {
+        "gpu": gpu,
+        "log_tail": tail,
+        "adapters": adapters,
+        "model_loaded": _model_loaded(),
+    }
+
+
 class Rating(BaseModel):
     judgment_id: str
     rating: str  # "up" | "down"

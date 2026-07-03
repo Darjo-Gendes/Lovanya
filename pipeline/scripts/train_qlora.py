@@ -27,6 +27,19 @@ from pipeline import config  # noqa: E402
 from pipeline.app.qwen_analyzer import JUDGE_PROMPT_TEMPLATE, QwenAnalyzer  # noqa: E402
 
 PIPELINE_DIR = Path(__file__).resolve().parent.parent
+TRAIN_LOG = PIPELINE_DIR / "logs" / "training.log"
+
+
+def log(msg: str) -> None:
+    """Print unbuffered AND append to logs/training.log — the /api/
+    training-status endpoint tails that file for remote monitoring."""
+    print(msg, flush=True)
+    try:
+        TRAIN_LOG.parent.mkdir(exist_ok=True)
+        with open(TRAIN_LOG, "a", encoding="utf-8") as f:
+            f.write(f"{time.strftime('%H:%M:%S')} {msg}\n")
+    except OSError:
+        pass
 
 
 def build_examples(analyzer):
@@ -55,7 +68,7 @@ def build_examples(analyzer):
             ensure_ascii=False,
         )
         examples.append((image_path, prompt, target))
-        print(f"  perceived {rec['image']}")
+        log(f"  perceived {rec['image']}")
     return examples
 
 
@@ -100,13 +113,13 @@ def main():
 
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 
-    print("Loading judge 4-bit…")
+    log("Loading judge 4-bit…")
     analyzer = QwenAnalyzer()
     model, processor = analyzer.model, analyzer.processor
 
-    print("Building dataset from data/gold.jsonl…")
+    log("Building dataset from data/gold.jsonl…")
     examples = build_examples(analyzer)
-    print(f"{len(examples)} training examples")
+    log(f"{len(examples)} training examples")
 
     model = prepare_model_for_kbit_training(model)
     model.gradient_checkpointing_enable()
@@ -143,17 +156,17 @@ def main():
                 opt.step()
                 opt.zero_grad()
                 step += 1
-                print(
+                log(
                     f"epoch {epoch + 1}/{args.epochs} step {step} "
                     f"loss {out.loss.item():.3f} "
                     f"vram {torch.cuda.memory_allocated() / 1e9:.1f}GB"
                 )
-        print(f"epoch {epoch + 1} mean loss {epoch_loss / max(n, 1):.3f}")
+        log(f"epoch {epoch + 1} mean loss {epoch_loss / max(n, 1):.3f}")
 
     out_dir = PIPELINE_DIR / "adapters" / time.strftime("%Y%m%d-%H%M")
     out_dir.mkdir(parents=True, exist_ok=True)
     model.save_pretrained(str(out_dir))
-    print(f"ADAPTER SAVED: {out_dir}")
+    log(f"ADAPTER SAVED: {out_dir}")
 
 
 if __name__ == "__main__":

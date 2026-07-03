@@ -197,6 +197,22 @@
     display: none;
   }
   .rate .saved { color: var(--good); font-size: 12px; }
+  #training { grid-column: 1 / -1; }
+  #training .gpu-row { display: flex; gap: 18px; align-items: center; font-size: 13px; margin-bottom: 10px; }
+  #training .bar { flex: 1; max-width: 320px; }
+  #training pre {
+    background: var(--panel-2);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 11.5px;
+    line-height: 1.5;
+    max-height: 180px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--muted);
+  }
+  #training .adapter { color: var(--good); font-size: 12.5px; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -229,6 +245,15 @@
     <h2>2 · Judgment</h2>
     <p class="placeholder">Select a sample photo on the left, pick an occasion, and hit <b>Analyze</b>.<br><br>
     First run loads the model into VRAM — expect a wait before the first result. After that it's fast.</p>
+  </section>
+  <section class="panel" id="training">
+    <h2>3 · Training / GPU monitor</h2>
+    <div class="gpu-row">
+      <span id="gpu-text">querying GPU…</span>
+      <div class="bar"><div id="gpu-bar" style="width:0%;background:var(--accent)"></div></div>
+    </div>
+    <pre id="train-log">no training log yet</pre>
+    <div class="adapter" id="adapters"></div>
   </section>
 </main>
 <script>
@@ -369,6 +394,27 @@ $('#go').addEventListener('click', async () => {
 });
 
 init();
+
+async function pollTraining() {
+  try {
+    const s = await (await fetch(BASE + '/api/training-status')).json();
+    if (s.gpu && !s.gpu.error) {
+      const pct = s.gpu.util_pct;
+      $('#gpu-text').textContent =
+        `GPU ${pct}% · VRAM ${(s.gpu.vram_used_mb / 1024).toFixed(1)}/${(s.gpu.vram_total_mb / 1024).toFixed(1)} GB`;
+      $('#gpu-bar').style.width = pct + '%';
+      $('#gpu-bar').style.background = pct > 80 ? 'var(--good)' : 'var(--accent)';
+    } else {
+      $('#gpu-text').textContent = 'GPU stats unavailable';
+    }
+    $('#train-log').textContent = (s.log_tail && s.log_tail.length)
+      ? s.log_tail.join('\n') : 'no training log yet';
+    $('#adapters').textContent = (s.adapters && s.adapters.length)
+      ? 'trained adapters: ' + s.adapters.join(', ') : '';
+  } catch { $('#gpu-text').textContent = 'status unreachable'; }
+}
+pollTraining();
+setInterval(pollTraining, 10000);
 </script>
 </body>
 </html>
