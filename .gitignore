@@ -10,7 +10,7 @@ venv/
 .venv/
 
 # Pipeline runtime output (regenerated locally, not project state)
-pipeline/logs/*.jsonl
+pipeline/logs/
 
 # Claude Code local state (machine-specific)
 .claude/settings.local.json
