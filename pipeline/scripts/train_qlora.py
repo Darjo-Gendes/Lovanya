@@ -157,6 +157,7 @@ def main():
         (p for p in model.parameters() if p.requires_grad), lr=args.lr
     )
 
+    run_stamp = time.strftime("%Y%m%d-%H%M")
     step = 0
     for epoch in range(args.epochs):
         epoch_loss, n = 0.0, 0
@@ -182,8 +183,12 @@ def main():
             done = epoch * len(examples) + i + 1
             log(f"PROGRESS phase=train done={done} total={args.epochs * len(examples)}")
         log(f"epoch {epoch + 1} mean loss {epoch_loss / max(n, 1):.3f}")
+        ckpt = PIPELINE_DIR / "adapters" / f"{run_stamp}-epoch{epoch + 1}"
+        ckpt.mkdir(parents=True, exist_ok=True)
+        model.save_pretrained(str(ckpt))
+        log(f"CHECKPOINT SAVED: {ckpt}")
 
-    out_dir = PIPELINE_DIR / "adapters" / time.strftime("%Y%m%d-%H%M")
+    out_dir = PIPELINE_DIR / "adapters" / run_stamp
     out_dir.mkdir(parents=True, exist_ok=True)
     model.save_pretrained(str(out_dir))
     log(f"ADAPTER SAVED: {out_dir}")
