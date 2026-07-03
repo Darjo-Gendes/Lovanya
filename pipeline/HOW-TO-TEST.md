@@ -4,10 +4,10 @@ Everything runs locally on the RTX 4060 Ti — no API keys, no cloud.
 
 ## Option A — browser test bench (easiest)
 
-From the `pipeline/` folder:
+From the **repo root** (not pipeline/ — the app imports as a package):
 
 ```
-python -m uvicorn app.main:app --port 8000
+python -m uvicorn pipeline.app.main:app --port 8000
 ```
 
 Then open **http://localhost:8000** in a browser. You'll see all 30 sample
@@ -26,9 +26,14 @@ outfit photos in a gallery. Click one, pick an occasion, hit **Analyze**.
 
 ## Option B — command line, one photo at a time
 
+From the repo root:
+
 ```
-python run_sample.py samples/sample_r1c1.jpg --occasion "date night"
+python pipeline/run_sample.py pipeline/samples/sample_r1c1.jpg --occasion "date night"
 ```
+
+Add `LOVANYA_ADAPTER=pipeline/adapters/<timestamp>` before the command to
+judge with a trained LoRA instead of the base model.
 
 Prints the full perception + judgment JSON.
 
@@ -44,6 +49,8 @@ Prints the full perception + judgment JSON.
 
 ## Unit tests (no GPU needed)
 
+From the repo root:
+
 ```
-python -m pytest tests -q
+python -m pytest pipeline/tests -q
 ```
