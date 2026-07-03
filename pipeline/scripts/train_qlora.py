@@ -49,7 +49,9 @@ def build_examples(analyzer):
     framework = Path(config.FRAMEWORK_PATH).read_text(encoding="utf-8")
     examples = []
     gold_path = PIPELINE_DIR / "data" / "gold.jsonl"
-    for line in gold_path.read_text(encoding="utf-8").splitlines():
+    lines = gold_path.read_text(encoding="utf-8").splitlines()
+    total = len([ln for ln in lines if ln.strip()])
+    for line in lines:
         rec = json.loads(line)
         image_path = str(PIPELINE_DIR / rec["image"])
         perception = analyzer.perceive(image_path)
@@ -69,6 +71,7 @@ def build_examples(analyzer):
         )
         examples.append((image_path, prompt, target))
         log(f"  perceived {rec['image']}")
+        log(f"PROGRESS phase=build done={len(examples)} total={total}")
     return examples
 
 
@@ -161,6 +164,8 @@ def main():
                     f"loss {out.loss.item():.3f} "
                     f"vram {torch.cuda.memory_allocated() / 1e9:.1f}GB"
                 )
+            done = epoch * len(examples) + i + 1
+            log(f"PROGRESS phase=train done={done} total={args.epochs * len(examples)}")
         log(f"epoch {epoch + 1} mean loss {epoch_loss / max(n, 1):.3f}")
 
     out_dir = PIPELINE_DIR / "adapters" / time.strftime("%Y%m%d-%H%M")

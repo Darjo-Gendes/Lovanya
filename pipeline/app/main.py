@@ -117,8 +117,11 @@ def training_status():
 
     log_path = PIPELINE_DIR / "logs" / "training.log"
     tail = []
+    progress = None
     if log_path.exists():
-        tail = log_path.read_text(encoding="utf-8", errors="replace").splitlines()[-15:]
+        lines = log_path.read_text(encoding="utf-8", errors="replace").splitlines()
+        tail = [ln for ln in lines if "PROGRESS" not in ln][-12:]
+        progress = _parse_progress(lines)
 
     adapters_dir = PIPELINE_DIR / "adapters"
     adapters = (
@@ -128,8 +131,59 @@ def training_status():
     return {
         "gpu": gpu,
         "log_tail": tail,
+        "progress": progress,
         "adapters": adapters,
         "model_loaded": _model_loaded(),
+    }
+
+
+# Dataset build (one perceive per image) vs training passes: rough relative
+# per-item cost observed on the 4060 Ti — build items are slower.
+_BUILD_WEIGHT = 0.55
+
+
+def _parse_progress(lines: list) -> dict | None:
+    import re
+
+    prog = [
+        (m.group(1), m.group(2), int(m.group(3)), int(m.group(4)))
+        for ln in lines
+        if (m := re.match(
+            r"(\d\d:\d\d:\d\d) PROGRESS phase=(\w+) done=(\d+) total=(\d+)", ln
+        ))
+    ]
+    if not prog:
+        return None
+    ts, phase, done, total = prog[-1]
+    if phase == "build":
+        overall = _BUILD_WEIGHT * done / total
+    else:
+        overall = _BUILD_WEIGHT + (1 - _BUILD_WEIGHT) * done / total
+    # ETA from this phase's observed rate
+    phase_lines = [p for p in prog if p[1] == phase]
+    eta_min = None
+    if len(phase_lines) >= 2:
+        def secs(t):
+            h, m, s = map(int, t.split(":"))
+            return h * 3600 + m * 60 + s
+
+        elapsed = secs(phase_lines[-1][0]) - secs(phase_lines[0][0])
+        if elapsed < 0:
+            elapsed += 86400  # crossed midnight
+        items = phase_lines[-1][2] - phase_lines[0][2]
+        if items > 0 and elapsed > 0:
+            rate = elapsed / items
+            remaining_items = total - done
+            if phase == "build":
+                # assume train items run at ~60% of a build item's cost
+                remaining_items += total * 2 * 0.6  # heuristic: epochs*total
+            eta_min = round(rate * remaining_items / 60)
+    return {
+        "phase": phase,
+        "done": done,
+        "total": total,
+        "overall_pct": round(overall * 100),
+        "eta_min": eta_min,
     }
 
 

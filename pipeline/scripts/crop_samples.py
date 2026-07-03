@@ -57,6 +57,11 @@ def main():
     parser.add_argument("image", help="Path to the grid/collage image")
     parser.add_argument("--out", default=None, help="Output directory (default: <pipeline>/samples)")
     parser.add_argument("--pad", type=int, default=2, help="Pixels to trim off each cell edge")
+    parser.add_argument("--prefix", default="sample", help="Output filename prefix")
+    parser.add_argument(
+        "--trim-bottom-frac", type=float, default=0.0,
+        help="Fraction of cell height to cut from the bottom (removes burned-in labels)",
+    )
     args = parser.parse_args()
 
     src = Path(args.image)
@@ -74,9 +79,10 @@ def main():
     count = 0
     for r, (y0, y1) in enumerate(row_bands):
         for c, (x0, x1) in enumerate(col_bands):
-            box = (x0 + args.pad, y0 + args.pad, x1 - args.pad, y1 - args.pad)
+            bottom_trim = int((y1 - y0) * args.trim_bottom_frac)
+            box = (x0 + args.pad, y0 + args.pad, x1 - args.pad, y1 - args.pad - bottom_trim)
             cell = im.crop(box)
-            out_path = out_dir / f"sample_r{r + 1}c{c + 1}.jpg"
+            out_path = out_dir / f"{args.prefix}_r{r + 1}c{c + 1}.jpg"
             cell.convert("RGB").save(out_path, quality=92)
             count += 1
 

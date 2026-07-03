@@ -252,6 +252,10 @@
       <span id="gpu-text">querying GPU…</span>
       <div class="bar"><div id="gpu-bar" style="width:0%;background:var(--accent)"></div></div>
     </div>
+    <div class="gpu-row" id="progress-row" style="display:none">
+      <span id="progress-text"></span>
+      <div class="bar"><div id="progress-bar" style="width:0%;background:var(--accent-2)"></div></div>
+    </div>
     <pre id="train-log">no training log yet</pre>
     <div class="adapter" id="adapters"></div>
   </section>
@@ -406,6 +410,16 @@ async function pollTraining() {
       $('#gpu-bar').style.background = pct > 80 ? 'var(--good)' : 'var(--accent)';
     } else {
       $('#gpu-text').textContent = 'GPU stats unavailable';
+    }
+    if (s.progress) {
+      const p = s.progress;
+      $('#progress-row').style.display = 'flex';
+      $('#progress-text').textContent =
+        `training ${p.overall_pct}% · ${p.phase} ${p.done}/${p.total}` +
+        (p.eta_min != null ? ` · ~${p.eta_min >= 60 ? Math.floor(p.eta_min / 60) + 'h ' + (p.eta_min % 60) + 'm' : p.eta_min + 'm'} left` : '');
+      $('#progress-bar').style.width = p.overall_pct + '%';
+    } else {
+      $('#progress-row').style.display = 'none';
     }
     $('#train-log').textContent = (s.log_tail && s.log_tail.length)
       ? s.log_tail.join('\n') : 'no training log yet';
