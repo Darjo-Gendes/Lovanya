@@ -187,3 +187,112 @@ textarea {
 .lv-home .home-insight h3 { font-family: var(--font-playfair), serif; font-weight: 600; font-size: 21px; color: var(--ink); margin: 8px 0 0; max-width: 220px; line-height: 1.12; }
 .lv-home .home-insight p { font-size: 13px; color: var(--body); margin: 10px 0 0; max-width: 250px; line-height: 1.4; }
 .lv-home .home-insight .lk { margin-top: 14px; display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--eyebrow); }
+
+/* ============================================================
+   Style Me flow (/check) — ported 1:1 from the analyze overlay in
+   public/prototype/lovanya-app.html, scoped under .lv-az. Fonts are
+   swapped for next/font variables; screens are page-level (the shell
+   hides the bottom nav on /check) instead of absolutely stacked.
+   ============================================================ */
+.lv-az {
+  --pink: #d56f88;
+  --ink: #48292e;
+  --body: #6e5a5a;
+  --muted: #a2908f;
+  --card2: #ffffff;
+  --line2: #efd9dc;
+  --blush3: #fbebeb;
+  --sage2: #8da767;
+  --sagebg2: #e8f0d8;
+  --eyebrow: #ce6e86;
+  min-height: 100dvh;
+  animation: lvAzFade 0.34s cubic-bezier(0.32, 0.72, 0.3, 1) both;
+}
+@keyframes lvAzFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.lv-az .eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--eyebrow); display: flex; align-items: center; gap: 6px; }
+.lv-az .abtn { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; border: none; cursor: pointer; border-radius: 24px; font-size: 15px; font-weight: 600; padding: 16px; color: #fff; background: linear-gradient(135deg, #e48ea0, #ce6c84); box-shadow: 0 14px 26px -10px rgba(206, 108, 132, 0.7); transition: transform 0.14s; }
+.lv-az .abtn:active { transform: scale(0.97); }
+.lv-az .abtn.soft { background: var(--card2); color: var(--pink); box-shadow: none; border: 1px solid var(--line2); }
+.lv-az .aback { width: 36px; height: 36px; border: none; background: transparent; color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: -8px; }
+.lv-az .aback:active { transform: scale(0.88); }
+
+/* occasion */
+.lv-az .occ { padding: 10px 24px 30px; }
+.lv-az .occ-title { font-family: var(--font-playfair), serif; font-weight: 600; font-size: 27px; line-height: 1.18; color: var(--ink); margin: 8px 0 0; }
+.lv-az .occ-sub { font-size: 13px; color: var(--body); margin: 10px 0 0; }
+.lv-az .occ-input { margin-top: 20px; display: flex; align-items: center; gap: 10px; background: var(--card2); border: 1px solid var(--line2); border-radius: 18px; padding: 14px 16px; }
+.lv-az .occ-input input { flex: 1; border: none; background: transparent; font-size: 13px; color: var(--ink); outline: none; }
+.lv-az .occ-input input::placeholder { color: var(--muted); }
+.lv-az .occ-label { font-size: 13px; font-weight: 600; color: var(--ink); margin: 22px 0 0; }
+.lv-az .occ-grid { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.lv-az .occ-chip { display: flex; align-items: center; gap: 9px; background: var(--card2); border: 1px solid var(--line2); border-radius: 16px; padding: 12px 13px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--ink); transition: transform 0.14s, background 0.16s; text-align: left; }
+.lv-az .occ-chip:active { transform: scale(0.97); }
+.lv-az .occ-ico { width: 30px; height: 30px; border-radius: 9px; background: var(--blush3); display: flex; align-items: center; justify-content: center; color: var(--pink); flex: none; }
+.lv-az .occ-chip.sel { background: linear-gradient(135deg, #e48ea0, #ce6c84); border-color: transparent; color: #fff; box-shadow: 0 10px 20px -10px rgba(206, 108, 132, 0.7); }
+.lv-az .occ-chip.sel .occ-ico { background: rgba(255, 255, 255, 0.22); color: #fff; }
+.lv-az .occ-skip { display: block; width: 100%; text-align: center; background: none; border: none; margin-top: 14px; font-size: 13.5px; font-weight: 500; color: var(--muted); cursor: pointer; }
+
+/* analyzing */
+.lv-az .anz { display: flex; flex-direction: column; padding: 10px 32px 30px; min-height: calc(100dvh - 60px); }
+.lv-az .anz-title { font-family: var(--font-playfair), serif; font-weight: 600; font-size: 26px; color: var(--ink); margin: 6px 0 0; display: flex; align-items: center; gap: 8px; }
+.lv-az .anz-ringwrap { align-self: center; position: relative; width: 130px; height: 130px; margin: 28px 0 30px; }
+.lv-az .anz-ring { transform: rotate(-90deg); }
+.lv-az .anz-prog { transition: stroke-dashoffset 3.1s linear; }
+.lv-az .anz-spark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--pink); }
+.lv-az .anz-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 15px; }
+.lv-az .anz-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); transition: color 0.3s; }
+.lv-az .anz-item .adot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line2); flex: none; display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.3s; }
+.lv-az .anz-item .adot svg { opacity: 0; transition: opacity 0.2s; }
+.lv-az .anz-item.act { color: var(--pink); font-weight: 500; }
+.lv-az .anz-item.act .adot { border-color: var(--pink); }
+.lv-az .anz-item.done { color: var(--ink); }
+.lv-az .anz-item.done .adot { background: var(--pink); border-color: var(--pink); }
+.lv-az .anz-item.done .adot svg { opacity: 1; }
+.lv-az .anz-note { margin-top: auto; display: flex; gap: 10px; background: var(--blush3); border-radius: 16px; padding: 14px 16px; font-size: 12px; color: var(--body); line-height: 1.4; }
+
+/* results */
+.lv-az .res-hero { position: relative; height: 300px; }
+.lv-az .res-hero > img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
+.lv-az .res-hero .ov { position: absolute; inset: 0; background: linear-gradient(to top, rgba(40, 26, 22, 0.5), rgba(40, 26, 22, 0.04) 46%); }
+.lv-az .res-hbtn { position: absolute; top: 18px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.85); border: none; display: flex; align-items: center; justify-content: center; color: var(--ink); cursor: pointer; }
+.lv-az .res-view { position: absolute; right: 16px; bottom: 16px; display: flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.92); border-radius: 20px; padding: 7px 13px; font-size: 11.5px; font-weight: 600; color: var(--ink); }
+.lv-az .res-body { padding: 22px 24px 30px; }
+.lv-az .res-verdict { font-family: var(--font-playfair), serif; font-weight: 600; font-size: 22px; line-height: 1.28; color: var(--ink); margin: 10px 0 0; }
+.lv-az .res-sub { font-size: 13px; line-height: 1.5; color: var(--body); margin: 12px 0 0; }
+.lv-az .res-list { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.lv-az .res-li { display: flex; gap: 12px; align-items: flex-start; }
+.lv-az .res-li .ic { width: 34px; height: 34px; border-radius: 10px; flex: none; display: flex; align-items: center; justify-content: center; }
+.lv-az .res-li p { margin: 7px 0 0; font-size: 12.5px; color: var(--body); line-height: 1.4; }
+.lv-az .res-actions { margin-top: 24px; display: flex; gap: 11px; }
+.lv-az .res-heart { width: 54px; height: 54px; flex: none; border-radius: 18px; background: var(--card2); border: 1px solid var(--line2); display: flex; align-items: center; justify-content: center; color: var(--pink); cursor: pointer; }
+
+/* share card */
+.lv-az .snap-wrap { padding: 16px 22px 26px; }
+.lv-az .snap { border-radius: 26px; overflow: hidden; background: var(--card2); box-shadow: 0 26px 46px -22px rgba(206, 140, 150, 0.65); border: 1px solid var(--line2); }
+.lv-az .snap-top { padding: 18px 20px 0; display: flex; align-items: center; justify-content: space-between; }
+.lv-az .snap-logo { font-family: var(--font-parisienne), cursive; font-size: 23px; color: var(--pink); }
+.lv-az .snap-tag { font-size: 9px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); }
+.lv-az .snap-h { padding: 4px 20px 0; }
+.lv-az .snap-h h3 { font-family: var(--font-playfair), serif; font-weight: 600; font-size: 18px; color: var(--ink); margin: 6px 0 0; }
+.lv-az .snap-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.lv-az .snap-photo { margin: 14px 20px 0; height: 198px; border-radius: 18px; overflow: hidden; position: relative; }
+.lv-az .snap-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 16%; }
+.lv-az .snap-imp { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 16px 12px; background: linear-gradient(to top, rgba(40, 26, 22, 0.74), transparent); }
+.lv-az .snap-imp .e { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255, 255, 255, 0.82); }
+.lv-az .snap-imp .t { font-family: var(--font-playfair), serif; font-weight: 600; font-size: 19px; color: #fff; margin-top: 2px; }
+.lv-az .snap-imp .s { font-size: 10.5px; color: rgba(255, 255, 255, 0.8); margin-top: 3px; text-transform: capitalize; }
+.lv-az .snap-strength { padding: 18px 20px 6px; }
+.lv-az .bar-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.lv-az .bar-row .lbl { flex: none; width: 100px; display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--ink); }
+.lv-az .bar-track { flex: 1; height: 7px; border-radius: 6px; background: #f3dee2; overflow: hidden; }
+.lv-az .bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #d56f88, #c25c76); width: 0; transition: width 1s cubic-bezier(0.32, 0.72, 0.3, 1); }
+.lv-az .bar-val { flex: none; width: 36px; text-align: right; font-size: 11px; font-weight: 600; color: var(--pink); }
+.lv-az .snap-refl { padding: 16px 20px 18px; border-top: 1px solid var(--line2); margin-top: 14px; }
+.lv-az .snap-refl p { font-size: 12.5px; line-height: 1.5; color: var(--body); margin: 8px 0 0; }
+.lv-az .snap-foot { padding: 16px 20px 20px; text-align: center; border-top: 1px solid var(--line2); }
+.lv-az .snap-foot .f1 { font-family: var(--font-parisienne), cursive; font-size: 21px; color: var(--pink); }
+.lv-az .snap-foot .f2 { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+/* camera screen wrapper (real PhotoCapture inside prototype chrome) */
+.lv-az .cam-wrap { padding: 10px 24px 30px; }

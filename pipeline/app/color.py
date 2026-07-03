@@ -189,6 +189,12 @@ def harmony_score(hexes: List[str]) -> int:
 def extract_palette(image_bytes: bytes, count: int = 4) -> List[str]:
     """Extract a dominant palette from an image (ported from extractPalette).
 
+    Background suppression (visual-pipeline-v1 interim, until SAM2 cutouts):
+    the border ring of the frame is almost always wall/floor, so its dominant
+    colors are treated as background candidates and removed from the palette;
+    only interior pixels (where the garment sits) are sampled. A safety floor
+    keeps the old behavior when the whole frame is one color.
+
     Pillow is imported lazily so the palette-only path (frontend pre-extracts on
     device and sends hexes) never needs the dependency.
     """
@@ -204,20 +210,43 @@ def extract_palette(image_bytes: bytes, count: int = 4) -> List[str]:
     except Exception:
         return ["#b8a8b0"]
 
+    SIZE = 56
     Q = 28
+    RING = 6  # ~11% frame on each side
     buckets: dict[str, list] = {}
-    for r, g, b, a in img.getdata():
-        if a < 200:
-            continue
-        key = f"{round(r / Q)},{round(g / Q)},{round(b / Q)}"
-        e = buckets.get(key)
-        if e:
-            e[0] += r
-            e[1] += g
-            e[2] += b
-            e[3] += 1
-        else:
-            buckets[key] = [r, g, b, 1]
+    ring_counts: dict[str, int] = {}
+    pixels = list(img.getdata())
+    for y in range(SIZE):
+        for x in range(SIZE):
+            r, g, b, a = pixels[y * SIZE + x]
+            if a < 200:
+                continue
+            key = f"{round(r / Q)},{round(g / Q)},{round(b / Q)}"
+            if x < RING or y < RING or x >= SIZE - RING or y >= SIZE - RING:
+                ring_counts[key] = ring_counts.get(key, 0) + 1
+            else:
+                e = buckets.get(key)
+                if e:
+                    e[0] += r
+                    e[1] += g
+                    e[2] += b
+                    e[3] += 1
+                else:
+                    buckets[key] = [r, g, b, 1]
+
+    # Border colors covering a meaningful share of the ring = background.
+    ring_total = sum(ring_counts.values()) or 1
+    bg_candidates = [
+        tuple(int(v) * Q for v in key.split(","))
+        for key, n in sorted(ring_counts.items(), key=lambda kv: kv[1], reverse=True)
+        if n / ring_total >= 0.12
+    ][:3]
+
+    # Interior fully transparent -> fall back to whatever the frame has.
+    if not buckets:
+        for key, n in ring_counts.items():
+            qr, qg, qb = (int(v) * Q for v in key.split(","))
+            buckets[key] = [qr * n, qg * n, qb * n, n]
 
     entries = sorted(
         ({"hex": rgb_to_hex(e[0] / e[3], e[1] / e[3], e[2] / e[3]), "n": e[3]} for e in buckets.values()),
@@ -226,6 +255,18 @@ def extract_palette(image_bytes: bytes, count: int = 4) -> List[str]:
     )
     if not entries:
         return ["#b8a8b0"]
+
+    # Suppress background-like colors — unless that empties the garment
+    # (e.g. a cream dress against a cream wall keeps the old behavior).
+    def is_bg(hexstr: str) -> bool:
+        r, g, b = hex_to_rgb(hexstr)
+        return any(
+            abs(r - r2) + abs(g - g2) + abs(b - b2) <= 75 for r2, g2, b2 in bg_candidates
+        )
+
+    foreground = [e for e in entries if not is_bg(e["hex"])]
+    if len(foreground) >= 2:
+        entries = foreground
 
     non_white = [e for e in entries if hex_to_hsl(e["hex"])[2] < 94]
     if len(non_white) >= 2:

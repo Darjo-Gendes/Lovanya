@@ -37,6 +37,12 @@ export type GarmentKind =
   | "crossbody"
   | "scarf";
 
+/** A re-upload of a piece the user confirmed is the same garment. */
+export interface ItemVariant {
+  photo?: string;
+  addedAt: number;
+}
+
 export interface WardrobeItem {
   id: string;
   name: string;
@@ -52,6 +58,8 @@ export interface WardrobeItem {
   photo?: string;
   /** Illustration for seeded items. */
   art?: GarmentKind;
+  /** Confirmed duplicates merged into this canonical item (visual-pipeline-v1 §4). */
+  variants?: ItemVariant[];
   timesWorn: number;
   loved: boolean;
   addedAt: number;

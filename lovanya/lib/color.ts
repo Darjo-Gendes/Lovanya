@@ -197,6 +197,12 @@ export function harmonyScore(hexes: string[]): number {
  * Extract a dominant palette from an image data-URL.
  * Downscales to a small canvas, buckets pixels in quantized RGB space,
  * and returns up to `count` representative hex colors.
+ *
+ * Background suppression (visual-pipeline-v1 interim, until SAM2 cutouts):
+ * the border ring of the frame is almost always wall/floor, so its dominant
+ * colors are treated as background candidates and removed from the palette;
+ * only interior pixels (where the garment sits) are sampled. A safety floor
+ * keeps the old behavior when the whole frame is one color.
  */
 export function extractPalette(
   dataUrl: string,
@@ -214,25 +220,64 @@ export function extractPalette(
       ctx.drawImage(img, 0, 0, size, size);
       const { data } = ctx.getImageData(0, 0, size, size);
 
+      const Q = 28;
+      const RING = 6; // ~11% frame on each side
       const buckets = new Map<
         string,
         { r: number; g: number; b: number; n: number }
       >();
-      const Q = 28;
-      for (let i = 0; i < data.length; i += 4) {
-        if (data[i + 3] < 200) continue;
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
+      const ringCounts = new Map<string, number>();
+
+      const bucketInto = (
+        map: Map<string, { r: number; g: number; b: number; n: number }>,
+        r: number,
+        g: number,
+        b: number
+      ) => {
         const key = `${Math.round(r / Q)},${Math.round(g / Q)},${Math.round(b / Q)}`;
-        const e = buckets.get(key);
+        const e = map.get(key);
         if (e) {
           e.r += r;
           e.g += g;
           e.b += b;
           e.n++;
         } else {
-          buckets.set(key, { r, g, b, n: 1 });
+          map.set(key, { r, g, b, n: 1 });
+        }
+      };
+
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const i = (y * size + x) * 4;
+          if (data[i + 3] < 200) continue;
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const onRing =
+            x < RING || y < RING || x >= size - RING || y >= size - RING;
+          if (onRing) {
+            const key = `${Math.round(r / Q)},${Math.round(g / Q)},${Math.round(b / Q)}`;
+            ringCounts.set(key, (ringCounts.get(key) ?? 0) + 1);
+          } else {
+            bucketInto(buckets, r, g, b);
+          }
+        }
+      }
+
+      // Border colors covering a meaningful share of the ring = background.
+      const ringTotal =
+        [...ringCounts.values()].reduce((a, b) => a + b, 0) || 1;
+      const bgCandidates = [...ringCounts.entries()]
+        .filter(([, n]) => n / ringTotal >= 0.12)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([key]) => key.split(",").map((v) => Number(v) * Q));
+
+      // Interior fully transparent → fall back to whatever the frame has.
+      if (buckets.size === 0) {
+        for (const [key, n] of ringCounts) {
+          const [qr, qg, qb] = key.split(",").map((v) => Number(v) * Q);
+          buckets.set(key, { r: qr * n, g: qg * n, b: qb * n, n });
         }
       }
 
@@ -242,6 +287,18 @@ export function extractPalette(
           n: e.n,
         }))
         .sort((a, b) => b.n - a.n);
+
+      // Suppress background-like colors — unless that empties the garment
+      // (e.g. a cream dress against a cream wall keeps the old behavior).
+      const isBg = (hex: string) => {
+        const [r, g, b] = hexToRgb(hex);
+        return bgCandidates.some(
+          ([r2, g2, b2]) =>
+            Math.abs(r - r2) + Math.abs(g - g2) + Math.abs(b - b2) <= 75
+        );
+      };
+      const foreground = entries.filter((e) => !isBg(e.hex));
+      if (foreground.length >= 2) entries = foreground;
 
       // Drop blown-out background whites unless that's all there is.
       const nonWhite = entries.filter((e) => hexToHsl(e.hex).l < 94);

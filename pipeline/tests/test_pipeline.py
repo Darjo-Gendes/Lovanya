@@ -64,3 +64,48 @@ def test_determinism():
     a1 = run_analyze(None, PALETTE, AnalyzeRequest(palette=PALETTE, occasion="date"))
     a2 = run_analyze(None, PALETTE, AnalyzeRequest(palette=PALETTE, occasion="date"))
     assert a1.score == a2.score and a1.headline == a2.headline
+
+
+def test_palette_suppresses_background():
+    """A beige wall behind a navy dress must not enter the palette
+    (visual-pipeline-v1 interim fix; the real fix is SAM2 cutouts)."""
+    import io
+
+    from PIL import Image
+
+    from pipeline.app.color import extract_palette, hex_to_rgb
+
+    wall = (222, 205, 190)  # beige background fills the frame
+    img = Image.new("RGB", (200, 200), wall)
+    for x in range(60, 140):  # navy dress, center-frame
+        for y in range(30, 185):
+            img.putpixel((x, y), (30, 45, 90))
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+
+    palette = extract_palette(buf.getvalue(), 4)
+    assert palette, "palette must never be empty"
+
+    # The garment leads the palette…
+    r, g, b = hex_to_rgb(palette[0])
+    assert b > r, f"expected navy first, got {palette[0]}"
+    # …and nothing background-like survives.
+    for hexstr in palette:
+        r, g, b = hex_to_rgb(hexstr)
+        dist = abs(r - wall[0]) + abs(g - wall[1]) + abs(b - wall[2])
+        assert dist > 75, f"background leaked into palette: {hexstr}"
+
+
+def test_palette_uniform_scene_still_works():
+    """Safety floor: garment the same color as the wall must not empty the palette."""
+    import io
+
+    from PIL import Image
+
+    from pipeline.app.color import extract_palette
+
+    img = Image.new("RGB", (200, 200), (230, 225, 218))  # cream on cream
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    palette = extract_palette(buf.getvalue(), 4)
+    assert len(palette) >= 1
