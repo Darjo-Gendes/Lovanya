@@ -244,7 +244,11 @@
   <section class="panel" id="results">
     <h2>2 · Judgment</h2>
     <p class="placeholder">Select a sample photo on the left, pick an occasion, and hit <b>Analyze</b>.<br><br>
-    First run loads the model into VRAM — expect a wait before the first result. After that it's fast.</p>
+    First run loads the model into VRAM — expect a few minutes before the first result.<br><br>
+    After each judgment, 👍/👎 rating buttons appear right here under the result —
+    rate every one (👎 opens a correction box); ratings become training data.<br><br>
+    Note: while a training run holds the GPU, Analyze is unavailable — watch the
+    training panel below instead.</p>
   </section>
   <section class="panel" id="training">
     <h2>3 · Training / GPU monitor</h2>
