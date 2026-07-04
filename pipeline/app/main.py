@@ -40,10 +40,13 @@ def health():
         cuda = torch.cuda.is_available()
     except ImportError:
         cuda = False
+    from .qwen_analyzer import resolve_adapter
+
     return {
         "status": "ok",
         "model": config.MODEL,
         "model_id": config.QWEN_MODEL_ID,
+        "adapter": resolve_adapter(config.ADAPTER) or "base model",
         "cuda": cuda,
         "model_loaded": _model_loaded(),
     }
