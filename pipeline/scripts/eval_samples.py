@@ -45,12 +45,15 @@ def main():
         "",
     ]
 
+    sidecar = []  # clean per-image records for scripts/benchmark.py
     for image, occasion in EVAL_SET:
         t0 = time.time()
         r = analyze(image, occasion)
         dt = time.time() - t0
         j = r.get("judgment", {})
         p = r.get("perception", {})
+        sidecar.append({"image": image, "occasion": occasion,
+                        "judgment": j, "elapsed_seconds": round(dt, 1)})
         lines += [
             f"## {Path(image).name} — {occasion} ({dt:.0f}s)",
             "",
@@ -66,7 +69,12 @@ def main():
         print(f"{Path(image).name} [{occasion}] done in {dt:.0f}s")
 
     Path(args.out).write_text("\n".join(lines), encoding="utf-8")
-    print(f"\nWrote {args.out}")
+    sidecar_path = Path(args.out).with_suffix(".jsonl")
+    sidecar_path.write_text(
+        "\n".join(json.dumps(s, ensure_ascii=False) for s in sidecar), encoding="utf-8"
+    )
+    print(f"\nWrote {args.out} and {sidecar_path}")
+    print(f"Benchmark it: python pipeline/scripts/benchmark.py --results {sidecar_path}")
 
 
 if __name__ == "__main__":
