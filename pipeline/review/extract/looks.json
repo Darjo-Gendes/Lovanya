@@ -1,0 +1,175 @@
+{
+  "version": 1,
+  "note": "CPU extraction preview — one outfit photo -> N garments",
+  "garments": [
+    {
+      "id": "b4_r4c4-0",
+      "category": "outerwear",
+      "colors": [
+        "#080908",
+        "#3f3a34"
+      ],
+      "cutout_url": "cutouts/b4_r4c4__0_outerwear.png"
+    },
+    {
+      "id": "b4_r4c4-1",
+      "category": "top",
+      "colors": [
+        "#080908",
+        "#3f3a33"
+      ],
+      "cutout_url": "cutouts/b4_r4c4__1_top.png"
+    },
+    {
+      "id": "b4_r4c4-2",
+      "category": "bottom",
+      "colors": [
+        "#3f3a34"
+      ],
+      "cutout_url": "cutouts/b4_r4c4__2_bottom.png"
+    },
+    {
+      "id": "b2_r3c3-0",
+      "category": "top",
+      "colors": [
+        "#534033",
+        "#090907",
+        "#ab917f"
+      ],
+      "cutout_url": "cutouts/b2_r3c3__0_top.png"
+    },
+    {
+      "id": "b2_r1c4-0",
+      "category": "top",
+      "colors": [
+        "#6c523f",
+        "#352515"
+      ],
+      "cutout_url": "cutouts/b2_r1c4__0_top.png"
+    },
+    {
+      "id": "b2_r1c4-1",
+      "category": "accessory",
+      "colors": [
+        "#4d4137",
+        "#77685a",
+        "#241e18"
+      ],
+      "cutout_url": "cutouts/b2_r1c4__1_accessory.png"
+    },
+    {
+      "id": "sample_r1c5-0",
+      "category": "top",
+      "colors": [
+        "#aaa6a7",
+        "#dcdae2",
+        "#715a4d"
+      ],
+      "cutout_url": "cutouts/sample_r1c5__0_top.png"
+    },
+    {
+      "id": "sample_r1c5-1",
+      "category": "bottom",
+      "colors": [
+        "#675c52",
+        "#42382f",
+        "#9e958c"
+      ],
+      "cutout_url": "cutouts/sample_r1c5__1_bottom.png"
+    },
+    {
+      "id": "sample_r1c5-2",
+      "category": "shoes",
+      "colors": [
+        "#503f37",
+        "#8e7166",
+        "#1c1b19"
+      ],
+      "cutout_url": "cutouts/sample_r1c5__2_shoes.png"
+    },
+    {
+      "id": "sample_r1c5-3",
+      "category": "bag",
+      "colors": [
+        "#503f37",
+        "#8e7166",
+        "#1c1b19"
+      ],
+      "cutout_url": "cutouts/sample_r1c5__3_bag.png"
+    },
+    {
+      "id": "sample_r1c5-4",
+      "category": "accessory",
+      "colors": [
+        "#504037",
+        "#8e7166",
+        "#1e1c19"
+      ],
+      "cutout_url": "cutouts/sample_r1c5__4_accessory.png"
+    },
+    {
+      "id": "b3_r1c6-0",
+      "category": "bottom",
+      "colors": [
+        "#725a54",
+        "#44322b"
+      ],
+      "cutout_url": "cutouts/b3_r1c6__0_bottom.png"
+    },
+    {
+      "id": "b3_r1c6-1",
+      "category": "accessory",
+      "colors": [
+        "#a39484",
+        "#70533c",
+        "#160902"
+      ],
+      "cutout_url": "cutouts/b3_r1c6__1_accessory.png"
+    }
+  ],
+  "outfits": [
+    {
+      "id": "look-b4_r4c4",
+      "garment_ids": [
+        "b4_r4c4-0",
+        "b4_r4c4-1",
+        "b4_r4c4-2"
+      ],
+      "created_at": 0
+    },
+    {
+      "id": "look-b2_r3c3",
+      "garment_ids": [
+        "b2_r3c3-0"
+      ],
+      "created_at": 0
+    },
+    {
+      "id": "look-b2_r1c4",
+      "garment_ids": [
+        "b2_r1c4-0",
+        "b2_r1c4-1"
+      ],
+      "created_at": 0
+    },
+    {
+      "id": "look-sample_r1c5",
+      "garment_ids": [
+        "sample_r1c5-0",
+        "sample_r1c5-1",
+        "sample_r1c5-2",
+        "sample_r1c5-3",
+        "sample_r1c5-4"
+      ],
+      "created_at": 0
+    },
+    {
+      "id": "look-b3_r1c6",
+      "garment_ids": [
+        "b3_r1c6-0",
+        "b3_r1c6-1"
+      ],
+      "created_at": 0
+    }
+  ]
+}

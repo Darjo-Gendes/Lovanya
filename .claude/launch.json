@@ -6,6 +6,12 @@
       "runtimeExecutable": "C:\\Users\\SpecialXz\\Documents\\Claude bestie API\\lovanya-dev.cmd",
       "runtimeArgs": [],
       "port": 3000
+    },
+    {
+      "name": "review",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8099", "--directory", "pipeline/review"],
+      "port": 8099
     }
   ]
 }
