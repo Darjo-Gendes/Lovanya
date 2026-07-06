@@ -49,12 +49,27 @@ def build_examples(analyzer):
     framework = Path(config.FRAMEWORK_PATH).read_text(encoding="utf-8")
     examples = []
     gold_path = PIPELINE_DIR / "data" / "gold.jsonl"
+    cache_path = PIPELINE_DIR / "data" / "perceptions-cache.jsonl"
+    cache = {}
+    if cache_path.exists():
+        for ln in cache_path.read_text(encoding="utf-8").splitlines():
+            if ln.strip():
+                c = json.loads(ln)
+                cache[c["image"]] = c["perception"]
     lines = gold_path.read_text(encoding="utf-8").splitlines()
     total = len([ln for ln in lines if ln.strip()])
     for line in lines:
         rec = json.loads(line)
         image_path = str(PIPELINE_DIR / rec["image"])
-        perception = analyzer.perceive(image_path)
+        if rec["image"] in cache:
+            perception = cache[rec["image"]]
+        else:
+            perception = analyzer.perceive(image_path)
+            with open(cache_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps(
+                    {"image": rec["image"], "perception": perception},
+                    ensure_ascii=False,
+                ) + "\n")
         prompt = JUDGE_PROMPT_TEMPLATE.format(
             occasion=rec["occasion"],
             framework=framework,
@@ -142,6 +157,7 @@ def main():
         (p for p in model.parameters() if p.requires_grad), lr=args.lr
     )
 
+    run_stamp = time.strftime("%Y%m%d-%H%M")
     step = 0
     for epoch in range(args.epochs):
         epoch_loss, n = 0.0, 0
@@ -167,8 +183,12 @@ def main():
             done = epoch * len(examples) + i + 1
             log(f"PROGRESS phase=train done={done} total={args.epochs * len(examples)}")
         log(f"epoch {epoch + 1} mean loss {epoch_loss / max(n, 1):.3f}")
+        ckpt = PIPELINE_DIR / "adapters" / f"{run_stamp}-epoch{epoch + 1}"
+        ckpt.mkdir(parents=True, exist_ok=True)
+        model.save_pretrained(str(ckpt))
+        log(f"CHECKPOINT SAVED: {ckpt}")
 
-    out_dir = PIPELINE_DIR / "adapters" / time.strftime("%Y%m%d-%H%M")
+    out_dir = PIPELINE_DIR / "adapters" / run_stamp
     out_dir.mkdir(parents=True, exist_ok=True)
     model.save_pretrained(str(out_dir))
     log(f"ADAPTER SAVED: {out_dir}")

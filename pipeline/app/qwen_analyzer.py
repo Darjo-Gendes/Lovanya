@@ -4,8 +4,34 @@ import torch
 from qwen_vl_utils import process_vision_info
 from transformers import AutoModelForImageTextToText, AutoProcessor
 
+import os
+
 from .. import config
 from .json_utils import extract_json
+
+
+def resolve_adapter(setting: str) -> str:
+    """Resolve the ADAPTER config: explicit path, 'auto' (newest dir under
+    pipeline/adapters/ by mtime), or '' for the base model."""
+    if not setting:
+        return ""
+    if setting != "auto":
+        return setting
+    adapters_dir = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "adapters"
+    )
+    if not os.path.isdir(adapters_dir):
+        return ""
+    dirs = [
+        os.path.join(adapters_dir, d)
+        for d in os.listdir(adapters_dir)
+        if os.path.isdir(os.path.join(adapters_dir, d))
+        and os.path.exists(os.path.join(adapters_dir, d, "adapter_config.json"))
+    ]
+    if not dirs:
+        return ""
+    return max(dirs, key=os.path.getmtime)
+
 
 PERCEIVE_PROMPT = """Look at this outfit photo. Respond with ONLY a JSON object
 (no markdown fences, no commentary) with these keys:
@@ -61,10 +87,12 @@ class QwenAnalyzer:
             # NF4-quantized the model fits on the card, so pin it there.
             kwargs["device_map"] = {"": 0}
         self.model = AutoModelForImageTextToText.from_pretrained(model_id, **kwargs)
-        if config.ADAPTER:
+        adapter = resolve_adapter(config.ADAPTER)
+        if adapter:
             from peft import PeftModel
 
-            self.model = PeftModel.from_pretrained(self.model, config.ADAPTER)
+            self.model = PeftModel.from_pretrained(self.model, adapter)
+        self.adapter = adapter
         self.processor = AutoProcessor.from_pretrained(model_id)
 
     def _generate(self, image_path: str, prompt: str, max_new_tokens: int) -> str:

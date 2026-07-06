@@ -73,6 +73,42 @@ def test_quality_score_bounds():
     assert quality_score(flat) == 0.0
 
 
+def test_resolve_adapter(tmp_path, monkeypatch):
+    from pipeline.app import qwen_analyzer as qa
+
+    assert qa.resolve_adapter("") == ""
+    assert qa.resolve_adapter("some/explicit/path") == "some/explicit/path"
+
+    # auto: newest dir containing adapter_config.json wins; others ignored
+    import os
+    import time as _t
+
+    old = tmp_path / "20260101-0000"
+    new = tmp_path / "20260102-0000"
+    junk = tmp_path / "not-an-adapter"
+    for d in (old, new, junk):
+        d.mkdir()
+    (old / "adapter_config.json").write_text("{}")
+    (new / "adapter_config.json").write_text("{}")
+    now = _t.time()
+    os.utime(old, (now - 100, now - 100))
+    os.utime(new, (now, now))
+
+    monkeypatch.setattr(
+        qa.os.path, "dirname", lambda p, _real=qa.os.path.dirname: _real(p)
+    )
+    # point the resolver at tmp_path by faking the adapters dir lookup
+    real_join = qa.os.path.join
+
+    def fake_join(*parts):
+        if parts[-1] == "adapters":
+            return str(tmp_path)
+        return real_join(*parts)
+
+    monkeypatch.setattr(qa.os.path, "join", fake_join)
+    assert qa.resolve_adapter("auto") == str(new)
+
+
 def test_qwen_analyzer_declares_image_input_kind():
     # analyze() dispatches on input_kind; without this attr the Qwen judge
     # silently receives a color palette instead of the photo (merge bug).

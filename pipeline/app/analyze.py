@@ -281,6 +281,7 @@ def analyze(image_path: str, occasion: str) -> dict:
         "judgment_id": uuid.uuid4().hex[:12],
         "model": config.MODEL,
         "model_id": config.QWEN_MODEL_ID,
+        "adapter": getattr(analyzer, "adapter", "") or "base model",
         "image_path": image_path,
         "occasion": occasion,
         "perception": perception,
