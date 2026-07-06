@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lovänya — Rate the Judgments</title>
+<style>
+  :root{
+    --bg:#14100e; --panel:#1f1917; --panel2:#2a2220; --text:#f2ece7;
+    --muted:#a89a90; --accent:#d4a373; --accent2:#e7bc91;
+    --good:#8fbf88; --mid:#d9c06b; --bad:#d98a7a; --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,sans-serif;min-height:100vh}
+  header{padding:20px 24px 8px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  header h1{font-size:22px;font-weight:600}
+  header h1 em{color:var(--accent);font-style:normal}
+  header .sub{color:var(--muted);font-size:13px}
+  #progress{margin-left:auto;font-size:13px;color:var(--muted);background:var(--panel);padding:6px 14px;border-radius:999px}
+  main{max-width:900px;margin:0 auto;padding:12px 24px 60px}
+  .card{background:var(--panel);border-radius:var(--radius);padding:20px;display:grid;grid-template-columns:300px 1fr;gap:22px}
+  @media(max-width:760px){.card{grid-template-columns:1fr}}
+  .photo img{width:100%;border-radius:12px;display:block}
+  .photo .occ{margin-top:10px;text-align:center;font-size:13px;color:var(--muted)}
+  .photo .occ b{color:var(--accent2);text-transform:capitalize}
+  .overall{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .overall .num{font-size:40px;font-weight:700;color:var(--accent2);line-height:1}
+  .overall .label{color:var(--muted);font-size:12px}
+  .srow{margin-bottom:9px}
+  .srow .n{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:3px}
+  .bar{height:7px;background:var(--panel2);border-radius:999px;overflow:hidden}
+  .bar>div{height:100%;border-radius:999px}
+  .fb{margin-top:14px;font-size:14px;line-height:1.6}
+  .fix{margin-top:10px;padding:10px 12px;background:var(--panel2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:13px}
+  .rate{margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .rate button{font-size:22px;padding:10px 20px;border-radius:12px;border:1px solid #3a2f2b;background:var(--panel2);color:var(--text);cursor:pointer;transition:.12s}
+  .rate button:hover{border-color:var(--accent)}
+  .rate button.up:hover{border-color:var(--good)}
+  .rate button.down:hover{border-color:var(--bad)}
+  textarea{width:100%;margin-top:12px;background:var(--panel2);color:var(--text);border:1px solid #3a2f2b;border-radius:10px;padding:10px 12px;font-size:13px;font-family:inherit;min-height:64px;display:none}
+  .skip{margin-top:14px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline}
+  .done{text-align:center;padding:60px 20px}
+  .done h2{font-size:24px;color:var(--accent2);margin-bottom:10px}
+  .done p{color:var(--muted);font-size:14px;line-height:1.7}
+  .hint{color:var(--muted);font-size:12.5px;margin:6px 0 16px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Lov<em>ä</em>nya</h1>
+  <span class="sub">Rate the model — your taste becomes the training signal</span>
+  <span id="progress">loading…</span>
+</header>
+<main>
+  <p class="hint">👍 if the judgment is fair · 👎 if it's off (then tell it what it <b>should</b> have said). Each rating is saved instantly — this is the ground truth the model has never had.</p>
+  <div id="stage"></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+let queue=[], rated=new Set(), idx=0;
+
+function barColor(v){return v>=7?'var(--good)':v>=5?'var(--mid)':'var(--bad)';}
+
+async function load(){
+  const d=await (await fetch('/api/rating-queue')).json();
+  rated=new Set(d.rated);
+  queue=d.items.filter(it=>!rated.has(it.judgment_id));
+  render();
+}
+
+function render(){
+  const total=queue.length;
+  if(idx>=total){
+    $('#progress').textContent=`${total} rated · done`;
+    $('#stage').innerHTML=`<div class="done"><h2>All done — thank you 🌿</h2>
+      <p>You rated ${document.querySelectorAll('.counted').length||total} judgments.<br>
+      They're saved to <b>data/ratings.jsonl</b> — the real ground truth for the next training round.<br><br>
+      Want more to rate? Ask me to extend the queue.</p></div>`;
+    return;
+  }
+  $('#progress').textContent=`${idx+1} / ${total}`;
+  const it=queue[idx], j=it.judgment, s=j.scores||{};
+  const rows=Object.entries(s).map(([k,v])=>`<div class="srow"><div class="n"><span>${k.replaceAll('_',' ')}</span><span>${v}/10</span></div><div class="bar"><div style="width:${v*10}%;background:${barColor(v)}"></div></div></div>`).join('');
+  $('#stage').innerHTML=`<div class="card">
+    <div class="photo"><img src="/samples/${it.image}"><div class="occ">for <b>${it.occasion}</b></div></div>
+    <div class="body">
+      <div class="overall"><div class="num">${j.overall??'—'}</div><div class="label">overall<br>score</div></div>
+      ${rows}
+      <div class="fb">${j.feedback||'<i>no feedback</i>'}${j.one_fix?`<div class="fix"><b>One fix:</b> ${j.one_fix}</div>`:''}</div>
+      <div class="rate">
+        <button class="up" id="up">👍 Fair</button>
+        <button class="down" id="down">👎 Off</button>
+      </div>
+      <textarea id="corr" placeholder="What should it have said? (scores, or what the feedback got wrong — optional but gold)"></textarea>
+      <button class="skip" id="skip">skip this one →</button>
+    </div></div>`;
+  $('#up').onclick=()=>save('up');
+  $('#down').onclick=()=>{const t=$('#corr');t.style.display='block';t.focus();$('#down').textContent='👎 Off — press again to save';$('#down').onclick=()=>save('down');};
+  $('#skip').onclick=()=>{idx++;render();};
+}
+
+async function save(rating){
+  const it=queue[idx];
+  await fetch('/api/rate',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({judgment_id:it.judgment_id,rating,correction:$('#corr')?.value||null})});
+  idx++; render();
+}
+load();
+</script>
+</body>
+</html>

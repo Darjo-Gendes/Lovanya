@@ -22,3 +22,7 @@ Thumbs.db
 
 # GPU matting exploration cutouts (regenerate via scripts/matte_garments.py)
 pipeline/review/matte_gpu/*.png
+
+# rating queue is regenerated locally
+pipeline/data/rating-queue.jsonl
+pipeline/data/ratings.jsonl

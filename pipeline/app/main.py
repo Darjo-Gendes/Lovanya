@@ -214,9 +214,33 @@ def rate(r: Rating):
     return {"saved": True}
 
 
+@app.get("/api/rating-queue")
+def rating_queue():
+    """The pre-computed judgments to rate + which judgment_ids are already
+    rated — powers the /rate page with no GPU wait per card."""
+    queue_path = PIPELINE_DIR / "data" / "rating-queue.jsonl"
+    items = []
+    if queue_path.exists():
+        for line in queue_path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                items.append(json.loads(line))
+    rated = set()
+    ratings_path = PIPELINE_DIR / "data" / "ratings.jsonl"
+    if ratings_path.exists():
+        for line in ratings_path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                rated.add(json.loads(line).get("judgment_id"))
+    return {"items": items, "rated": sorted(rated)}
+
+
 app.mount("/samples", StaticFiles(directory=str(SAMPLES_DIR)), name="samples")
 
 
 @app.get("/")
 def index():
     return FileResponse(str(STATIC_DIR / "index.html"))
+
+
+@app.get("/rate")
+def rate_page():
+    return FileResponse(str(STATIC_DIR / "rate.html"))
