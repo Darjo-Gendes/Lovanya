@@ -19,3 +19,6 @@ pipeline/logs/
 # OS
 Thumbs.db
 .DS_Store
+
+# GPU matting exploration cutouts (regenerate via scripts/matte_garments.py)
+pipeline/review/matte_gpu/*.png
