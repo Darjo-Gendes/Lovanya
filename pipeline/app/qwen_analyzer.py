@@ -60,6 +60,49 @@ Perception data already extracted from this same photo:
 Respond with ONLY a JSON object (no markdown fences, no commentary) matching
 the "Output contract" section of the framework above."""
 
+# Single-call variant: perceive AND judge in one generation (halves inference
+# vs the two-call path). The occasion and framework are given up front so the
+# model does both jobs at once.
+COMBINED_PROMPT_TEMPLATE = """Look at this outfit photo and judge it for this
+occasion: {occasion}
+
+Use this styling framework for the judgment:
+--- STYLING FRAMEWORK ---
+{framework}
+--- END FRAMEWORK ---
+
+Respond with ONLY ONE JSON object (no markdown fences, no commentary) with
+BOTH the perception and the judgment, exactly these keys:
+{{
+  "garment_category": "e.g. dress, top+bottom, suit, activewear, ...",
+  "items": ["short description of each visible garment/accessory"],
+  "dominant_colors": ["2-4 dominant colors you actually see, plain names"],
+  "pattern": "solid | striped | floral | plaid | graphic | other, briefly",
+  "silhouette": "fitted | loose | mixed, briefly",
+  "modest_dress": "true if modest dress (hijab, covered arms, long hemlines, loose layering), else false",
+  "scores": {{"color_harmony": 1-10, "occasion_fit": 1-10, "silhouette_balance": 1-10, "cohesion": 1-10}},
+  "overall": 1-10,
+  "feedback": "2-4 sentences, warm and specific",
+  "one_fix": "a single concrete add/swap/style suggestion, never a garment modification"
+}}"""
+
+_PERCEPTION_KEYS = (
+    "garment_category", "items", "dominant_colors",
+    "pattern", "silhouette", "modest_dress", "notes",
+)
+_JUDGMENT_KEYS = ("scores", "overall", "feedback", "one_fix")
+
+
+def split_combined(obj: dict) -> tuple[dict, dict]:
+    """Split a combined one-shot JSON into (perception, judgment). If no
+    judgment keys are present (parse error / wrong shape), the whole object
+    is returned as the judgment so the failure surfaces instead of hiding."""
+    perception = {k: obj[k] for k in _PERCEPTION_KEYS if k in obj}
+    judgment = {k: obj[k] for k in _JUDGMENT_KEYS if k in obj}
+    if not judgment:
+        judgment = obj
+    return perception, judgment
+
 
 class QwenAnalyzer:
     """Perception + judgment via Qwen VL, one structured call per stage.
@@ -140,3 +183,13 @@ class QwenAnalyzer:
         )
         raw = self._generate(image_path, prompt, max_new_tokens=400)
         return extract_json(raw)
+
+    def analyze_one_shot(self, image_path: str, occasion: str) -> tuple[dict, dict]:
+        """Perceive AND judge in a single model call, then split the result
+        into (perception, judgment). Falls back to a parse-error judgment if
+        the model returns unusable JSON."""
+        with open(config.FRAMEWORK_PATH, encoding="utf-8") as f:
+            framework = f.read()
+        prompt = COMBINED_PROMPT_TEMPLATE.format(occasion=occasion, framework=framework)
+        raw = self._generate(image_path, prompt, max_new_tokens=650)
+        return split_combined(extract_json(raw))

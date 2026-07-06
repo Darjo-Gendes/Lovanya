@@ -29,6 +29,9 @@ QUANT: str = os.environ.get("LOVANYA_QUANT", "4bit")
 # "dino" = GroundingDINO garment detection before perception; "off" = whole image.
 SEGMENT: str = os.environ.get("LOVANYA_SEGMENT", "dino")
 
+# "1" = perceive+judge in ONE model call (~halves latency); "0" = two calls.
+ONESHOT: bool = os.environ.get("LOVANYA_ONESHOT", "1") == "1"
+
 # Trained LoRA adapter (scripts/train_qlora.py output): a path, "auto" to
 # use the most recently modified dir under pipeline/adapters/ (so a finished
 # training run is picked up by the next model load with no restart or

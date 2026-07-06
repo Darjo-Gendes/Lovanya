@@ -266,8 +266,11 @@ def analyze(image_path: str, occasion: str) -> dict:
     analyzer = get_analyzer()
     if getattr(analyzer, "input_kind", "palette") == "image":
         region_path = segment_path(image_path)
-        perception = analyzer.perceive(region_path)
-        judgment = analyzer.judge(region_path, perception, occasion)
+        if config.ONESHOT and hasattr(analyzer, "analyze_one_shot"):
+            perception, judgment = analyzer.analyze_one_shot(region_path, occasion)
+        else:
+            perception = analyzer.perceive(region_path)
+            judgment = analyzer.judge(region_path, perception, occasion)
     else:
         with open(image_path, "rb") as f:
             palette = extract_palette(f.read(), count=4)

@@ -117,6 +117,31 @@ def test_qwen_analyzer_declares_image_input_kind():
     assert QwenAnalyzer.input_kind == "image"
 
 
+def test_split_combined_partitions_oneshot_json():
+    from pipeline.app.qwen_analyzer import split_combined
+
+    obj = {
+        "garment_category": "dress", "items": ["a dress"],
+        "dominant_colors": ["black"], "pattern": "solid",
+        "silhouette": "fitted", "modest_dress": False,
+        "scores": {"color_harmony": 8, "occasion_fit": 7,
+                   "silhouette_balance": 8, "cohesion": 8},
+        "overall": 8, "feedback": "nice", "one_fix": "add heels",
+    }
+    perception, judgment = split_combined(obj)
+    assert perception["garment_category"] == "dress"
+    assert "scores" not in perception
+    assert judgment["overall"] == 8
+    assert "items" not in judgment
+
+
+def test_split_combined_surfaces_bad_shape():
+    from pipeline.app.qwen_analyzer import split_combined
+
+    perception, judgment = split_combined({"_parse_error": True})
+    assert judgment["_parse_error"] is True
+
+
 def test_get_analyzer_rejects_unknown_model(monkeypatch):
     monkeypatch.setattr(config, "MODEL", "nonexistent")
     monkeypatch.setattr(analyze, "_analyzer", None)
