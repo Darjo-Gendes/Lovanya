@@ -53,6 +53,14 @@ CURATED_PAIRS = [
 ]
 
 
+def _write_queue(queue: dict) -> None:
+    QUEUE.parent.mkdir(exist_ok=True)
+    QUEUE.write_text(
+        "\n".join(json.dumps(v, ensure_ascii=False) for v in queue.values()),
+        encoding="utf-8",
+    )
+
+
 def reuse_from_log() -> dict:
     """image basename -> queue record, from logged bench judgments (latest wins)."""
     out = {}
@@ -113,12 +121,9 @@ def main():
                 "judgment_id": r.get("judgment_id", key),
                 "perception": r.get("perception", {}), "judgment": r.get("judgment", {}),
             }
+            _write_queue(queue)  # write after EACH item so /rate sees it live
 
-    QUEUE.parent.mkdir(exist_ok=True)
-    QUEUE.write_text(
-        "\n".join(json.dumps(v, ensure_ascii=False) for v in queue.values()),
-        encoding="utf-8",
-    )
+    _write_queue(queue)
     print(f"wrote {len(queue)} records to {QUEUE}", flush=True)
 
 
