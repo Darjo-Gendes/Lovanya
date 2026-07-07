@@ -29,3 +29,4 @@ pipeline/data/ratings.jsonl
 
 # generated lookcard images (regenerate via gen_lookcard.py)
 pipeline/data/lookcards/
+pipeline/review/sam2/*.png
