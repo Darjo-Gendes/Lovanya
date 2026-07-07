@@ -131,9 +131,15 @@ def main():
 
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 
-    log("Loading judge 4-bit…")
+    # Train a FRESH LoRA from the BASE model — never stack on an existing
+    # adapter (that inherits its bias and creates duplicate PEFT adapters).
+    from pipeline import config as _cfg
+    _cfg.ADAPTER = ""
+
+    log("Loading BASE judge 4-bit (no adapter)…")
     analyzer = QwenAnalyzer()
     model, processor = analyzer.model, analyzer.processor
+    assert not getattr(analyzer, "adapter", ""), "training must start from base model"
 
     log("Building dataset from data/gold.jsonl…")
     examples = build_examples(analyzer)
