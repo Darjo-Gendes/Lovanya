@@ -142,16 +142,33 @@ def test_split_combined_surfaces_bad_shape():
     assert judgment["_parse_error"] is True
 
 
-def test_imagegen_prompt_builder():
-    # prompt assembly is pure logic — testable without loading SDXL
-    from pipeline.app.imagegen import build_prompt
+def test_render_prep_flattens_to_white_square():
+    # cutout prep (transparent -> white RGB square) is pure image logic,
+    # testable without loading SDXL
+    import io
 
-    p = build_prompt("work", "black blazer, white tee", ["black", "white"])
-    assert "work" in p
-    assert "black blazer, white tee" in p
-    assert "lookbook" in p.lower()
-    # palette folded in
-    assert "black" in p
+    from PIL import Image
+
+    from pipeline.app.imagegen import _prep
+
+    # a transparent 40x80 RGBA with an opaque red patch
+    im = Image.new("RGBA", (40, 80), (0, 0, 0, 0))
+    im.paste((255, 0, 0, 255), (0, 0, 40, 40))
+    buf = io.BytesIO()
+    im.save(buf, format="PNG")
+
+    out = _prep(buf.getvalue(), size=256)
+    assert out.mode == "RGB"
+    assert out.size == (256, 256)          # square
+    assert out.getpixel((250, 250)) == (255, 255, 255)  # transparent -> white
+
+
+def test_render_off_returns_none(monkeypatch):
+    from pipeline.app import render as render_mod
+
+    monkeypatch.setattr(config, "RENDER", "off")
+    assert render_mod.render(b"anything") is None
+    assert render_mod.render(None) is None
 
 
 def test_get_analyzer_rejects_unknown_model(monkeypatch):

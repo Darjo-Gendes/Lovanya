@@ -45,6 +45,8 @@ ADAPTER: str = os.environ.get("LOVANYA_ADAPTER", "auto")
 IMAGE_MODEL_ID: str = os.environ.get(
     "LOVANYA_IMAGE_MODEL", "stabilityai/stable-diffusion-xl-base-1.0"
 )
+# "on" = render the optional clean product shot; "off" = skip it.
+RENDER: str = os.environ.get("LOVANYA_RENDER", "on")
 
 # --- Framework-as-file (the moat lives in text, not code) ---------------------
 _HERE = os.path.dirname(os.path.abspath(__file__))
