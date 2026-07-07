@@ -38,6 +38,14 @@ ONESHOT: bool = os.environ.get("LOVANYA_ONESHOT", "1") == "1"
 # config change), or "" to run the base model.
 ADAPTER: str = os.environ.get("LOVANYA_ADAPTER", "auto")
 
+# --- Local image generation (outfit / LookCard visuals) -----------------------
+# Open-weight, on-GPU, zero tokens. Swap here to change the image model
+# ("Nano Banana" = Google Gemini 2.5 Flash Image is cloud-only, not usable
+# here). SDXL fits the 8GB card via cpu-offload.
+IMAGE_MODEL_ID: str = os.environ.get(
+    "LOVANYA_IMAGE_MODEL", "stabilityai/stable-diffusion-xl-base-1.0"
+)
+
 # --- Framework-as-file (the moat lives in text, not code) ---------------------
 _HERE = os.path.dirname(os.path.abspath(__file__))
 FRAMEWORK_PATH: str = os.environ.get(

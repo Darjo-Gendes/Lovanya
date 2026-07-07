@@ -26,3 +26,6 @@ pipeline/review/matte_gpu/*.png
 # rating queue is regenerated locally
 pipeline/data/rating-queue.jsonl
 pipeline/data/ratings.jsonl
+
+# generated lookcard images (regenerate via gen_lookcard.py)
+pipeline/data/lookcards/

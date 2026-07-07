@@ -142,6 +142,18 @@ def test_split_combined_surfaces_bad_shape():
     assert judgment["_parse_error"] is True
 
 
+def test_imagegen_prompt_builder():
+    # prompt assembly is pure logic — testable without loading SDXL
+    from pipeline.app.imagegen import build_prompt
+
+    p = build_prompt("work", "black blazer, white tee", ["black", "white"])
+    assert "work" in p
+    assert "black blazer, white tee" in p
+    assert "lookbook" in p.lower()
+    # palette folded in
+    assert "black" in p
+
+
 def test_get_analyzer_rejects_unknown_model(monkeypatch):
     monkeypatch.setattr(config, "MODEL", "nonexistent")
     monkeypatch.setattr(analyze, "_analyzer", None)
