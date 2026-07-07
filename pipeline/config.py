@@ -48,6 +48,11 @@ IMAGE_MODEL_ID: str = os.environ.get(
 # "on" = render the optional clean product shot; "off" = skip it.
 RENDER: str = os.environ.get("LOVANYA_RENDER", "on")
 
+# Box-prompted SAM2 for precise garment cutouts (app/cutout.py). Small, on-GPU.
+# Use the non-"-hf" repo: it ships the HF processor config + converted weights
+# (the "-hf" repo is incomplete — raw weights, no processor).
+SAM2_MODEL_ID: str = os.environ.get("LOVANYA_SAM2_MODEL", "facebook/sam2.1-hiera-tiny")
+
 # --- Framework-as-file (the moat lives in text, not code) ---------------------
 _HERE = os.path.dirname(os.path.abspath(__file__))
 FRAMEWORK_PATH: str = os.environ.get(
