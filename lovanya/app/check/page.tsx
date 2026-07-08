@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   BookHeart,
+  Bookmark,
   BookOpen,
   Briefcase,
   Check,
@@ -87,7 +88,7 @@ export default function StyleMe() {
   const [ringGo, setRingGo] = useState(false);
   const [barsGo, setBarsGo] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [loved, setLoved] = useState(false);
+  const [ribboned, setRibboned] = useState(false);
   const [shareLbl, setShareLbl] = useState("Share Card");
   const runRef = useRef(0);
 
@@ -156,7 +157,7 @@ export default function StyleMe() {
     setPhoto(null);
     setAnalysis(null);
     setSaved(false);
-    setLoved(false);
+    setRibboned(false);
     setStage("camera");
   };
 
@@ -165,7 +166,7 @@ export default function StyleMe() {
     setPhoto(null);
     setAnalysis(null);
     setSaved(false);
-    setLoved(false);
+    setRibboned(false);
     setNote("");
     setStage("occasion");
   };
@@ -184,23 +185,21 @@ export default function StyleMe() {
       downscaleImage(photo, 180, 0.6),
       downscaleImage(photo, 512, 0.72),
     ]);
-    recordCheck({
-      id: uid(),
-      at: Date.now(),
-      score: analysis.score,
-      occasion,
-      palette: analysis.palette,
-      headline: analysis.headline,
-      thumb,
-    });
+    // File the garment FIRST so the look can record the canonical wardrobe id.
+    let garmentIds: string[] = [];
     try {
       const draft = await stylist.identifyItem({
         palette: analysis.palette,
         modestDefault: profile.modest,
       });
-      if (!findLikelyDuplicate(draft, items)) {
+      const match = findLikelyDuplicate(draft, items);
+      if (match) {
+        // The look wore an existing piece — link the canonical, never duplicate.
+        garmentIds = [match.item.id];
+      } else {
+        const gid = uid();
         addItem({
-          id: uid(),
+          id: gid,
           name: draft.name,
           category: draft.category,
           colors: draft.colors,
@@ -212,10 +211,27 @@ export default function StyleMe() {
           loved: false,
           addedAt: Date.now(),
         });
+        garmentIds = [gid];
       }
     } catch {
-      // Wardrobe filing is best-effort; the check itself is already saved.
+      // Wardrobe filing is best-effort; the check itself is still recorded.
     }
+    recordCheck({
+      id: uid(),
+      at: Date.now(),
+      score: analysis.score,
+      occasion,
+      palette: analysis.palette,
+      headline: analysis.headline,
+      thumb,
+      title: note.trim() || undefined,
+      ribboned,
+      garmentIds,
+      breakdown: analysis.breakdown,
+      whatWorks: analysis.whatWorks,
+      gentleThought: analysis.gentleThought,
+      auraNote: analysis.auraNote,
+    });
     setStage("share");
   };
 
@@ -383,10 +399,10 @@ export default function StyleMe() {
             <button
               className="res-hbtn"
               style={{ right: 18 }}
-              aria-label={loved ? "Loved" : "Love this look"}
-              onClick={() => setLoved((v) => !v)}
+              aria-label={ribboned ? "Marked as memorable" : "Mark as memorable"}
+              onClick={() => setRibboned((v) => !v)}
             >
-              <Heart size={19} fill={loved ? "#D56F88" : "none"} color="#D56F88" strokeWidth={1.8} />
+              <Bookmark size={19} fill={ribboned ? "#D56F88" : "none"} color="#D56F88" strokeWidth={1.8} />
             </button>
             <div className="res-view">
               <Sparkle size={13} color="#D56F88" /> {analysis.score} · Style Score
@@ -428,10 +444,10 @@ export default function StyleMe() {
             <div className="res-actions">
               <button
                 className="res-heart"
-                aria-label={loved ? "Loved" : "Love this look"}
-                onClick={() => setLoved((v) => !v)}
+                aria-label={ribboned ? "Marked as memorable" : "Mark as memorable"}
+                onClick={() => setRibboned((v) => !v)}
               >
-                <Heart size={22} fill={loved ? "currentColor" : "none"} strokeWidth={1.8} />
+                <Bookmark size={22} fill={ribboned ? "currentColor" : "none"} strokeWidth={1.8} />
               </button>
               <button className="abtn" onClick={saveToJournal}>
                 <BookHeart size={18} strokeWidth={1.9} />

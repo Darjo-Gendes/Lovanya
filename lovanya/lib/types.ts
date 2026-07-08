@@ -127,6 +127,11 @@ export interface Recommendation {
   auraNote: string;
 }
 
+/**
+ * A saved look — the Journal's core entity (evolved from the original check
+ * record; every field added for Journal v1 is optional so previously
+ * persisted stores keep working untouched).
+ */
 export interface CheckRecord {
   id: string;
   at: number;
@@ -135,7 +140,21 @@ export interface CheckRecord {
   palette: string[];
   headline: string;
   thumb?: string;
+  /** User-typed context from the Style Me note input ("Summer brunch…"). */
+  title?: string;
+  /** Ribbon = "memorable moment" — the single save affordance on looks. */
+  ribboned?: boolean;
+  /** Wardrobe items filed from this look (canonical ids after dedup). */
+  garmentIds?: string[];
+  /** Full analysis payload so the Journal can reopen the verdict later. */
+  breakdown?: { label: string; score: number; note: string }[];
+  whatWorks?: string[];
+  gentleThought?: string;
+  auraNote?: string;
 }
+
+/** Journal-facing alias — same persisted shape, clearer name. */
+export type Look = CheckRecord;
 
 export interface Profile {
   name: string;

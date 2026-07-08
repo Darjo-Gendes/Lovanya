@@ -168,12 +168,12 @@ export default function Today() {
       </div>
 
       {/* ===== Today's insight → History ===== */}
-      <Link href="/journey" className="home-insight">
+      <Link href="/journal" className="home-insight">
         <div className="e">TODAY&rsquo;S INSIGHT</div>
         <h3>Confidence is your best accessory.</h3>
         <p>You&rsquo;ve been choosing pieces that reflect you beautifully. Keep listening to yourself.</p>
         <div className="lk">
-          View Your History{" "}
+          View Your Journal{" "}
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#CE6E86" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 6l6 6-6 6" />
           </svg>

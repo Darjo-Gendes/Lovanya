@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, LineChart, Plus, Shirt, User } from "lucide-react";
+import { BookHeart, Home, Plus, Shirt, User } from "lucide-react";
 
 export default function BottomNav() {
   const pathname = usePathname();
@@ -55,7 +55,7 @@ export default function BottomNav() {
             </span>
           </Link>
 
-          {tab("/journey", "Journey", LineChart)}
+          {tab("/journal", "Journal", BookHeart)}
           {tab("/profile", "Profile", User)}
         </div>
       </div>

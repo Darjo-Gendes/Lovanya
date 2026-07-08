@@ -30,6 +30,8 @@ interface LovanyaState {
   removeItem: (id: string) => void;
   toggleLove: (id: string) => void;
   recordCheck: (c: CheckRecord) => void;
+  /** Ribbon = mark a look as a memorable moment (Journal v1). */
+  toggleRibbon: (lookId: string) => void;
   recordWear: (itemIds: string[]) => void;
   recordReject: (pairKey: string, itemIds: string[]) => void;
   seedCloset: () => void;
@@ -92,6 +94,13 @@ export const useLovanya = create<LovanyaState>()(
 
       recordCheck: (c) =>
         set({ checks: [c, ...get().checks].slice(0, 30) }),
+
+      toggleRibbon: (lookId) =>
+        set({
+          checks: get().checks.map((c) =>
+            c.id === lookId ? { ...c, ribboned: !c.ribboned } : c
+          ),
+        }),
 
       // Wearing a recommendation teaches Aura what worked.
       recordWear: (itemIds) => {
