@@ -16,6 +16,14 @@ pipeline/logs/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 
+# Secrets — API keys never get committed
+.env
+.env.*
+*.env
+
+# Throwaway spike / test artifacts
+lovanya/public/spike/
+
 # OS
 Thumbs.db
 .DS_Store
