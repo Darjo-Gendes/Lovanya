@@ -38,3 +38,10 @@ pipeline/data/ratings.jsonl
 # generated lookcard images (regenerate via gen_lookcard.py)
 pipeline/data/lookcards/
 pipeline/review/sam2/*.png
+
+# cached font binaries for the Artifact build (regenerate via build-artifact.py)
+lovanya/scripts/.font-cache/
+
+# third-party vendor skills (local reference library; absorbed content lives
+# in .claude/skills/lovanya-design-director/ which IS committed)
+.claude/skills/_vendor/
