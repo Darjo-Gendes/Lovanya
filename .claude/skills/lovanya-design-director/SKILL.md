@@ -21,7 +21,10 @@ feature-rich.
 1. Read the gates below BEFORE writing any code or layout.
 2. Read `references/tokens.md` before writing ANY styles — philosophy without
    the tokens produces beautiful screens that aren't Lovanya.
-3. Touching Home, Journal, Wardrobe, or Style Me? Read that surface's brief in
+3. Read `references/craft.md` when implementing — the numeric floor
+   (accessibility, touch targets, motion timing, composition rules) every
+   build must clear. Tokens say what things ARE; craft says how well.
+4. Touching Home, Journal, Wardrobe, or Style Me? Read that surface's brief in
    `references/` first.
 4. **Delegation rule:** subagents do NOT auto-load skills. When dispatching a
    builder (Opus/Sonnet), the dispatch prompt MUST embed the relevant gate
