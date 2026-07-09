@@ -38,6 +38,8 @@ pipeline/data/ratings.jsonl
 # generated lookcard images (regenerate via gen_lookcard.py)
 pipeline/data/lookcards/
 pipeline/review/sam2/*.png
+# GPU-side generated review images
+pipeline/review/wardrobe/*.png
 
 # cached font binaries for the Artifact build (regenerate via build-artifact.py)
 lovanya/scripts/.font-cache/
