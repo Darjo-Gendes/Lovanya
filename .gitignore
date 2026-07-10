@@ -8,35 +8,33 @@ __pycache__/
 .pytest_cache/
 venv/
 .venv/
-
 # Pipeline runtime output (regenerated locally, not project state)
 pipeline/logs/
-
 # Claude Code local state (machine-specific)
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
-
 # Secrets — API keys never get committed
 .env
 .env.*
 *.env
-
 # Throwaway spike / test artifacts
 lovanya/public/spike/
-
 # OS
 Thumbs.db
 .DS_Store
-
 # GPU matting exploration cutouts (regenerate via scripts/matte_garments.py)
 pipeline/review/matte_gpu/*.png
-
 # rating queue is regenerated locally
 pipeline/data/rating-queue.jsonl
 pipeline/data/ratings.jsonl
-
 # generated lookcard images (regenerate via gen_lookcard.py)
 pipeline/data/lookcards/
 pipeline/review/sam2/*.png
 pipeline/review/wardrobe/*.png
 pipeline/review/garments/
+# GPU-side generated review images
+# cached font binaries for the Artifact build (regenerate via build-artifact.py)
+lovanya/scripts/.font-cache/
+# third-party vendor skills (local reference library; absorbed content lives
+# in .claude/skills/lovanya-design-director/ which IS committed)
+.claude/skills/_vendor/

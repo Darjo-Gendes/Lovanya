@@ -41,6 +41,28 @@ thumbnail.
 
 **Exit test:** a stranger signs up, uses it, and the unit economics hold.
 
+## Two-machine protocol (GitHub is the connector)
+
+Two machines build one product; `main` on github.com/Darjo-Gendes/Lovanya is
+the single source of truth. Every major adjustment is broadcast there.
+
+- **GPU PC = the AI department.** Owns `pipeline/` — Qwen judge, GroundingDINO
+  + SAM2, ComfyUI/Flux thumbnails, training. Serves the model.
+- **This PC = the App.** Owns `lovanya/` — the Next.js app, screens, design.
+- **Shared law, held to the same standard on both:**
+  - Design: `.claude/skills/lovanya-design-director/` (committed — both PCs
+    auto-load it for any UI work) + the identity core in `lovanya/AGENTS.md`.
+  - AI: `pipeline/docs/*` + `architecture-decisions.md`.
+  - Plan: this file.
+- **Rhythm:** `git pull --rebase` before starting; push when a unit of work is
+  green; `git fetch` before pushing (the other side moves fast). No force-push
+  to `main`. Broadcast any locked decision as a commit, not just a memory.
+- **Shareable canvas:** `lovanya/public/prototype/lovanya-app.artifact.html`
+  (self-contained, fonts inlined) is committed and publishable as a Claude
+  Artifact from either machine; rebuild it with
+  `lovanya/scripts/build-artifact.py` after editing the canonical
+  `lovanya-app.html`.
+
 ## Standing rules
 - Two machines, one `main`: **always `git fetch` before pushing** — the other
   side moves fast.
