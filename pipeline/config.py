@@ -48,6 +48,10 @@ IMAGE_MODEL_ID: str = os.environ.get(
 # "on" = render the optional clean product shot; "off" = skip it.
 RENDER: str = os.environ.get("LOVANYA_RENDER", "on")
 
+# product-shot angle dispatched by render(): "faithful" (img2img, closest to
+# the real garment), "balanced" (img2img, flatter), "idealized" (txt2img).
+PRODUCT_MODE: str = os.environ.get("LOVANYA_PRODUCT_MODE", "faithful")
+
 # Box-prompted SAM2 for precise garment cutouts (app/cutout.py). Small, on-GPU.
 # Use the non-"-hf" repo: it ships the HF processor config + converted weights
 # (the "-hf" repo is incomplete — raw weights, no processor).
