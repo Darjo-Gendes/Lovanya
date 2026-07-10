@@ -21,6 +21,7 @@ prompt (subagents don't auto-load skills).
 
 Language is editorial, never administrative ("Today's Look", never "Saved
 Items"). Typography is locked (Parisienne = wordmark only · Dancing Script =
-greetings · Playfair = headings · Poppins = UI). Icons: Iconsax (Linear
-resting / Bold active) + hand-drawn brand SVGs, which always outrank library
-glyphs. Single theme: rosewood on porcelain — no dark mode.
+greetings · Playfair = headings · Poppins = UI). Icons: lucide-react (active =
+heavier strokeWidth) + hand-drawn brand SVGs, which always outrank library
+glyphs. (Iconsax deferred — 0.0.8 broke rendering; revisit with a mature
+version only.) Single theme: rosewood on porcelain — no dark mode.
