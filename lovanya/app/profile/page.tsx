@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Setting2 } from "iconsax-react";
+import { Settings2 } from "lucide-react";
 import AuraOrb from "@/components/AuraOrb";
 import SettingsSheet from "@/components/SettingsSheet";
 import { useLovanya } from "@/lib/store";
@@ -26,7 +26,7 @@ export default function Profile() {
           aria-label="Settings"
           className="flex h-[42px] w-[42px] items-center justify-center rounded-[13px] bg-card text-ink-soft shadow-soft active:scale-95"
         >
-          <Setting2 size={20} />
+          <Settings2 size={20} />
         </button>
       </div>
 
@@ -84,7 +84,7 @@ export default function Profile() {
             Name, vibes, modest styling &amp; closet data
           </span>
         </span>
-        <Setting2 size={18} className="text-ink-faint" />
+        <Settings2 size={18} className="text-ink-faint" />
       </button>
 
       <SettingsSheet open={settingsOpen} onClose={() => setSettingsOpen(false)} />

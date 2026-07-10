@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { CloseCircle } from "iconsax-react";
+import { X } from "lucide-react";
 
 /**
  * Bottom sheet. Renders only while open and unmounts immediately on close —
@@ -47,7 +47,7 @@ export default function Sheet({
             aria-label="Close"
             className="flex h-9 w-9 items-center justify-center rounded-full bg-blush text-rosewood-deep active:scale-95"
           >
-            <CloseCircle size={17} />
+            <X size={17} />
           </button>
         </div>
         {children}

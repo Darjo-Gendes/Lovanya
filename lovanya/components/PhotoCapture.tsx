@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Camera, GalleryAdd, Refresh } from "iconsax-react";
+import { Camera, ImagePlus, RefreshCw } from "lucide-react";
 
 /**
  * Camera capture with a graceful upload fallback.
@@ -98,7 +98,7 @@ export default function PhotoCapture({
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-3 px-8 text-center">
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-card text-rosewood shadow-soft">
-              <GalleryAdd size={24} />
+              <ImagePlus size={24} />
             </span>
             <p className="text-sm text-ink-soft">
               No camera here — no problem. Choose a photo instead.
@@ -113,7 +113,7 @@ export default function PhotoCapture({
               aria-label="Upload a photo"
               className="flex h-11 w-11 items-center justify-center rounded-full bg-white/25 text-white backdrop-blur active:scale-95"
             >
-              <GalleryAdd size={19} />
+              <ImagePlus size={19} />
             </button>
             <button
               onClick={snap}
@@ -125,7 +125,7 @@ export default function PhotoCapture({
               aria-label="Flip preview"
               className="flex h-11 w-11 items-center justify-center rounded-full bg-white/25 text-white backdrop-blur active:scale-95"
             >
-              <Refresh size={18} />
+              <RefreshCw size={18} />
             </button>
           </div>
         )}

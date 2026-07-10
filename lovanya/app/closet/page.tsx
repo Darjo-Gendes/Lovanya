@@ -2,17 +2,17 @@
 
 import { useMemo, useState } from "react";
 import {
-  Add,
-  ArrowDown2,
-  ArrowRight2,
+  ChevronDown,
+  ChevronRight,
   Clock,
   Heart,
-  InfoCircle,
-  More,
-  SearchNormal1,
+  Info,
+  MoreHorizontal,
+  Plus,
+  Search,
   ShoppingBag,
-  SliderHorizontal,
-} from "iconsax-react";
+  SlidersHorizontal,
+} from "lucide-react";
 import AuraMessage from "@/components/AuraMessage";
 import AuraOrb from "@/components/AuraOrb";
 import ItemThumb from "@/components/ItemThumb";
@@ -121,21 +121,21 @@ export default function Wardrobe() {
               searchOpen ? "bg-rosewood text-white" : "bg-card text-ink-soft"
             }`}
           >
-            <SearchNormal1 size={20} />
+            <Search size={20} />
           </button>
           <button
             onClick={cycleSort}
             aria-label="Change sorting"
             className="flex h-[42px] w-[42px] items-center justify-center rounded-[13px] bg-card text-ink-soft shadow-soft active:scale-95"
           >
-            <SliderHorizontal size={20} />
+            <SlidersHorizontal size={20} />
           </button>
         </div>
       </div>
 
       {searchOpen && (
         <div className="relative mt-4">
-          <SearchNormal1
+          <Search
             size={16}
             className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-faint"
           />
@@ -167,7 +167,7 @@ export default function Wardrobe() {
             photo, and I&rsquo;ll handle the organizing.
           </AuraMessage>
           <Button full onClick={() => setAdding(true)}>
-            <Add size={17} /> Add my first piece
+            <Plus size={17} /> Add my first piece
           </Button>
         </div>
       ) : (
@@ -232,7 +232,7 @@ export default function Wardrobe() {
                     {stats.health.note}
                   </div>
                 </div>
-                <ArrowRight2 size={20} className="text-rosewood" />
+                <ChevronRight size={20} className="text-rosewood" strokeWidth={2.2} />
               </div>
             </div>
           )}
@@ -253,7 +253,7 @@ export default function Wardrobe() {
                 Add items, auto-categorize and tidy your wardrobe.
               </span>
             </span>
-            <ArrowRight2 size={20} className="text-white" />
+            <ChevronRight size={20} className="text-white" strokeWidth={2.2} />
           </button>
 
           {/* ===== Filter chips ===== */}
@@ -280,7 +280,7 @@ export default function Wardrobe() {
               className="flex items-center gap-1.5 text-[13px] text-ink-faint active:scale-95"
             >
               {SORT_LABEL[sort]}
-              <ArrowDown2 size={14} />
+              <ChevronDown size={14} strokeWidth={2} />
             </button>
           </div>
 
@@ -303,7 +303,7 @@ export default function Wardrobe() {
                       {item.loved ? (
                         <Heart size={13} className="text-rosewood" fill="currentColor" />
                       ) : (
-                        <More size={15} />
+                        <MoreHorizontal size={15} />
                       )}
                     </span>
                   </div>
@@ -673,7 +673,7 @@ function ItemDetailSheet({
                   : "Not worn yet"}
               </div>
               <div className="mt-1.5 flex items-center gap-2 text-[13px] capitalize text-ink-soft">
-                <InfoCircle size={16} className="text-rosewood/70" />
+                <Info size={16} className="text-rosewood/70" />
                 {item.colors.slice(0, 2).map(colorName).join(" · ")}
                 {item.modest ? " · modest" : ""}
               </div>

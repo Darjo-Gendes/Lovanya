@@ -1,21 +1,21 @@
 "use client";
 
-import { type ElementType, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Leaf } from "lucide-react";
 import {
   ArrowLeft,
-  Bag,
-  Book1,
+  BookHeart,
   Bookmark,
-  BookSaved,
+  BookOpen,
   Briefcase,
   Check,
   Heart,
   Home,
-  MagicStar,
-  Share,
-} from "iconsax-react";
+  Leaf,
+  Share2,
+  ShoppingBasket,
+  Sparkles,
+} from "lucide-react";
 import PhotoCapture from "@/components/PhotoCapture";
 import { stylist } from "@/lib/ai";
 import { downscaleImage, extractPalette } from "@/lib/color";
@@ -38,15 +38,13 @@ import { getTodayWeather } from "@/lib/weather";
 
 type Stage = "occasion" | "camera" | "analyzing" | "results" | "share";
 
-// Mixed set: Iconsax metaphors + one kept lucide (Leaf) for "casual" — Iconsax
-// 0.0.8 has no leaf/plant glyph. ElementType covers both component types.
-const OCC_ICON: Record<Occasion, ElementType> = {
+const OCC_ICON: Record<Occasion, typeof Briefcase> = {
   work: Briefcase,
-  class: Book1,
+  class: BookOpen,
   casual: Leaf,
   date: Heart,
-  event: MagicStar,
-  errands: Bag,
+  event: Sparkles,
+  errands: ShoppingBasket,
 };
 
 const ANZ_STEPS = [
@@ -375,7 +373,7 @@ export default function StyleMe() {
                 className={`anz-item ${i < anzStep ? "done" : i === anzStep ? "act" : ""}`}
               >
                 <span className="adot">
-                  <Check size={9} />
+                  <Check size={9} strokeWidth={3.5} />
                 </span>
                 {s}
               </li>
@@ -404,7 +402,7 @@ export default function StyleMe() {
               aria-label={ribboned ? "Marked as memorable" : "Mark as memorable"}
               onClick={() => setRibboned((v) => !v)}
             >
-              <Bookmark size={19} variant={ribboned ? "Bold" : "Linear"} color="#D56F88" />
+              <Bookmark size={19} fill={ribboned ? "#D56F88" : "none"} color="#D56F88" strokeWidth={1.8} />
             </button>
             <div className="res-view">
               <Sparkle size={13} color="#D56F88" /> {analysis.score} · Style Score
@@ -424,7 +422,7 @@ export default function StyleMe() {
               {analysis.whatWorks.map((w, i) => (
                 <li key={i} className="res-li">
                   <span className="ic" style={{ background: "var(--sagebg2)", color: "var(--sage2)" }}>
-                    <Check size={16} />
+                    <Check size={16} strokeWidth={2.2} />
                   </span>
                   <p>{w}</p>
                 </li>
@@ -437,7 +435,7 @@ export default function StyleMe() {
             <ul className="res-list">
               <li className="res-li">
                 <span className="ic" style={{ background: "var(--blush3)", color: "var(--pink)" }}>
-                  <MagicStar size={16} />
+                  <Sparkles size={16} strokeWidth={1.9} />
                 </span>
                 <p>{analysis.gentleThought}</p>
               </li>
@@ -449,10 +447,10 @@ export default function StyleMe() {
                 aria-label={ribboned ? "Marked as memorable" : "Mark as memorable"}
                 onClick={() => setRibboned((v) => !v)}
               >
-                <Bookmark size={22} variant={ribboned ? "Bold" : "Linear"} />
+                <Bookmark size={22} fill={ribboned ? "currentColor" : "none"} strokeWidth={1.8} />
               </button>
               <button className="abtn" onClick={saveToJournal}>
-                <BookSaved size={18} />
+                <BookHeart size={18} strokeWidth={1.9} />
                 {saved ? "View Style Card" : "Save to Journal"}
               </button>
             </div>
@@ -512,11 +510,11 @@ export default function StyleMe() {
             </div>
           </div>
           <button className="abtn" style={{ marginTop: 18 }} onClick={shareCard}>
-            <Share size={18} />
+            <Share2 size={18} strokeWidth={1.9} />
             {shareLbl}
           </button>
           <button className="abtn soft" style={{ marginTop: 11 }} onClick={() => router.push("/")}>
-            <Home size={18} />
+            <Home size={18} strokeWidth={1.9} />
             Back to Home
           </button>
           <button className="occ-skip" style={{ marginTop: 10 }} onClick={restart}>
