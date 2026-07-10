@@ -1,19 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { type ElementType, useMemo, useState } from "react";
 import Link from "next/link";
+import { Wine } from "lucide-react";
 import {
   Award,
   Bookmark,
   Calendar,
   Camera,
+  Category,
   Check,
-  LayoutGrid,
-  Search,
-  SlidersHorizontal,
-  SwatchBook,
-  Wine,
-} from "lucide-react";
+  ColorSwatch,
+  SearchNormal1,
+  SliderHorizontal,
+} from "iconsax-react";
 import ItemThumb from "@/components/ItemThumb";
 import Button from "@/components/ui/Button";
 import Chip from "@/components/ui/Chip";
@@ -100,14 +100,14 @@ export default function Journal() {
             aria-label="Feed"
             className="flex h-[42px] w-[42px] items-center justify-center rounded-[13px] bg-card text-ink-soft shadow-soft active:scale-95"
           >
-            <Calendar size={20} strokeWidth={1.7} />
+            <Calendar size={20} />
           </button>
           <button
             onClick={() => setMode("library")}
             aria-label="Library"
             className="flex h-[42px] w-[42px] items-center justify-center rounded-[13px] bg-card text-ink-soft shadow-soft active:scale-95"
           >
-            <SlidersHorizontal size={20} strokeWidth={1.7} />
+            <SliderHorizontal size={20} />
           </button>
         </div>
       </div>
@@ -191,9 +191,8 @@ function RibbonButton({
     >
       <Bookmark
         size={size}
-        strokeWidth={2}
+        variant={active ? "Bold" : "Linear"}
         className={active ? "text-rosewood" : "text-ink-faint"}
-        fill={active ? "currentColor" : "none"}
       />
     </button>
   );
@@ -299,7 +298,7 @@ function HeroCard({
 
         {look.ribboned && (
           <span className="absolute left-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-rosewood text-white shadow-lift">
-            <Bookmark size={14} fill="currentColor" />
+            <Bookmark size={14} variant="Bold" />
           </span>
         )}
 
@@ -436,13 +435,13 @@ function LibraryView({
   const facetDefs = (
     [
       { key: "occasion", name: "Occasion", icon: Wine, count: occCounts.length, tint: "#FBE0E2", tone: "#D56F88" },
-      { key: "colors", name: "Colors", icon: SwatchBook, count: famList.length, tint: "#EFE4F1", tone: "#9B6FA3" },
+      { key: "colors", name: "Colors", icon: ColorSwatch, count: famList.length, tint: "#EFE4F1", tone: "#9B6FA3" },
       { key: "ribboned", name: "Ribboned", icon: Award, count: ribbonedCount, tint: "#F4E7D6", tone: "#C79A4A" },
-      { key: "all", name: "All Looks", icon: LayoutGrid, count: checks.length, tint: "#E8F0D8", tone: "#8DA767" },
+      { key: "all", name: "All Looks", icon: Category, count: checks.length, tint: "#E8F0D8", tone: "#8DA767" },
     ] as {
       key: Facet;
       name: string;
-      icon: typeof Bookmark;
+      icon: ElementType;
       count: number;
       tint: string;
       tone: string;
@@ -479,7 +478,7 @@ function LibraryView({
     <div className="mt-5">
       {/* ===== Search ===== */}
       <div className="relative">
-        <Search
+        <SearchNormal1
           size={16}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-faint"
         />
@@ -734,7 +733,7 @@ function LookSheet({
           <Button variant="soft" full onClick={() => toggleRibbon(look.id)}>
             <Bookmark
               size={16}
-              fill={look.ribboned ? "currentColor" : "none"}
+              variant={look.ribboned ? "Bold" : "Linear"}
             />
             {look.ribboned ? "Marked as memorable" : "Mark as memorable"}
           </Button>

@@ -1,13 +1,19 @@
 "use client";
 
+import { type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookHeart, Home, Plus, Shirt, User } from "lucide-react";
+import { Shirt } from "lucide-react";
+import { Add, BookSaved, Home, User } from "iconsax-react";
 
 export default function BottomNav() {
   const pathname = usePathname();
 
-  const tab = (href: string, label: string, Icon: typeof Home) => {
+  const tab = (
+    href: string,
+    label: string,
+    renderIcon: (active: boolean) => ReactNode
+  ) => {
     const active = pathname === href;
     return (
       <Link
@@ -16,7 +22,7 @@ export default function BottomNav() {
           active ? "text-rosewood" : "text-ink-faint"
         }`}
       >
-        <Icon size={23} strokeWidth={active ? 2.2 : 1.8} />
+        {renderIcon(active)}
         <span className={`text-[11px] ${active ? "font-semibold" : "font-medium"}`}>
           {label}
         </span>
@@ -30,8 +36,14 @@ export default function BottomNav() {
     <nav className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-[430px]">
       <div className="relative h-[84px] rounded-t-[28px] bg-card shadow-[0_-8px_26px_-14px_rgba(206,150,150,0.45)]">
         <div className="absolute inset-x-0 top-3.5 flex items-start justify-around px-3.5">
-          {tab("/", "Home", Home)}
-          {tab("/closet", "Wardrobe", Shirt)}
+          {tab("/", "Home", (a) => (
+            <Home size={23} variant={a ? "Bold" : "Linear"} />
+          ))}
+          {/* Wardrobe stays on lucide Shirt — Iconsax 0.0.8 has no apparel glyph.
+              Active state uses a stroke-weight bump instead of Bold/Linear. */}
+          {tab("/closet", "Wardrobe", (a) => (
+            <Shirt size={23} strokeWidth={a ? 2.2 : 1.8} />
+          ))}
 
           <Link
             href="/check"
@@ -44,7 +56,7 @@ export default function BottomNav() {
               }`}
               style={{ background: "linear-gradient(135deg,#e48ea0,#ce6c84)" }}
             >
-              <Plus size={24} strokeWidth={2.4} />
+              <Add size={24} />
             </span>
             <span
               className={`mt-1.5 text-[11px] font-medium ${
@@ -55,8 +67,12 @@ export default function BottomNav() {
             </span>
           </Link>
 
-          {tab("/journal", "Journal", BookHeart)}
-          {tab("/profile", "Profile", User)}
+          {tab("/journal", "Journal", (a) => (
+            <BookSaved size={23} variant={a ? "Bold" : "Linear"} />
+          ))}
+          {tab("/profile", "Profile", (a) => (
+            <User size={23} variant={a ? "Bold" : "Linear"} />
+          ))}
         </div>
       </div>
     </nav>

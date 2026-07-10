@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
-import { Check, RefreshCw, Sparkles, Wand2 } from "lucide-react";
+import { Check, Magicpen, MagicStar, Refresh } from "iconsax-react";
 import AuraMessage from "@/components/AuraMessage";
 import AuraOrb from "@/components/AuraOrb";
 import ItemThumb from "@/components/ItemThumb";
@@ -147,7 +147,7 @@ export default function StyleMe() {
       {!recs && !thinking && (
         <div className="mt-8">
           <Button full onClick={() => compose()}>
-            <Wand2 size={17} /> Compose my look
+            <Magicpen size={17} /> Compose my look
           </Button>
         </div>
       )}
@@ -231,7 +231,7 @@ export default function StyleMe() {
                 <ul className="mt-2.5 space-y-2">
                   {current.why.map((w, i) => (
                     <li key={i} className="flex gap-2.5 text-[13.5px] leading-snug">
-                      <Sparkles size={14} className="mt-0.5 shrink-0 text-gold" />
+                      <MagicStar size={14} className="mt-0.5 shrink-0 text-gold" />
                       {w}
                     </li>
                   ))}
@@ -243,7 +243,7 @@ export default function StyleMe() {
 
             <div className="flex gap-2.5 pb-2">
               <Button variant="soft" className="flex-1" onClick={another}>
-                <RefreshCw size={16} /> Another
+                <Refresh size={16} /> Another
               </Button>
               <Button className="flex-1" onClick={wear}>
                 <Check size={17} /> I&rsquo;ll wear this

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "iconsax-react";
 import AuraOrb from "@/components/AuraOrb";
 import Button from "@/components/ui/Button";
 import Chip from "@/components/ui/Chip";
