@@ -29,11 +29,16 @@ lovanya-app.html` (single-file app) and `lovanya/design/claude-ui/CLAUDE.md`
   quiet metadata. Text never competes at equal weight.
 - Eyebrow labels: 10px/600, letter-spacing 1.5px, uppercase, `#CE6E86`.
 
-## Icon law (decided 2026-07-09)
+## Icon law (lucide current; Iconsax deferred 2026-07-10)
 
-- **Iconsax** (`iconsax-react`, MIT) is the app's utility icon language.
-  Variant semantics: **Linear = resting**, **Bold = active/selected** (nav
-  active tab, ribboned state). Sizes on a 16/20/24 grid; color via tokens.
+- **lucide-react** is the app's utility icon language. Active state = heavier
+  `strokeWidth` (≈1.8 resting / 2.2 active). Sizes on a 16/20/24 grid; color
+  inherits `currentColor` from `text-*` tokens.
+- **Iconsax was trialed and reverted (2026-07-10):** `iconsax-react@0.0.8` is
+  too immature — missing common glyphs (no leaf/apparel/wine) and its icons
+  don't inherit `currentColor`, so white-on-pink/rosewood elements rendered in
+  its default gray → broke every icon. Revisit ONLY with a mature Iconsax
+  package that fixes both; until then, do not reintroduce it.
 - **Hand-drawn brand SVGs stay** and outrank Iconsax: the 4-point sparkle
   motif, hangers, hearts, flower deco — these ARE brand warmth. Never replace
   them with library glyphs; never mix a third icon set.
