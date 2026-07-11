@@ -52,6 +52,19 @@ RENDER: str = os.environ.get("LOVANYA_RENDER", "on")
 # the real garment), "balanced" (img2img, flatter), "idealized" (txt2img).
 PRODUCT_MODE: str = os.environ.get("LOVANYA_PRODUCT_MODE", "faithful")
 
+# --- Cloud product shots (Nano Banana pivot, 2026-07-10) ----------------------
+# Verdict from the AFK batch review: stage-compounding (DINO box -> SAM2 mask
+# -> SDXL polish) can't reach catalog quality — it misses layered garments and
+# faithfully polishes bad crops. Industry practice and VTOFF research both use
+# ONE generative call conditioned on the worn photo, so:
+# "gemini" = Nano Banana single-call reconstruction (scripts/gemini_shots.py);
+# "local"  = the old on-GPU SDXL chain, kept as the zero-token fallback.
+PRODUCT_BACKEND: str = os.environ.get("LOVANYA_PRODUCT_BACKEND", "gemini")
+# "auto" = walk the preference list in gemini_shots.py, demoting models that
+# reject the key's tier at runtime; or pin an exact model id to freeze it.
+GEMINI_IMAGE_MODEL: str = os.environ.get("LOVANYA_GEMINI_IMAGE_MODEL", "auto")
+GEMINI_ANALYSIS_MODEL: str = os.environ.get("LOVANYA_GEMINI_ANALYSIS_MODEL", "auto")
+
 # Box-prompted SAM2 for precise garment cutouts (app/cutout.py). Small, on-GPU.
 # Use the non-"-hf" repo: it ships the HF processor config + converted weights
 # (the "-hf" repo is incomplete — raw weights, no processor).
