@@ -33,6 +33,10 @@ pipeline/review/sam2/*.png
 pipeline/review/wardrobe/*.png
 pipeline/review/garments/
 pipeline/review/garments_gemini/
+pipeline/review/garments_flux/
+pipeline/review/garments_omini/
+# vendored demo assets (heavy, not needed to run)
+pipeline/vendor/*/assets/
 # GPU-side generated review images
 # cached font binaries for the Artifact build (regenerate via build-artifact.py)
 lovanya/scripts/.font-cache/
