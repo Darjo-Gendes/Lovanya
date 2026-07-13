@@ -51,6 +51,7 @@ BASE_REPO = "YuCollection/FLUX.1-schnell-Diffusers"
 
 CATEGORIES = ("hijab", "top", "bottom", "dress", "outerwear", "bag", "shoes", "accessory")
 RIGID = ("bag", "shoes", "accessory")
+SEED = int(os.environ.get("LOVANYA_SEED", "42"))
 
 SHADES = {
     "black": (20, 18, 16), "dark chocolate brown": (60, 42, 30),
@@ -305,7 +306,7 @@ def main() -> None:
             condition = Condition("subject", cond_img, position_delta=(0, 32))
             scale = 1.3 if g.get("category") in RIGID else 1.0
             t = time.time()
-            seed_everything(42)
+            seed_everything(SEED)
             img = generate(pipe, prompt=build_prompt(g, j.get("shade", "")),
                            conditions=[condition], condition_scale=scale,
                            num_inference_steps=8, height=512, width=512).images[0]

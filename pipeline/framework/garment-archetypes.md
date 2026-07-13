@@ -31,29 +31,49 @@ edge (baby hem, eyelash fringe, laser-cut) · pattern.
 
 ## top
 
-Checklist: type (button-up shirt/kemeja, blouse, tee, knit sweater, sweater
-vest, tunic) · collar/neckline · sleeve length + cuff · fit (slim, relaxed,
-oversized) · length (cropped, hip, tunic) · closure · pattern.
+Checklist: type (button-up shirt/kemeja, blouse, tee, hoodie, knit sweater,
+sweater vest, tank/sleeveless, tunic, mesh/sheer statement top) ·
+collar/neckline (INCLUDING "none — sleeveless/crew, no collar") · sleeve
+length + cuff (sleeveless / short / long) · fit (slim, relaxed, oversized) ·
+length (cropped, hip, tunic) · closure · pattern.
+
+DECISION RULE — do not default to "kemeja" (button-up shirt): a button-up
+shirt REQUIRES a visible shirt collar and a full button placket down the
+front. If the neckline is a plain crew/round neck with NO collar and NO
+visible buttons, it is a tee, hoodie, or knit top — never a kemeja. Sleeveless
+= tank/sweater-vest/mesh top, never a long-sleeve archetype.
 
 - **classic button-up shirt (kemeja)** — shirt collar, full button placket, cuffed sleeves;
   render: "a classic button-up shirt with shirt collar, full front button placket, long cuffed sleeves, relaxed fit"
 - **band-collar blouse** — collarless mandarin band, clean placket;
   render: "a band-collar blouse with mandarin neckline, concealed placket, long sleeves, flowy relaxed fit"
-- **oversized cotton tee** — drop shoulders, ribbed crew neck;
+- **oversized cotton tee** — crew neck, NO collar, NO buttons, drop shoulders;
   render: "an oversized cotton t-shirt with ribbed crew neck, drop shoulders, straight boxy body"
+- **hoodie** — crew-less hood, drawstring at the neck, kangaroo pocket, ribbed cuffs/hem;
+  render: "a relaxed pullover hoodie with an attached hood, drawstring at the neckline, kangaroo pouch pocket, ribbed cuffs and hem"
 - **ribbed knit sweater** — visible rib texture, ribbed hems;
   render: "a ribbed knit sweater with crew neck, long sleeves, ribbed cuffs and hem, relaxed fit"
 - **sweater vest** — sleeveless V-neck knit, worn layered over a shirt;
   render: "a sleeveless V-neck sweater vest in fine knit, ribbed trims, straight hip-length body"
+- **tank / sleeveless top** — no sleeves, no collar, simple crew or scoop neck;
+  render: "a sleeveless tank top with a simple scoop neckline, no collar, fitted straight body"
+- **mesh / sheer statement top** — net-like or sheer knit, visible open-weave texture, artisan/editorial cut;
+  render: "an artisan sheer mesh knit top, open-weave net-like texture, relaxed statement silhouette"
 - **flowy tunic** — longline, side slits, often worn over trousers;
   render: "a flowy tunic top, longline body reaching upper thigh, long sleeves, soft drapey fabric, side slits"
 
 ## bottom
 
-Checklist: type (trousers, jeans, skirt, culottes) · waist (high/mid, belt
-loops, belt) · leg or skirt shape (wide, straight, tapered, pleated, A-line)
-· length (full, ankle, midi, maxi) · front details (crease, pleats, fly) ·
-pattern.
+Checklist: type (trousers, jeans, shorts, skirt, culottes) · waist (high/mid,
+belt loops, belt) · leg or skirt shape (wide, straight, tapered, pleated,
+A-line) · length (full, ankle, midi, maxi, ABOVE-KNEE) · front details
+(crease, pleats, fly) · pattern.
+
+DECISION RULE — LENGTH FROM SKIN, NOT DEFAULT: if the photo shows bare leg
+skin from the knee down (or most of the leg), the item is SHORTS, not
+full-length trousers — do not default to "trousers" when skin exposure says
+otherwise. Skirts show a continuous hem with no separate leg lines; trousers
+and shorts show two distinct pant legs.
 
 - **high-waist wide-leg trousers** — clean straight-to-wide fall from a high waist;
   render: "high-waisted wide-leg trousers with a clean straight fall, front crease, full length, smooth tailored fabric"
@@ -61,6 +81,10 @@ pattern.
   render: "straight-leg tailored trousers with pressed front creases, high waist with belt loops, ankle-full length"
 - **relaxed jeans** — visible denim weave, five-pocket;
   render: "relaxed straight-leg jeans in washed denim, five-pocket styling, full length"
+- **tailored shorts** — same cut as tailored trousers but ending above the knee, bare leg below;
+  render: "tailored high-waisted shorts with a pressed front crease, ending above the knee, smooth fabric"
+- **casual shorts** — soft cotton/denim, relaxed fit, above-knee;
+  render: "relaxed casual shorts in soft cotton, straight fit, ending above the knee"
 - **pleated midi skirt** — accordion/knife pleats, midi length;
   render: "a pleated midi skirt with fine accordion pleats falling straight from the waistband"
 - **A-line maxi skirt** — smooth flare to floor;
@@ -87,20 +111,32 @@ pattern.
 
 ## outerwear
 
-Checklist: type (blazer, trench/coat, cardigan, jacket, puffer) · breast
-style (single/double) + BUTTON COUNT + button color · lapel/collar type
-(notch, peak, shawl, collarless) · length (hip, mid-thigh, knee, longline) ·
-shoulder (structured / relaxed drop) · pockets (flap, patch, welt) · belt ·
-pattern.
+Checklist: type (blazer, trench/coat, cardigan, vest, jacket, puffer) ·
+breast style (single/double) + BUTTON COUNT + button color · lapel/collar
+type (notch, peak, shawl, OR "collarless — no lapels") · sleeves (long /
+SLEEVELESS) · material finish (structured woven with slight sheen, vs soft
+matte knit) · length (hip, mid-thigh, knee, longline) · shoulder (structured
+/ relaxed drop) · pockets (flap, patch, welt, none) · belt · pattern.
 
-- **longline single-breasted blazer** — THE modest-fashion staple; mid-thigh+,
-  relaxed shoulders; render: "a longline single-breasted blazer, notch lapels, one-or-two button front, flap pockets, relaxed straight cut reaching mid-thigh"
-- **oversized boxy blazer** — wide drop shoulders, hip-length;
+DECISION RULE — BLAZER vs CARDIGAN vs VEST (the most-missed call): a blazer
+REQUIRES a visible lapel/collar (notch, peak, or shawl) and a structured,
+slightly stiff woven fabric with some sheen. If the garment is COLLARLESS
+(no lapel at all) and made of soft matte knit, it is a CARDIGAN, not a
+blazer — regardless of length. If it is ALSO sleeveless, it is a VEST
+(sleeveless cardigan or gilet), not a blazer or a full cardigan. Check
+sleeves explicitly: no sleeves visible = vest.
+
+- **longline single-breasted blazer** — THE modest-fashion staple; visible
+  notch lapels, structured woven fabric with sheen, mid-thigh+, relaxed
+  shoulders; render: "a longline single-breasted blazer, notch lapels, one-or-two button front, flap pockets, relaxed straight cut reaching mid-thigh"
+- **oversized boxy blazer** — wide drop shoulders, hip-length, visible lapels;
   render: "an oversized boxy blazer with wide drop shoulders, notch lapels, single-button front, hip length"
 - **double-breasted trench coat** — storm flap, waist belt, 6+ buttons;
   render: "a classic double-breasted trench coat with wide lapels, two button columns, waist belt with buckle, knee length"
-- **long knit cardigan** — no buttons or few, soft knit, longline;
-  render: "a long open-front knit cardigan, soft ribbed knit, no closures, relaxed straight fall to mid-thigh"
+- **long knit cardigan** — COLLARLESS (no lapels), long sleeves, no buttons or few, soft matte knit, longline;
+  render: "a long open-front knit cardigan, collarless, soft matte ribbed knit, no closures, relaxed straight fall to mid-thigh"
+- **sleeveless cardigan vest** — COLLARLESS, NO sleeves, soft matte knit or light woven, often one patch pocket, open front;
+  render: "a sleeveless open-front cardigan vest, collarless, soft matte knit, one patch pocket, relaxed straight body"
 - **denim jacket** — trucker style, metal buttons;
   render: "a classic denim trucker jacket with metal shank buttons, chest flap pockets, hip length"
 - **puffer jacket** — horizontal quilting;

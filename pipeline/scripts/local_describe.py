@@ -50,12 +50,16 @@ NEVER report (not clothing): walls, curtains, bed, bedding, pillows, furniture, 
 
 Recall sweeps - check each deliberately, including partially hidden items:
 - head: hijab/headscarf (almost always present here)
-- torso: EVERY genuine layer separately (shirt/kemeja under a sweater or vest, top under a blazer/coat)
+- torso: EVERY genuine layer separately (shirt/kemeja under a sweater or vest, top under a blazer/coat). Also check for a SECOND outer layer - sometimes an open blazer or cardigan is worn over another top; look past the outermost layer for one underneath, and past an inner top for an open layer over it.
 - lower body: the person IS wearing something below the waist - trousers, skirt, or a dress. Find it and include it even if an open coat hides most of it and only a sliver shows between or below the coat (mark it occluded). Only skip if the photo is cropped above the waist.
-- hands/wrists: watch, bracelets - include even if only a few pixels of a band or glint on the wrist
+- hands/wrists: watch, bracelets
 - face/ears/neck: glasses, earrings, necklace
 - carried: bag - box the bag's BODY (the pouch itself, usually at hip/waist height); include the strap only as part of that box, NEVER box the strap alone. Shoes if visible.
 A hand, phone, strap, or hair crossing OVER a garment does not split it - one garment, one box around everything that belongs to it. When unsure if something is a separate layer, choose FEWER items.
+
+ACCESSORY HALLUCINATION GUARD (jewelry/watches are the most over-reported items): only report a watch, bracelet, or necklace if you see UNAMBIGUOUS physical evidence - a distinct band circling the wrist, a visible chain around the neck, a case on the arm. Do NOT infer an accessory from a sleeve cuff, a fold in fabric, a hijab edge near the neck, or "wrists/necks usually have something." If you are not confident the item is actually present, leave it out entirely - an omission is far better than a hallucinated accessory.
+
+DUPLICATE GUARD: if two candidate boxes are the same category, same rough position, and clearly the same physical object (e.g. one wristband seen from two angles, or a slightly re-detected box), report it ONCE only - do not emit near-identical boxes for a single real-world item.
 
 Return a JSON array only. Each element:
 {"item": "short name", "category": "hijab|top|bottom|dress|outerwear|bag|shoes|accessory", "bbox_2d": [x1, y1, x2, y2], "occluded": "no | partially (by what)"}
@@ -92,6 +96,43 @@ def taxonomy_sections() -> dict[str, str]:
     for m in re.finditer(r"^## (\w+)\n(.*?)(?=^## |\Z)", text, re.M | re.S):
         sections[m.group(1).strip()] = m.group(2).strip()
     return sections
+
+
+# ------------------------------------------------------------------ dedupe --
+def _box_iou(a, b) -> float:
+    try:
+        ax1, ay1, ax2, ay2 = [float(v) for v in a]
+        bx1, by1, bx2, by2 = [float(v) for v in b]
+    except (TypeError, ValueError):
+        return 0.0
+    ix1, iy1 = max(ax1, bx1), max(ay1, by1)
+    ix2, iy2 = min(ax2, bx2), min(ay2, by2)
+    iw, ih = max(0.0, ix2 - ix1), max(0.0, iy2 - iy1)
+    inter = iw * ih
+    if inter <= 0:
+        return 0.0
+    area_a = max(0.0, ax2 - ax1) * max(0.0, ay2 - ay1)
+    area_b = max(0.0, bx2 - bx1) * max(0.0, by2 - by1)
+    union = area_a + area_b - inter
+    return inter / union if union > 0 else 0.0
+
+
+def dedupe_detections(detected: list[dict], iou_thresh: float = 0.55) -> list[dict]:
+    """The LLM's own duplicate-guard wording is a soft signal at best - this is
+    the reliable code-level backstop (caught 2 real duplicates in the first
+    production batch: two wristbands, two bracelets, both same category +
+    near-identical boxes)."""
+    kept: list[dict] = []
+    for d in detected:
+        box = d.get("bbox_2d")
+        is_dup = False
+        for k in kept:
+            if k.get("category") == d.get("category") and _box_iou(box, k.get("bbox_2d")) >= iou_thresh:
+                is_dup = True
+                break
+        if not is_dup:
+            kept.append(d)
+    return kept
 
 
 # ------------------------------------------------------------------ parsing --
@@ -201,7 +242,10 @@ def describe(stem: str) -> list[dict]:
     raw = ask(str(img_path), DETECT_PROMPT, max_new_tokens=700)
     detected = [d for d in parse_array(raw)
                 if d.get("category") in CATEGORIES and not d.get("_parse_error")]
-    print(f"pass1: {len(detected)} items in {time.time()-t0:.0f}s: "
+    before = len(detected)
+    detected = dedupe_detections(detected)
+    dedupe_note = f" ({before - len(detected)} duplicate(s) merged)" if len(detected) < before else ""
+    print(f"pass1: {len(detected)} items in {time.time()-t0:.0f}s{dedupe_note}: "
           + ", ".join(d.get("item", "?") for d in detected), flush=True)
     if not detected:
         print(f"  pass1 raw output was: {raw[:400]}", flush=True)
