@@ -162,3 +162,7 @@ watch: case shape + dial color + band type · belt: width + buckle shape.
 - **delicate chain necklace**; render: "a delicate fine-chain necklace with small minimal pendant, polished finish"
 - **slim leather belt**; render: "a slim leather belt with small polished buckle, clean minimal strap"
 - **stud earrings**; render: "a pair of small stud earrings, polished metal, minimal design"
+- **chain bracelet** — worn on the WRIST, not a waist belt; render: "a delicate chain-link bracelet, fine polished metal, small clasp, shown laid flat in a gentle curve"
+- **bangle** — rigid wrist ring; render: "a slim rigid bangle bracelet, smooth polished metal, single circular band"
+- **beaded bracelet**; render: "a beaded bracelet, small round beads on an elastic strand, shown laid flat in a circle"
+- **cuff bracelet**; render: "a wide open cuff bracelet, smooth metal, C-shaped rigid band worn on the wrist"

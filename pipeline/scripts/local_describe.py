@@ -252,9 +252,13 @@ def describe(stem: str) -> list[dict]:
 
 def main() -> None:
     stems = [a for a in sys.argv[1:] if not a.startswith("--")] or ["b2_r1c4"]
+    force = "--force" in sys.argv
     for stem in stems:
         if not (SAMPLES / f"{stem}.jpg").exists():
             print(f"  {stem}: sample missing", flush=True)
+            continue
+        if not force and (OUT / f"{stem}.json").exists():
+            print(f"  {stem}: description cached, skipping", flush=True)
             continue
         describe(stem)
 
