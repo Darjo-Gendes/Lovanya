@@ -115,9 +115,16 @@ medium, large) · top/closure (flap, zip, open, drawstring, clasp) · strap
 (single/double, slim/wide, chain/leather, short handle vs long crossbody) ·
 hardware color (gold, silver, brass, none).
 
+CANONICAL COMPLETION RULE (bags): rigid leather goods are identified by their
+hardware and material — when these are not clearly visible in the photo,
+inherit the archetype's canonical spec below and flag it "(inferred)". A
+plausible canonical detail beats a hedged omission.
+
 - **box-flap crossbody** — structured LANDSCAPE rectangle (wider than tall,
-  ~4:3), front flap, clasp, long slim strap;
-  render: "a structured box-flap crossbody bag, wide landscape rectangle clearly wider than tall, full-width front flap with metal clasp, long slim shoulder strap"
+  ~4:3), front flap, clasp, long slim strap; canonical: smooth structured
+  leather with a slight sheen, GOLD metal clasp lock centered on the flap,
+  crisp edges holding a firm box shape;
+  render: "a structured box-flap crossbody bag in smooth leather, wide landscape rectangle clearly wider than tall, firm crisp edges, full-width front flap with a gold metal clasp lock, long slim leather shoulder strap"
 - **saddle bag** — curved-bottom flap, landscape;
   render: "a saddle bag with rounded curved bottom, landscape orientation, curved front flap, medium crossbody strap"
 - **structured tote** — PORTRAIT or square, open top, double handles;
