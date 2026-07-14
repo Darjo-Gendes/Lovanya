@@ -36,6 +36,8 @@ def _thumb(path: Path, mx: int = 420) -> str:
 
 
 def main() -> None:
+    conf_path = SHOTS.parent / "confidence.json"
+    conf = json.loads(conf_path.read_text(encoding="utf-8")) if conf_path.exists() else {}
     stems = sorted({p.name.rsplit("_", 2)[0] for p in SHOTS.glob("*.png")})
     outfits = []
     categories = set()
@@ -50,6 +52,7 @@ def main() -> None:
             g = garments[i] if i < len(garments) else {}
             cat = g.get("category", "?")
             categories.add(cat)
+            c = conf.get(p.stem, {})
             items.append({
                 "id": p.stem,
                 "img": _thumb(p),
@@ -57,6 +60,9 @@ def main() -> None:
                 "archetype": g.get("archetype", ""),
                 "color": g.get("color", ""),
                 "category": cat,
+                "conf_band": c.get("review_band", "high"),
+                "conf_score": c.get("review_score", 1.0),
+                "conf_flags": [f for f in c.get("flags", []) if "no automatic" not in f],
             })
         outfits.append({
             "stem": stem,
@@ -100,6 +106,13 @@ cursor:pointer;font-size:14px;line-height:1}}
 .votes button.active-down{{background:#cf5c5c;border-color:#cf5c5c;color:#fff}}
 .note{{width:100%;margin-top:6px;font-size:11px;padding:5px 7px;border-radius:6px;
 border:1px solid #e2dad6;font-family:inherit;resize:vertical;min-height:30px}}
+.conf{{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;
+margin-top:5px;letter-spacing:.02em}}
+.conf.high{{background:#e3f4ea;color:#2c7a52}}
+.conf.medium{{background:#fdf3e0;color:#9a6a1e}}
+.conf.low{{background:#fbe4e4;color:#b33}}
+.flag{{font-size:9.5px;color:#b33;margin-top:4px;line-height:1.3}}
+.card.flagged{{border-color:#e8a33d;box-shadow:0 0 0 2px #fbe9cf}}
 .hidden{{display:none !important}}
 .toast{{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1c1714;
 color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .2s;
@@ -114,9 +127,15 @@ pointer-events:none}}
   <select id=catFilter><option value="">All categories</option></select>
   <select id=viewFilter>
     <option value="all">Show all</option>
+    <option value="flagged">⚠ Flagged by AI only</option>
     <option value="down">Show 👎 only</option>
     <option value="unrated">Show unrated only</option>
   </select>
+  <select id=sortFilter>
+    <option value="outfit">Group by outfit</option>
+    <option value="conf">Lowest confidence first</option>
+  </select>
+  <span class=stat>⚠ <b id=statFlag>0</b> flagged</span>
   <button id=exportBtn class=primary>Export results</button>
   <button id=resetBtn>Reset</button>
 </div>
@@ -130,49 +149,85 @@ let state = JSON.parse(localStorage.getItem(KEY) || "{{}}");
 
 function save() {{ localStorage.setItem(KEY, JSON.stringify(state)); }}
 
+function cardHTML(it, outfit) {{
+  const st = state[it.id] || {{}};
+  const flagged = (it.conf_flags && it.conf_flags.length) || it.conf_band === 'low';
+  let cls = 'card';
+  if (st.rating) cls += ' ' + st.rating;
+  if (flagged) cls += ' flagged';
+  const flagHtml = (it.conf_flags && it.conf_flags.length)
+    ? `<div class=flag>⚠ ${{it.conf_flags.join('<br>⚠ ')}}</div>` : '';
+  const color = it.color ? ' · ' + it.color.replace(/\\s*\\(?~?#?[0-9a-fA-F]{{6}}\\)?/,'') : '';
+  return `
+    <div class="${{cls}}" data-id="${{it.id}}">
+      <img src="${{it.img}}">
+      <div class=lbl><span class=cat>${{it.category}} · ${{outfit.stem}}</span>
+        <b>${{it.archetype || it.item}}</b>${{color}}
+      </div>
+      <span class="conf ${{it.conf_band}}">AI ${{it.conf_band}} ${{Math.round(it.conf_score*100)}}%</span>
+      ${{flagHtml}}
+      <div class=votes>
+        <button data-v="up" class="${{st.rating==='up'?'active-up':''}}">👍</button>
+        <button data-v="down" class="${{st.rating==='down'?'active-down':''}}">👎</button>
+      </div>
+      <textarea class=note placeholder="what's wrong / correct type...">${{st.note||''}}</textarea>
+    </div>`;
+}}
+
+function passesFilter(it, catF, viewF) {{
+  const st = state[it.id] || {{}};
+  const flagged = (it.conf_flags && it.conf_flags.length) || it.conf_band === 'low';
+  if (catF && it.category !== catF) return false;
+  if (viewF === 'down' && st.rating !== 'down') return false;
+  if (viewF === 'unrated' && st.rating) return false;
+  if (viewF === 'flagged' && !flagged) return false;
+  return true;
+}}
+
 function render() {{
   const catF = document.getElementById('catFilter').value;
   const viewF = document.getElementById('viewFilter').value;
+  const sortF = document.getElementById('sortFilter').value;
   const wrap = document.getElementById('wrap');
   wrap.innerHTML = '';
-  let total = 0, reviewed = 0, up = 0, down = 0;
+  let total = 0, reviewed = 0, up = 0, down = 0, flag = 0;
 
-  for (const outfit of OUTFITS) {{
-    const cardsHtml = [];
-    for (const it of outfit.items) {{
-      total++;
-      const st = state[it.id] || {{}};
-      if (st.rating === 'up') {{ up++; reviewed++; }}
-      else if (st.rating === 'down') {{ down++; reviewed++; }}
-      if (catF && it.category !== catF) continue;
-      if (viewF === 'down' && st.rating !== 'down') continue;
-      if (viewF === 'unrated' && st.rating) continue;
-      const cls = st.rating ? ('card ' + st.rating) : 'card';
-      cardsHtml.push(`
-        <div class="${{cls}}" data-id="${{it.id}}">
-          <img src="${{it.img}}">
-          <div class=lbl><span class=cat>${{it.category}}</span>
-            <b>${{it.archetype || it.item}}</b>${{it.color ? ' · ' + it.color.replace(/\\s*\\(?~?#?[0-9a-fA-F]{{6}}\\)?/,'') : ''}}
-          </div>
-          <div class=votes>
-            <button data-v="up" class="${{st.rating==='up'?'active-up':''}}">👍</button>
-            <button data-v="down" class="${{st.rating==='down'?'active-down':''}}">👎</button>
-          </div>
-          <textarea class=note placeholder="what's wrong / correct type...">${{st.note||''}}</textarea>
-        </div>`);
+  // global stats (all items, unfiltered)
+  for (const outfit of OUTFITS) for (const it of outfit.items) {{
+    total++;
+    const st = state[it.id] || {{}};
+    if (st.rating === 'up') {{ up++; reviewed++; }}
+    else if (st.rating === 'down') {{ down++; reviewed++; }}
+    if ((it.conf_flags && it.conf_flags.length) || it.conf_band === 'low') flag++;
+  }}
+
+  if (sortF === 'conf') {{
+    // flat list, lowest confidence (and flagged) first
+    const all = [];
+    for (const outfit of OUTFITS) for (const it of outfit.items)
+      if (passesFilter(it, catF, viewF)) all.push({{it, outfit}});
+    all.sort((a, b) => a.it.conf_score - b.it.conf_score);
+    const cards = all.map(x => cardHTML(x.it, x.outfit)).join('');
+    if (cards) wrap.insertAdjacentHTML('beforeend',
+      `<section class=samp style="grid-template-columns:1fr"><div class=pairs>${{cards}}</div></section>`);
+  }} else {{
+    for (const outfit of OUTFITS) {{
+      const cards = outfit.items.filter(it => passesFilter(it, catF, viewF))
+        .map(it => cardHTML(it, outfit)).join('');
+      if (!cards) continue;
+      wrap.insertAdjacentHTML('beforeend', `
+        <section class=samp>
+          <div><div class=stemtag>${{outfit.stem}}</div><img class=src src="${{outfit.src}}"></div>
+          <div class=pairs>${{cards}}</div>
+        </section>`);
     }}
-    if (cardsHtml.length === 0) continue;
-    wrap.insertAdjacentHTML('beforeend', `
-      <section class=samp>
-        <div><div class=stemtag>${{outfit.stem}}</div><img class=src src="${{outfit.src}}"></div>
-        <div class=pairs>${{cardsHtml.join('')}}</div>
-      </section>`);
   }}
 
   document.getElementById('statTotal').textContent = total;
   document.getElementById('statReviewed').textContent = reviewed;
   document.getElementById('statUp').textContent = up;
   document.getElementById('statDown').textContent = down;
+  document.getElementById('statFlag').textContent = flag;
 }}
 
 document.getElementById('wrap').addEventListener('click', e => {{
@@ -210,7 +265,9 @@ document.getElementById('exportBtn').onclick = () => {{
     if (!st || !st.rating) continue;
     rows.push({{stem: outfit.stem, id: it.id, category: it.category,
       item: it.item, archetype: it.archetype, color: it.color,
-      rating: st.rating, note: st.note || ''}});
+      rating: st.rating, note: st.note || '',
+      ai_conf_band: it.conf_band, ai_conf_score: it.conf_score,
+      ai_flags: it.conf_flags || []}});
   }}
   const payload = {{exported_at: new Date().toISOString(),
     total: rows.length, up: rows.filter(r=>r.rating==='up').length,
@@ -231,6 +288,7 @@ document.getElementById('resetBtn').onclick = () => {{
 }};
 document.getElementById('catFilter').onchange = render;
 document.getElementById('viewFilter').onchange = render;
+document.getElementById('sortFilter').onchange = render;
 
 for (const c of CATS) {{
   const o = document.createElement('option'); o.value = c; o.textContent = c;

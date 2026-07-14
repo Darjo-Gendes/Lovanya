@@ -1,0 +1,1938 @@
+{
+  "b2_r1c4_0_hijab": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r1c4_1_top": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 53.8,
+      "rendered_rgb": [
+        223,
+        215,
+        197
+      ],
+      "intended_rgb": [
+        255,
+        248,
+        225
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r1c4_2_outerwear": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": {
+      "delta": 31.0,
+      "rendered_rgb": [
+        185,
+        162,
+        137
+      ],
+      "intended_rgb": [
+        210,
+        180,
+        140
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.94,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r1c4_3_bottom": {
+    "perception": {
+      "score": 0.8,
+      "band": "high",
+      "reasons": [
+        "occluded (partially (by coat))",
+        "3 attributes not visible"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 0.55,
+        "completeness": 0.64
+      }
+    },
+    "color": {
+      "delta": 30.0,
+      "rendered_rgb": [
+        231,
+        231,
+        231
+      ],
+      "intended_rgb": [
+        255,
+        248,
+        225
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.8,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r1c4_4_bag": {
+    "perception": {
+      "score": 0.93,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 0.87,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.93,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r2c4_0_top": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r2c4_1_bottom": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.94,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r3c1_0_top": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r3c1_1_outerwear": {
+    "perception": {
+      "score": 0.88,
+      "band": "high",
+      "reasons": [
+        "4 attributes not visible"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.52
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.88,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r3c1_2_bottom": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r3c1_3_bag": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r3c1_4_accessory": {
+    "perception": {
+      "score": 0.58,
+      "band": "medium",
+      "reasons": [
+        "small crop (1.0% of frame)"
+      ],
+      "signals": {
+        "size": 0.16,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 308.4,
+      "rendered_rgb": [
+        223,
+        223,
+        223
+      ],
+      "intended_rgb": [
+        62,
+        39,
+        35
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.58,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r3c1_5_accessory": {
+    "perception": {
+      "score": 0.52,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.03,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 50.2,
+      "rendered_rgb": [
+        221,
+        221,
+        221
+      ],
+      "intended_rgb": [
+        192,
+        192,
+        192
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.52,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r3c6_0_top": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.94,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r3c6_1_bottom": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r4c4_0_hijab": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r4c4_1_top": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": {
+      "delta": 68.7,
+      "rendered_rgb": [
+        39,
+        39,
+        41
+      ],
+      "intended_rgb": [
+        0,
+        0,
+        0
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.94,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r4c4_2_outerwear": {
+    "perception": {
+      "score": 0.91,
+      "band": "high",
+      "reasons": [
+        "3 attributes not visible"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.64
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.91,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r4c4_3_bottom": {
+    "perception": {
+      "score": 0.75,
+      "band": "high",
+      "reasons": [
+        "occluded (partially (by outerwear))",
+        "3 attributes not visible"
+      ],
+      "signals": {
+        "size": 0.91,
+        "occlusion": 0.55,
+        "completeness": 0.64
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.75,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b2_r4c4_4_accessory": {
+    "perception": {
+      "score": 0.49,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.3% of frame)"
+      ],
+      "signals": {
+        "size": 0.04,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.49,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r1c4_0_hijab": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 94.4,
+      "rendered_rgb": [
+        223,
+        223,
+        223
+      ],
+      "intended_rgb": [
+        210,
+        180,
+        140
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r1c4_1_top": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": {
+      "delta": 82.1,
+      "rendered_rgb": [
+        208,
+        198,
+        185
+      ],
+      "intended_rgb": [
+        248,
+        244,
+        240
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.94,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r1c4_2_outerwear": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": {
+      "delta": 111.6,
+      "rendered_rgb": [
+        194,
+        185,
+        171
+      ],
+      "intended_rgb": [
+        255,
+        248,
+        240
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r1c4_3_bag": {
+    "perception": {
+      "score": 0.92,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 0.83,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.92,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r2c6_0_dress": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r2c6_1_accessory": {
+    "perception": {
+      "score": 0.46,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.03,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.46,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r2c6_2_accessory": {
+    "perception": {
+      "score": 0.53,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.3% of frame)"
+      ],
+      "signals": {
+        "size": 0.05,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 26.0,
+      "rendered_rgb": [
+        207,
+        207,
+        207
+      ],
+      "intended_rgb": [
+        192,
+        192,
+        192
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.53,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r4c5_0_dress": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.94,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b3_r4c5_1_accessory": {
+    "perception": {
+      "score": 0.58,
+      "band": "medium",
+      "reasons": [
+        "small crop (1.0% of frame)"
+      ],
+      "signals": {
+        "size": 0.17,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.58,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r3c2_0_top": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r3c2_1_bottom": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": {
+      "delta": 27.8,
+      "rendered_rgb": [
+        231,
+        227,
+        219
+      ],
+      "intended_rgb": [
+        248,
+        244,
+        233
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.94,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r3c2_2_accessory": {
+    "perception": {
+      "score": 0.74,
+      "band": "high",
+      "reasons": [
+        "small crop (2.9% of frame)"
+      ],
+      "signals": {
+        "size": 0.48,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 85.4,
+      "rendered_rgb": [
+        87,
+        88,
+        79
+      ],
+      "intended_rgb": [
+        107,
+        142,
+        142
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.74,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r4c4_0_accessory": {
+    "perception": {
+      "score": 0.68,
+      "band": "medium",
+      "reasons": [
+        "3 attributes not visible"
+      ],
+      "signals": {
+        "size": 0.54,
+        "occlusion": 1.0,
+        "completeness": 0.64
+      }
+    },
+    "color": {
+      "delta": 80.3,
+      "rendered_rgb": [
+        46,
+        46,
+        47
+      ],
+      "intended_rgb": [
+        0,
+        0,
+        0
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.68,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r4c4_1_top": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": {
+      "delta": 56.7,
+      "rendered_rgb": [
+        32,
+        31,
+        35
+      ],
+      "intended_rgb": [
+        0,
+        0,
+        0
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r4c4_2_bottom": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 92.5,
+      "rendered_rgb": [
+        76,
+        77,
+        71
+      ],
+      "intended_rgb": [
+        128,
+        128,
+        128
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r5c3_0_top": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r5c3_1_bottom": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.94,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r5c3_2_accessory": {
+    "perception": {
+      "score": 0.57,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.8% of frame)"
+      ],
+      "signals": {
+        "size": 0.14,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 127.0,
+      "rendered_rgb": [
+        221,
+        221,
+        219
+      ],
+      "intended_rgb": [
+        255,
+        105,
+        180
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.57,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r5c4_0_top": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r5c4_1_bottom": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r5c4_2_accessory": {
+    "perception": {
+      "score": 0.73,
+      "band": "high",
+      "reasons": [
+        "small crop (2.8% of frame)"
+      ],
+      "signals": {
+        "size": 0.47,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 30.0,
+      "rendered_rgb": [
+        224,
+        224,
+        224
+      ],
+      "intended_rgb": [
+        245,
+        245,
+        220
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.73,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r5c4_3_bag": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "b4_r5c4_4_accessory": {
+    "perception": {
+      "score": 0.5,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.3% of frame)"
+      ],
+      "signals": {
+        "size": 0.05,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": {
+      "delta": 50.2,
+      "rendered_rgb": [
+        221,
+        221,
+        221
+      ],
+      "intended_rgb": [
+        192,
+        192,
+        192
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.5,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r1c3_0_top": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r1c3_1_bottom": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 43.3,
+      "rendered_rgb": [
+        230,
+        230,
+        230
+      ],
+      "intended_rgb": [
+        255,
+        255,
+        255
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r1c3_2_bag": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r1c3_3_accessory": {
+    "perception": {
+      "score": 0.54,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.5% of frame)"
+      ],
+      "signals": {
+        "size": 0.08,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 46.8,
+      "rendered_rgb": [
+        219,
+        219,
+        219
+      ],
+      "intended_rgb": [
+        192,
+        192,
+        192
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.54,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r1c3_4_accessory": {
+    "perception": {
+      "score": 0.52,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.04,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.52,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r1c4_0_top": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": {
+      "delta": 60.6,
+      "rendered_rgb": [
+        35,
+        35,
+        35
+      ],
+      "intended_rgb": [
+        0,
+        0,
+        0
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r1c4_1_bottom": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r1c4_2_accessory": {
+    "perception": {
+      "score": 0.52,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.04,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.52,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r2c3_0_top": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r2c3_1_bottom": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r2c3_2_accessory": {
+    "perception": {
+      "score": 0.68,
+      "band": "medium",
+      "reasons": [
+        "small crop (2.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.37,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.68,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r2c3_3_bag": {
+    "perception": {
+      "score": 0.85,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 0.76,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.85,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r2c3_4_accessory": {
+    "perception": {
+      "score": 0.52,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.3% of frame)"
+      ],
+      "signals": {
+        "size": 0.05,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.52,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r2c5_0_top": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 159.4,
+      "rendered_rgb": [
+        183,
+        151,
+        121
+      ],
+      "intended_rgb": [
+        255,
+        248,
+        225
+      ],
+      "mismatch": true,
+      "reason": "color far from spec (delta 159)"
+    },
+    "review_band": "low",
+    "review_score": 0.35,
+    "flags": [
+      "color: color far from spec (delta 159)"
+    ]
+  },
+  "sample_r2c5_1_bottom": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r2c5_2_bag": {
+    "perception": {
+      "score": 0.9,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 0.8,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 28.6,
+      "rendered_rgb": [
+        225,
+        225,
+        224
+      ],
+      "intended_rgb": [
+        245,
+        245,
+        220
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.9,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c1_0_dress": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": {
+      "delta": 109.3,
+      "rendered_rgb": [
+        197,
+        184,
+        168
+      ],
+      "intended_rgb": [
+        245,
+        245,
+        245
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c1_1_bag": {
+    "perception": {
+      "score": 0.72,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 0.5,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 0.72,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c1_2_accessory": {
+    "perception": {
+      "score": 0.56,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.7% of frame)"
+      ],
+      "signals": {
+        "size": 0.12,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 61.9,
+      "rendered_rgb": [
+        208,
+        208,
+        207
+      ],
+      "intended_rgb": [
+        245,
+        245,
+        240
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.56,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c1_3_accessory": {
+    "perception": {
+      "score": 0.52,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.03,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.52,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c4_0_accessory": {
+    "perception": {
+      "score": 0.69,
+      "band": "medium",
+      "reasons": [
+        "small crop (2.3% of frame)"
+      ],
+      "signals": {
+        "size": 0.39,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 38.7,
+      "rendered_rgb": [
+        223,
+        223,
+        222
+      ],
+      "intended_rgb": [
+        245,
+        245,
+        245
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "medium",
+    "review_score": 0.69,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c4_1_top": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": {
+      "delta": 102.5,
+      "rendered_rgb": [
+        63,
+        65,
+        48
+      ],
+      "intended_rgb": [
+        0,
+        0,
+        0
+      ],
+      "mismatch": true,
+      "reason": "dark garment rendered with a color cast (rel-chroma 0.26)"
+    },
+    "review_band": "low",
+    "review_score": 0.35,
+    "flags": [
+      "color: dark garment rendered with a color cast (rel-chroma 0.26)"
+    ]
+  },
+  "sample_r4c4_2_bottom": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c4_3_accessory": {
+    "perception": {
+      "score": 0.52,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.04,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.52,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c4_4_accessory": {
+    "perception": {
+      "score": 0.49,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.04,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.49,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c5_0_top": {
+    "perception": {
+      "score": 0.94,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.76
+      }
+    },
+    "color": {
+      "delta": 78.7,
+      "rendered_rgb": [
+        36,
+        42,
+        56
+      ],
+      "intended_rgb": [
+        0,
+        0,
+        0
+      ],
+      "mismatch": true,
+      "reason": "dark garment rendered with a color cast (rel-chroma 0.35)"
+    },
+    "review_band": "low",
+    "review_score": 0.35,
+    "flags": [
+      "color: dark garment rendered with a color cast (rel-chroma 0.35)"
+    ]
+  },
+  "sample_r4c5_1_bottom": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r4c5_2_accessory": {
+    "perception": {
+      "score": 0.52,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.04,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.52,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r5c2_0_hijab": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 17.3,
+      "rendered_rgb": [
+        221,
+        221,
+        221
+      ],
+      "intended_rgb": [
+        211,
+        211,
+        211
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r5c2_1_top": {
+    "perception": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 108.6,
+      "rendered_rgb": [
+        185,
+        183,
+        179
+      ],
+      "intended_rgb": [
+        245,
+        245,
+        245
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 1.0,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r5c2_2_bottom": {
+    "perception": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "color": {
+      "delta": 24.2,
+      "rendered_rgb": [
+        231,
+        231,
+        231
+      ],
+      "intended_rgb": [
+        245,
+        245,
+        245
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review_band": "high",
+    "review_score": 0.97,
+    "flags": [
+      "no automatic flags"
+    ]
+  },
+  "sample_r5c2_3_bag": {
+    "perception": {
+      "score": 0.69,
+      "band": "medium",
+      "reasons": [
+        "small crop (2.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.38,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": null,
+    "review_band": "medium",
+    "review_score": 0.69,
+    "flags": [
+      "no automatic flags"
+    ]
+  }
+}
