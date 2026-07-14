@@ -1429,24 +1429,24 @@
       }
     },
     "color": {
-      "delta": 159.4,
+      "delta": 11.0,
       "rendered_rgb": [
-        183,
-        151,
-        121
+        248,
+        242,
+        219
       ],
       "intended_rgb": [
         255,
         248,
         225
       ],
-      "mismatch": true,
-      "reason": "color far from spec (delta 159)"
+      "mismatch": false,
+      "reason": ""
     },
-    "review_band": "low",
-    "review_score": 0.35,
+    "review_band": "high",
+    "review_score": 1.0,
     "flags": [
-      "color: color far from spec (delta 159)"
+      "no automatic flags"
     ]
   },
   "sample_r2c5_1_bottom": {
@@ -1659,24 +1659,24 @@
       }
     },
     "color": {
-      "delta": 102.5,
+      "delta": 15.6,
       "rendered_rgb": [
-        63,
-        65,
-        48
+        9,
+        9,
+        9
       ],
       "intended_rgb": [
         0,
         0,
         0
       ],
-      "mismatch": true,
-      "reason": "dark garment rendered with a color cast (rel-chroma 0.26)"
+      "mismatch": false,
+      "reason": ""
     },
-    "review_band": "low",
-    "review_score": 0.35,
+    "review_band": "high",
+    "review_score": 0.97,
     "flags": [
-      "color: dark garment rendered with a color cast (rel-chroma 0.26)"
+      "no automatic flags"
     ]
   },
   "sample_r4c4_2_bottom": {
@@ -1753,24 +1753,24 @@
       }
     },
     "color": {
-      "delta": 78.7,
+      "delta": 29.4,
       "rendered_rgb": [
-        36,
-        42,
-        56
+        17,
+        17,
+        17
       ],
       "intended_rgb": [
         0,
         0,
         0
       ],
-      "mismatch": true,
-      "reason": "dark garment rendered with a color cast (rel-chroma 0.35)"
+      "mismatch": false,
+      "reason": ""
     },
-    "review_band": "low",
-    "review_score": 0.35,
+    "review_band": "high",
+    "review_score": 0.94,
     "flags": [
-      "color: dark garment rendered with a color cast (rel-chroma 0.35)"
+      "no automatic flags"
     ]
   },
   "sample_r4c5_1_bottom": {
@@ -1861,11 +1861,11 @@
       }
     },
     "color": {
-      "delta": 108.6,
+      "delta": 63.5,
       "rendered_rgb": [
-        185,
-        183,
-        179
+        213,
+        211,
+        202
       ],
       "intended_rgb": [
         245,

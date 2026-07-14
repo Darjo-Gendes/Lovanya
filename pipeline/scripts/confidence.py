@@ -133,6 +133,46 @@ def generation_color_delta(shot_path, intended_color: str) -> dict | None:
 SHOTS = ROOT / "review" / "garments_omini" / "shots"
 
 
+def recolor_condition(cond_img, intended_color: str):
+    """Force the intended hue onto the condition image while KEEPING luminance
+    (shape, folds, texture come from luminance; only chroma is corrected). This
+    is the fix for the render-vs-spec color bug: a warm-cast crop of a black
+    top reads olive, so OminiControl renders olive — neutralizing the cast here
+    makes it render true black. Returns a recolored PIL image (or the original
+    if no hex). Only touches the garment; white background is preserved."""
+    import numpy as np
+    from PIL import Image
+
+    intended = _parse_hex(intended_color)
+    if intended is None:
+        return cond_img
+    a = np.asarray(cond_img.convert("RGB")).astype(np.float32)
+    L = 0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2]
+    is_bg = a.min(axis=2) > 232                          # keep white backdrop
+    ic = max(intended) - min(intended)
+    if ic < 40 and max(intended) < 120:                  # dark neutral -> desaturate
+        # desaturate to kill the cast, then remap luminance so the median lands
+        # near the intended lightness (a "true black" spec reads black, not grey)
+        gm = float(np.median(L[~is_bg])) if (~is_bg).any() else 128.0
+        target_l = max(max(intended), 24)               # avoid crushing to pure 0
+        scale = target_l / (gm + 1e-3)
+        Ln = np.clip(L * min(scale, 1.0) + (target_l - gm) * 0.4, 0, 255)
+        new = np.stack([Ln, Ln, Ln], axis=2)
+    else:
+        # colored/light -> MEAN-SHIFT the garment so its median becomes the
+        # intended color, keeping per-pixel variation (folds, shading). Fixes
+        # tan-rendered-as-cream where luminance-scaling left it too dark.
+        gmask = ~is_bg
+        if gmask.any():
+            median = np.median(a[gmask], axis=0)
+            shift = np.array(intended, dtype=np.float32) - median
+            new = a + shift[None, None, :]
+        else:
+            new = a
+    out = np.where(is_bg[..., None], a, new)
+    return Image.fromarray(np.clip(out, 0, 255).astype("uint8"))
+
+
 def combine(perception: dict, color: dict | None) -> dict:
     """Merge the two signals into one review verdict. A hard color mismatch
     dominates (it's a confirmed render defect); otherwise perception drives."""

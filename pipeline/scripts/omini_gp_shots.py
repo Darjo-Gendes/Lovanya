@@ -179,8 +179,23 @@ def stems_for_batch() -> list[str]:
     return previous_batch_stems(20)
 
 
+def _color_flagged_ids() -> set[str]:
+    """Shot ids the confidence pass marked as a render-vs-spec color mismatch."""
+    p = OUT / "confidence.json"
+    if not p.exists():
+        return set()
+    conf = json.loads(p.read_text(encoding="utf-8"))
+    return {sid for sid, c in conf.items()
+            if c.get("color") and c["color"].get("mismatch")}
+
+
 def collect_jobs(stems: list[str]) -> list[dict]:
-    """Build/refresh conditions for every garment with a valid description."""
+    """Build/refresh conditions for every garment with a valid description.
+    Color-flagged items get their condition recolored toward the intended hue
+    (the auto-fix for the black->olive class of render bug)."""
+    from confidence import recolor_condition
+    from PIL import Image as _Image
+    flagged = _color_flagged_ids()
     CONDS.mkdir(parents=True, exist_ok=True)
     jobs = []
     for stem in stems:
@@ -203,8 +218,13 @@ def collect_jobs(stems: list[str]) -> list[dict]:
             if not ok:
                 print(f"  {stem}[{i}] {g.get('item')}: condition failed, skipped", flush=True)
                 continue
-            jobs.append({"stem": stem, "i": i, "g": g, "shot": shot, "cond": cond_file,
-                         "shade": shade, "cached": False})
+            shot_id = f"{stem}_{i}_{g.get('category')}"
+            job = {"stem": stem, "i": i, "g": g, "shot": shot, "cond": cond_file,
+                   "shade": shade, "cached": False}
+            if shot_id in flagged:  # color-flagged -> recolor the OUTPUT after gen
+                job["recolor_hex"] = g.get("color", "")
+                print(f"  {stem}[{i}] {g.get('item')}: will recolor output -> '{g.get('color')}'", flush=True)
+            jobs.append(job)
     return jobs
 
 
@@ -310,6 +330,12 @@ def main() -> None:
             img = generate(pipe, prompt=build_prompt(g, j.get("shade", "")),
                            conditions=[condition], condition_scale=scale,
                            num_inference_steps=8, height=512, width=512).images[0]
+            # color auto-fix: OminiControl's color conditioning is too weak to
+            # force a spec color onto FLUX's shape-prior, so correct the OUTPUT
+            # deterministically (retoucher-style) when the item was color-flagged.
+            if j.get("recolor_hex"):
+                from confidence import recolor_condition
+                img = recolor_condition(img.convert("RGB"), j["recolor_hex"])
             img.save(j["shot"])
             done += 1
             print(f"  [{done}/{len(todo)}] {j['stem']}[{j['i']}] "
