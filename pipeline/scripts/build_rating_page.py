@@ -144,7 +144,7 @@ pointer-events:none}}
 <script>
 const OUTFITS = {data_json};
 const CATS = {cats_json};
-const KEY = "lovanya_garment_ratings_v1";
+const KEY = "lovanya_garment_ratings_v2";  // v2: fresh crop pipeline, don't inherit v1 votes
 let state = JSON.parse(localStorage.getItem(KEY) || "{{}}");
 
 function save() {{ localStorage.setItem(KEY, JSON.stringify(state)); }}

@@ -1,9 +1,16 @@
 """OminiControl production pipeline — image-conditioned product shots, batch.
 
-The winning stack (comparison card 5) with the bag-bundle fixes folded in for
-EVERY garment:
-  - conditions: SAM2 mask -> largest connected component (drops contamination)
-    -> gray-world white-balanced pixels -> white 512^2 + unsharp;
+The winning stack (comparison card 5) with the bag-bundle fixes AND the
+2026-07-14 cropping fix folded in for EVERY garment:
+  - conditions: source upscaled 3x -> ATR clothing PARSER class (per category)
+    intersected with the detection box, SAM2 as fallback only where the
+    parser has no class (jewelry/watch/belt/cap) -> skin mask (arms/legs/
+    face/hair) ALWAYS subtracted -> largest connected component -> gray-world
+    white-balanced -> white 512^2 + unsharp. Root-cause fix: generic SAM2
+    box-prompting had no concept of "garment", so it bled into skin (similar
+    color at 245px) and adjacent layered garments — the recurring
+    shape/fit/material downvotes traced to THIS stage, since generate() only
+    ever sees this small condition image, never the original photo;
   - measured color: masked-median shade (deterministic) injected for
     solid-pattern items — VLM color judgment stays for prints;
   - prompts: v2.2 archetype descriptions (taxonomy carries canonical
@@ -131,9 +138,44 @@ def rescale_bbox(bbox, w: int, h: int, cat: str):
     return x1, y1, x2, y2
 
 
-def build_condition(wb: Image.Image, bbox, cat: str, out_file: Path):
-    """WB image + box -> cleaned 512^2 condition on white + measured shade.
-    Returns (ok, shade)."""
+UPSCALE = 3.0  # source photos are ~245px; both the parser and SAM2 do better
+               # with more pixels to work from (same trick as the VLM crop zoom)
+
+
+def upscale_and_parse(src: Image.Image):
+    """Once per outfit: upscale (more pixels for both segmenters) + run the
+    clothing parser once -> (upscaled_wb_image, label_map, skin_mask)."""
+    from pipeline.app.clothes_parser import parse, skin_mask as skin_mask_fn
+    w, h = src.size
+    big = src.resize((int(w * UPSCALE), int(h * UPSCALE)), Image.LANCZOS)
+    wb = gray_world_wb(big)
+    label_map = parse(wb)
+    return wb, label_map, skin_mask_fn(label_map)
+
+
+def _box_region_mask(box, shape) -> np.ndarray:
+    h, w = shape
+    x1, y1, x2, y2 = box
+    px, py = (x2 - x1) * 0.12, (y2 - y1) * 0.12  # modest pad: excludes a
+    x1, y1 = max(0, int(x1 - px)), max(0, int(y1 - py))          # sibling
+    x2, y2 = min(w, int(x2 + px)), min(h, int(y2 + py))          # garment,
+    m = np.zeros(shape, dtype=bool)                              # keeps real
+    m[y1:y2, x1:x2] = True                                       # edges
+    return m
+
+
+def build_condition(wb: Image.Image, bbox, cat: str, out_file: Path,
+                     label_map: np.ndarray | None = None,
+                     skin: np.ndarray | None = None):
+    """WB (upscaled) image + box -> cleaned 512^2 condition on white + shade.
+
+    Hybrid segmentation (fixes the skin/adjacent-garment bleed that caused the
+    recurring shape/fit/material downvotes): a garment class from the ATR
+    clothing parser, intersected with the detection box, is used when the
+    parser has that class; jewelry/watch/belt/cap (no parser class) fall back
+    to SAM2. The skin mask (arms/legs/face/hair - classes the parser gives us
+    for free) is ALWAYS subtracted from whichever mask wins. Returns (ok, shade)."""
+    from pipeline.app.clothes_parser import garment_mask
     from pipeline.app.cutout import sam2_mask
     w, h = wb.size
     try:
@@ -142,7 +184,28 @@ def build_condition(wb: Image.Image, bbox, cat: str, out_file: Path):
         return False, ""
     if box[2] - box[0] < 4 or box[3] - box[1] < 4:
         return False, ""
-    mask = sam2_mask(wb, box)
+
+    # 3-tier: parser-class AND SAM2-boundary AND box-region is tightest (SAM2's
+    # boundary-following, but class-constrained so a same-class sibling layer
+    # outside SAM2's own salient region can't sneak in) -> parser-class alone
+    # if SAM2 disagreed too much -> SAM2 alone if the parser has no class here.
+    mask = None
+    gm = garment_mask(label_map, cat) if label_map is not None else None
+    if gm is not None:
+        boxed = gm & _box_region_mask(box, gm.shape)
+        if boxed.sum() >= 80:
+            sam_m = sam2_mask(wb, box)
+            tight = boxed & sam_m
+            mask = tight if tight.sum() >= 60 else boxed
+    if mask is None:  # no parser class here, or too little parser evidence
+        mask = sam2_mask(wb, box)
+    # skin-subtraction fixes GARMENTS absorbing adjacent skin (a large-region
+    # shape distortion). Jewelry/watches are worn ON skin by definition - the
+    # same subtraction over-trims a tiny box down to nothing (2 real failures
+    # in the full-batch run: earrings, bracelet). Skip it for that category;
+    # largest_component still drops any stray skin blob that isn't the item.
+    if skin is not None and cat != "accessory":
+        mask = mask & ~skin
     mask = largest_component(mask)
     ys, xs = np.where(mask)
     if len(xs) < 30:
@@ -205,7 +268,14 @@ def collect_jobs(stems: list[str]) -> list[dict]:
             print(f"  {stem}: missing description or sample, skipped", flush=True)
             continue
         garments = json.loads(desc.read_text(encoding="utf-8"))
-        wb = gray_world_wb(Image.open(src).convert("RGB"))
+        needs_build = any(
+            g.get("category") in CATEGORIES and not g.get("_parse_error")
+            and not (SHOTS / f"{stem}_{i}_{g.get('category')}.png").exists()
+            for i, g in enumerate(garments))
+        wb = label_map = skin = None
+        if needs_build:  # upscale + parse ONCE per outfit, reused across garments
+            wb, label_map, skin = upscale_and_parse(Image.open(src).convert("RGB"))
+            print(f"  {stem}: parsed ({wb.size[0]}x{wb.size[1]} upscaled)", flush=True)
         for i, g in enumerate(garments):
             if g.get("category") not in CATEGORIES or g.get("_parse_error"):
                 continue
@@ -214,7 +284,8 @@ def collect_jobs(stems: list[str]) -> list[dict]:
                 jobs.append({"stem": stem, "i": i, "g": g, "shot": shot, "cached": True})
                 continue
             cond_file = CONDS / f"{stem}_{i}_{g.get('category')}.png"
-            ok, shade = build_condition(wb, g.get("bbox"), g.get("category"), cond_file)
+            ok, shade = build_condition(wb, g.get("bbox"), g.get("category"), cond_file,
+                                        label_map=label_map, skin=skin)
             if not ok:
                 print(f"  {stem}[{i}] {g.get('item')}: condition failed, skipped", flush=True)
                 continue

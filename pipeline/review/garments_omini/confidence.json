@@ -33,11 +33,11 @@
       }
     },
     "color": {
-      "delta": 53.8,
+      "delta": 75.1,
       "rendered_rgb": [
-        223,
-        215,
-        197
+        205,
+        202,
+        193
       ],
       "intended_rgb": [
         255,
@@ -67,11 +67,11 @@
       }
     },
     "color": {
-      "delta": 31.0,
+      "delta": 52.5,
       "rendered_rgb": [
-        185,
-        162,
-        137
+        165,
+        153,
+        139
       ],
       "intended_rgb": [
         210,
@@ -102,11 +102,11 @@
       }
     },
     "color": {
-      "delta": 30.0,
+      "delta": 77.6,
       "rendered_rgb": [
-        231,
-        231,
-        231
+        208,
+        201,
+        185
       ],
       "intended_rgb": [
         255,
@@ -215,7 +215,21 @@
         "completeness": 0.52
       }
     },
-    "color": null,
+    "color": {
+      "delta": 0.0,
+      "rendered_rgb": [
+        27,
+        42,
+        74
+      ],
+      "intended_rgb": [
+        27,
+        42,
+        74
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
     "review_band": "high",
     "review_score": 0.88,
     "flags": [
@@ -276,11 +290,11 @@
       }
     },
     "color": {
-      "delta": 308.4,
+      "delta": 305.0,
       "rendered_rgb": [
-        223,
-        223,
-        223
+        221,
+        221,
+        221
       ],
       "intended_rgb": [
         62,
@@ -310,11 +324,11 @@
       }
     },
     "color": {
-      "delta": 50.2,
+      "delta": 46.2,
       "rendered_rgb": [
-        221,
-        221,
-        221
+        219,
+        219,
+        218
       ],
       "intended_rgb": [
         192,
@@ -404,11 +418,11 @@
       }
     },
     "color": {
-      "delta": 68.7,
+      "delta": 72.8,
       "rendered_rgb": [
-        39,
-        39,
-        41
+        41,
+        41,
+        44
       ],
       "intended_rgb": [
         0,
@@ -499,11 +513,11 @@
       }
     },
     "color": {
-      "delta": 94.4,
+      "delta": 88.6,
       "rendered_rgb": [
-        223,
-        223,
-        223
+        219,
+        219,
+        219
       ],
       "intended_rgb": [
         210,
@@ -533,11 +547,11 @@
       }
     },
     "color": {
-      "delta": 82.1,
+      "delta": 85.9,
       "rendered_rgb": [
-        208,
-        198,
-        185
+        205,
+        195,
+        184
       ],
       "intended_rgb": [
         248,
@@ -567,11 +581,11 @@
       }
     },
     "color": {
-      "delta": 111.6,
+      "delta": 111.9,
       "rendered_rgb": [
-        194,
+        197,
         185,
-        171
+        168
       ],
       "intended_rgb": [
         255,
@@ -661,11 +675,11 @@
       }
     },
     "color": {
-      "delta": 26.0,
+      "delta": 32.9,
       "rendered_rgb": [
-        207,
-        207,
-        207
+        211,
+        211,
+        211
       ],
       "intended_rgb": [
         192,
@@ -755,11 +769,11 @@
       }
     },
     "color": {
-      "delta": 27.8,
+      "delta": 61.2,
       "rendered_rgb": [
-        231,
-        227,
-        219
+        213,
+        209,
+        197
       ],
       "intended_rgb": [
         248,
@@ -789,11 +803,11 @@
       }
     },
     "color": {
-      "delta": 85.4,
+      "delta": 27.7,
       "rendered_rgb": [
-        87,
-        88,
-        79
+        132,
+        134,
+        133
       ],
       "intended_rgb": [
         107,
@@ -823,11 +837,11 @@
       }
     },
     "color": {
-      "delta": 80.3,
+      "delta": 117.2,
       "rendered_rgb": [
-        46,
-        46,
-        47
+        68,
+        67,
+        68
       ],
       "intended_rgb": [
         0,
@@ -891,11 +905,11 @@
       }
     },
     "color": {
-      "delta": 92.5,
+      "delta": 97.1,
       "rendered_rgb": [
-        76,
-        77,
-        71
+        72,
+        75,
+        69
       ],
       "intended_rgb": [
         128,
@@ -965,11 +979,11 @@
       }
     },
     "color": {
-      "delta": 127.0,
+      "delta": 0.0,
       "rendered_rgb": [
-        221,
-        221,
-        219
+        255,
+        105,
+        180
       ],
       "intended_rgb": [
         255,
@@ -1039,11 +1053,11 @@
       }
     },
     "color": {
-      "delta": 30.0,
+      "delta": 121.9,
       "rendered_rgb": [
-        224,
-        224,
-        224
+        185,
+        168,
+        147
       ],
       "intended_rgb": [
         245,
@@ -1147,11 +1161,11 @@
       }
     },
     "color": {
-      "delta": 43.3,
+      "delta": 113.2,
       "rendered_rgb": [
-        230,
-        230,
-        230
+        201,
+        192,
+        178
       ],
       "intended_rgb": [
         255,
@@ -1201,11 +1215,11 @@
       }
     },
     "color": {
-      "delta": 46.8,
+      "delta": 39.8,
       "rendered_rgb": [
-        219,
-        219,
-        219
+        215,
+        215,
+        215
       ],
       "intended_rgb": [
         192,
@@ -1255,10 +1269,10 @@
       }
     },
     "color": {
-      "delta": 60.6,
+      "delta": 59.5,
       "rendered_rgb": [
-        35,
-        35,
+        34,
+        34,
         35
       ],
       "intended_rgb": [
@@ -1429,11 +1443,11 @@
       }
     },
     "color": {
-      "delta": 11.0,
+      "delta": 96.0,
       "rendered_rgb": [
-        248,
-        242,
-        219
+        192,
+        189,
+        183
       ],
       "intended_rgb": [
         255,
@@ -1483,11 +1497,11 @@
       }
     },
     "color": {
-      "delta": 28.6,
+      "delta": 28.7,
       "rendered_rgb": [
         225,
         225,
-        224
+        225
       ],
       "intended_rgb": [
         245,
@@ -1517,11 +1531,11 @@
       }
     },
     "color": {
-      "delta": 109.3,
+      "delta": 97.3,
       "rendered_rgb": [
-        197,
-        184,
-        168
+        201,
+        191,
+        177
       ],
       "intended_rgb": [
         245,
@@ -1571,11 +1585,11 @@
       }
     },
     "color": {
-      "delta": 61.9,
+      "delta": 53.2,
       "rendered_rgb": [
-        208,
-        208,
-        207
+        213,
+        213,
+        212
       ],
       "intended_rgb": [
         245,
@@ -1625,11 +1639,11 @@
       }
     },
     "color": {
-      "delta": 38.7,
+      "delta": 62.7,
       "rendered_rgb": [
-        223,
-        223,
-        222
+        216,
+        211,
+        201
       ],
       "intended_rgb": [
         245,
@@ -1659,11 +1673,11 @@
       }
     },
     "color": {
-      "delta": 15.6,
+      "delta": 62.9,
       "rendered_rgb": [
-        9,
-        9,
-        9
+        36,
+        36,
+        37
       ],
       "intended_rgb": [
         0,
@@ -1753,11 +1767,11 @@
       }
     },
     "color": {
-      "delta": 29.4,
+      "delta": 69.9,
       "rendered_rgb": [
-        17,
-        17,
-        17
+        39,
+        39,
+        43
       ],
       "intended_rgb": [
         0,
@@ -1827,11 +1841,11 @@
       }
     },
     "color": {
-      "delta": 17.3,
+      "delta": 13.9,
       "rendered_rgb": [
-        221,
-        221,
-        221
+        219,
+        219,
+        219
       ],
       "intended_rgb": [
         211,
@@ -1861,11 +1875,11 @@
       }
     },
     "color": {
-      "delta": 63.5,
+      "delta": 62.1,
       "rendered_rgb": [
         213,
         211,
-        202
+        204
       ],
       "intended_rgb": [
         245,
@@ -1895,11 +1909,11 @@
       }
     },
     "color": {
-      "delta": 24.2,
+      "delta": 67.6,
       "rendered_rgb": [
-        231,
-        231,
-        231
+        211,
+        209,
+        199
       ],
       "intended_rgb": [
         245,
@@ -1933,6 +1947,40 @@
     "review_score": 0.69,
     "flags": [
       "no automatic flags"
+    ]
+  },
+  "sample_r4c5_3_accessory": {
+    "perception": {
+      "score": 0.51,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.1% of frame)"
+      ],
+      "signals": {
+        "size": 0.01,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "color": {
+      "delta": 167.1,
+      "rendered_rgb": [
+        221,
+        221,
+        219
+      ],
+      "intended_rgb": [
+        183,
+        110,
+        100
+      ],
+      "mismatch": true,
+      "reason": "color far from spec (delta 167)"
+    },
+    "review_band": "low",
+    "review_score": 0.35,
+    "flags": [
+      "color: color far from spec (delta 167)"
     ]
   }
 }

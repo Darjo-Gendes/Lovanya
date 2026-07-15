@@ -1,0 +1,300 @@
+[
+  {
+    "item": "white blouse",
+    "category": "top",
+    "archetype": "classic button-up shirt (kemeja)",
+    "color": "pure white (with warm undertone)",
+    "attributes": {
+      "collar": "shirt collar",
+      "sleeve": "long sleeves",
+      "cuff": "cuffed sleeves",
+      "fit": "relaxed",
+      "length": "hip",
+      "closure": "full front button placket"
+    },
+    "details": "visible shirt collar, full button placket, long cuffed sleeves, relaxed fit, hip-length, worn under a navy vest",
+    "prompt": "a classic button-up shirt with shirt collar, full front button placket, long cuffed sleeves, relaxed fit, in pure white with warm undertone",
+    "bbox": [
+      220,
+      280,
+      680,
+      999
+    ],
+    "occluded": "no",
+    "perception_confidence": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "generation_color": null,
+    "review": {
+      "review_band": "high",
+      "review_score": 1.0,
+      "flags": [
+        "no automatic flags"
+      ]
+    }
+  },
+  {
+    "item": "navy vest",
+    "category": "outerwear",
+    "archetype": "sleeveless cardigan vest",
+    "color": "deep navy blue (~#1B2A4A)",
+    "attributes": {
+      "type": "vest",
+      "breast style": "single",
+      "button count": "one",
+      "button color": "not visible (inferred: dark)",
+      "lapel/collar": "collarless — no lapels",
+      "sleeves": "sleeveless",
+      "material finish": "soft matte knit",
+      "length": "hip",
+      "shoulder": "not visible (inferred: relaxed drop)",
+      "pockets": "not visible (inferred: none)",
+      "belt": "not visible (inferred: none)",
+      "pattern": "plain"
+    },
+    "details": "open front, relaxed straight body, worn over white blouse, no visible pockets or belt",
+    "prompt": "a sleeveless open-front cardigan vest in deep navy soft wool knit, collarless, ribbed trims, relaxed straight body, matte woolly texture (not smooth)",
+    "bbox": [
+      220,
+      280,
+      680,
+      999
+    ],
+    "occluded": "no",
+    "perception_confidence": {
+      "score": 0.88,
+      "band": "high",
+      "reasons": [
+        "4 attributes not visible"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.52
+      }
+    },
+    "generation_color": {
+      "delta": 0.0,
+      "rendered_rgb": [
+        27,
+        42,
+        74
+      ],
+      "intended_rgb": [
+        27,
+        42,
+        74
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review": {
+      "review_band": "high",
+      "review_score": 0.88,
+      "flags": [
+        "no automatic flags"
+      ]
+    }
+  },
+  {
+    "item": "white skirt",
+    "category": "bottom",
+    "archetype": "straight tailored trousers",
+    "color": "white with warm undertone",
+    "attributes": {
+      "type": "skirt",
+      "waist": "high",
+      "leg or skirt shape": "straight",
+      "length": "full",
+      "front details": "pressed front crease, visible button fly"
+    },
+    "details": "inferred: smooth tailored fabric, high waist with belt loops (from context), full length covering ankles",
+    "prompt": "straight-leg tailored trousers with pressed front creases, high waist with belt loops, ankle-full length in white with warm undertone, smooth tailored fabric",
+    "bbox": [
+      220,
+      780,
+      680,
+      999
+    ],
+    "occluded": "no",
+    "perception_confidence": {
+      "score": 1.0,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "generation_color": null,
+    "review": {
+      "review_band": "high",
+      "review_score": 1.0,
+      "flags": [
+        "no automatic flags"
+      ]
+    }
+  },
+  {
+    "item": "beige bag",
+    "category": "bag",
+    "archetype": "structured tote",
+    "color": "warm cream beige",
+    "attributes": {
+      "orientation": "PORTRAIT",
+      "silhouette": "structured tote",
+      "size": "medium",
+      "top/closure": "open",
+      "strap": "single",
+      "hardware color": "not visible (inferred: silver)"
+    },
+    "details": "single shoulder strap, soft fabric, no visible hardware or closure details",
+    "prompt": "a structured tote bag, upright portrait rectangle, open top, single shoulder strap, in warm cream beige soft fabric",
+    "bbox": [
+      220,
+      312,
+      400,
+      999
+    ],
+    "occluded": "no",
+    "perception_confidence": {
+      "score": 0.97,
+      "band": "high",
+      "reasons": [
+        "clear, well-sized crop"
+      ],
+      "signals": {
+        "size": 1.0,
+        "occlusion": 1.0,
+        "completeness": 0.88
+      }
+    },
+    "generation_color": null,
+    "review": {
+      "review_band": "high",
+      "review_score": 0.97,
+      "flags": [
+        "no automatic flags"
+      ]
+    }
+  },
+  {
+    "item": "glasses",
+    "category": "accessory",
+    "archetype": "thin-frame glasses",
+    "color": "dark brown (~#3E2723)",
+    "attributes": {
+      "material + finish": "metal",
+      "size/width": "slim"
+    },
+    "details": "not visible (inferred: thin metal frame, clear lenses)",
+    "prompt": "a pair of thin-frame eyeglasses with slim metal rims and clear lenses, dark brown, shown in profile on a face",
+    "bbox": [
+      330,
+      156,
+      462,
+      230
+    ],
+    "occluded": "no",
+    "perception_confidence": {
+      "score": 0.58,
+      "band": "medium",
+      "reasons": [
+        "small crop (1.0% of frame)"
+      ],
+      "signals": {
+        "size": 0.16,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "generation_color": {
+      "delta": 305.0,
+      "rendered_rgb": [
+        221,
+        221,
+        221
+      ],
+      "intended_rgb": [
+        62,
+        39,
+        35
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review": {
+      "review_band": "medium",
+      "review_score": 0.58,
+      "flags": [
+        "no automatic flags"
+      ]
+    }
+  },
+  {
+    "item": "bracelet",
+    "category": "accessory",
+    "archetype": "chain bracelet",
+    "color": "silver gray (~#C0C0C0)",
+    "attributes": {
+      "type": "bracelet",
+      "material": "polished metal",
+      "size/width": "thin"
+    },
+    "details": "not visible (inferred: thin chain-link design, small clasp)",
+    "prompt": "a delicate chain-link bracelet, fine polished metal, small clasp, shown laid flat in a gentle curve, silver gray",
+    "bbox": [
+      480,
+      430,
+      520,
+      480
+    ],
+    "occluded": "no",
+    "perception_confidence": {
+      "score": 0.52,
+      "band": "medium",
+      "reasons": [
+        "small crop (0.2% of frame)"
+      ],
+      "signals": {
+        "size": 0.03,
+        "occlusion": 1.0,
+        "completeness": 1.0
+      }
+    },
+    "generation_color": {
+      "delta": 46.2,
+      "rendered_rgb": [
+        219,
+        219,
+        218
+      ],
+      "intended_rgb": [
+        192,
+        192,
+        192
+      ],
+      "mismatch": false,
+      "reason": ""
+    },
+    "review": {
+      "review_band": "medium",
+      "review_score": 0.52,
+      "flags": [
+        "no automatic flags"
+      ]
+    }
+  }
+]
